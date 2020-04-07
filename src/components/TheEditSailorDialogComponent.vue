@@ -6,59 +6,63 @@
       <v-card-title>
         Edit {{ rate }} {{ lastName }}, {{ firstName }}
       </v-card-title>
-      <v-card-text>
-        <v-text-field v-model="lastName"
-                      class="pa-1"
-                      label="Last Name"
-                      :rules="requiredRules"
-                      required />
-        <v-text-field v-model="firstName"
-                      class="pa-1"
-                      label="First Name"
-                      :rules="requiredRules"
-                      required />
-        <v-text-field v-model="middleInitial"
-                      class="pa-1"
-                      label="Middle Initial (optional)" />
-        <v-select v-model="rank"
-                  :items="ranks"
-                  label="Rank"
-                  :rules="ranksRequired"
-                  required />
-        <v-text-field v-model="ssn"
-                      class="pa-1"
-                      label="SSN (optional)"
-                      placeholder="111-11-1111" />
-        <v-select v-model="memberStatus"
-                  :items="memberStatus"
-                  class="pa-1"
-                  label="Member Status (optional)">
-          <template v-slot:selection="{ item }">
-            <span>{{ item }}</span>
-          </template>
-        </v-select>
-        <v-text-field v-if="!officer"
-                      v-model="rate"
-                      class="pa-1"
-                      label="Designation (optional)"
-                      placeholder="BM3" />
-        <v-text-field v-if="!officer"
-                      v-model="designation"
-                      class="pa-1"
-                      label="Rate (optional)"
-                      placeholder="ESWS/SS" />
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn text
-               @click="dialog = false">
-          Cancel
-        </v-btn>
-        <v-btn color="primary"
-               @click="submit">
-          Save Sailor
-        </v-btn>
-      </v-card-actions>
+      <v-form ref="form"
+              v-model="valid">
+        <v-card-text>
+          <v-text-field v-model="lastName"
+                        class="pa-1"
+                        label="Last Name"
+                        :rules="requiredRules"
+                        required />
+          <v-text-field v-model="firstName"
+                        class="pa-1"
+                        label="First Name"
+                        :rules="requiredRules"
+                        required />
+          <v-text-field v-model="middleInitial"
+                        class="pa-1"
+                        label="Middle Initial (optional)" />
+          <v-select v-model="rank"
+                    :items="ranks"
+                    label="Rank"
+                    :rules="ranksRequired"
+                    required />
+          <v-text-field v-model="ssn"
+                        class="pa-1"
+                        label="SSN (optional)"
+                        placeholder="111-11-1111" />
+          <v-select v-model="memberStatus"
+                    :items="memberStatus"
+                    class="pa-1"
+                    label="Member Status (optional)">
+            <template v-slot:selection="{ item }">
+              <span>{{ item }}</span>
+            </template>
+          </v-select>
+          <v-text-field v-if="!officer"
+                        v-model="rate"
+                        class="pa-1"
+                        label="Designation (optional)"
+                        placeholder="BM3" />
+          <v-text-field v-if="!officer"
+                        v-model="designation"
+                        class="pa-1"
+                        label="Rate (optional)"
+                        placeholder="ESWS/SS" />
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text
+                 @click="dialog = false">
+            Cancel
+          </v-btn>
+          <v-btn color="primary"
+                 :disabled="!valid"
+                 @click="submit">
+            Save Sailor
+          </v-btn>
+        </v-card-actions>
+      </v-form>
     </v-card>
   </v-dialog>
 </template>
@@ -77,6 +81,7 @@ export default Vue.extend({
     },
   },
   data: () => ({
+    valid: false,
     requiredRules: [
       v => !!v || "Is required",
     ],
@@ -115,8 +120,13 @@ export default Vue.extend({
   },
   methods: {
     submit() {
+      this.$refs.form.validate();
       this.$store.dispatch("updateSailor");
       this.dialog = false;
+      this.clear();
+    },
+    clear() {
+      this.$refs.form.reset();
     },
   },
 });

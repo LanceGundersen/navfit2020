@@ -156,7 +156,7 @@ export default Vue.extend({
     },
     clear() {
       this.$refs.form.reset();
-    }
+    },
   },
 });
 </script>
