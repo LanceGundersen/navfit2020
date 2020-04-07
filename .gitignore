@@ -27,7 +27,7 @@ yarn-error.log*
 /dist_electron
 
 #dbfile
-mrbingedb.json
+data.json
 
 #coverage
 /coverage
