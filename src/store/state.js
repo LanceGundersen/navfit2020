@@ -68,7 +68,22 @@ const INITIAL_STATE = {
       "Early Promote"
     ]
   },
-  forms: {},
+  commandInfo: {
+    uic: "",
+    shipStation: "",
+    commandDescription: "",
+    reportingSenior: {
+      lastName: "",
+      firstName: "",
+      middleInitial: "",
+      grade: "",
+      designation: "",
+      title: "",
+      reportingSeniorUic: "",
+      ssn: "",
+      address: ""
+    }
+  },
   sailors: [],
 };
 

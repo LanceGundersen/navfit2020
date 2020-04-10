@@ -91,15 +91,15 @@ export default Vue.extend({
   }),
   computed: {
     ...mapFields([
-      "forms.sailor.firstName",
-      "forms.sailor.lastName",
-      "forms.sailor.middleInitial",
-      "forms.sailor.rank",
-      "forms.sailor.officer",
-      "forms.sailor.rate",
-      "forms.sailor.designation",
-      "forms.sailor.ssn",
-      "forms.sailor.memberStatus",
+      "forms.sailorEdit.firstName",
+      "forms.sailorEdit.lastName",
+      "forms.sailorEdit.middleInitial",
+      "forms.sailorEdit.rank",
+      "forms.sailorEdit.officer",
+      "forms.sailorEdit.rate",
+      "forms.sailorEdit.designation",
+      "forms.sailorEdit.ssn",
+      "forms.sailorEdit.memberStatus",
     ]),
     dialog: {
       get() {

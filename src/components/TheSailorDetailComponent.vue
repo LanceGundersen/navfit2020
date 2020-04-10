@@ -2,7 +2,7 @@
   <div>
     <v-toolbar dense>
       <v-toolbar-title>
-        {{ sailorDetail.rate }} {{ sailorDetail.lastName }}, {{ sailorDetail.firstName }}
+        {{ rate }} {{ lastName }}, {{ firstName }}
         <v-btn icon
                small
                color="primary"
@@ -16,11 +16,11 @@
       <v-btn text
              color="primary"
              @click="showAddEvalDialog = !showAddEvalDialog">
-        {{ sailorDetail.rank.charAt(0) === "E" ? 'ADD EVAL' : 'ADD FITREP' }}
+        {{ officer ? 'ADD FITREP' : 'ADD EVAL' }}
       </v-btn>
     </v-toolbar>
     <v-expansion-panels>
-      <v-expansion-panel v-for="record in sailorDetail.records"
+      <v-expansion-panel v-for="record in records"
                          :key="record.id">
         <v-expansion-panel-header>
           Reporting Period: {{ record.date.from }} - {{ record.date.to }}
@@ -37,6 +37,7 @@
 
 <script>
 import Vue from "vue";
+import { mapFields } from "vuex-map-fields";
 import TheAddEvalDialogComponent from "./TheAddEvalDialogComponent";
 import TheEditSailorDialogComponent from "./TheEditSailorDialogComponent";
 
@@ -58,11 +59,18 @@ export default Vue.extend({
     showEditSailorDialog: false,
   }),
   computed: {
-    sailorDetail() {
-      return this.$store.getters.getSailorById(
-        this.$router.currentRoute.params.uuid
-      );
-    },
+    ...mapFields([
+      "selected.sailor.lastName",
+      "selected.sailor.firstName",
+      "selected.sailor.rate",
+      "selected.sailor.officer",
+      "selected.sailor.records",
+    ]),
   },
+  beforeCreate() {
+    if (!this.$store.getters.getSelectedSailor.uuid) {
+      this.$router.push({ name: "home" });
+    }
+  }
 });
 </script>

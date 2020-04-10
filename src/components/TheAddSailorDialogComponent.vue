@@ -104,15 +104,15 @@ export default Vue.extend({
   }),
   computed: {
     ...mapFields([
-      "forms.sailor.firstName",
-      "forms.sailor.lastName",
-      "forms.sailor.middleInitial",
-      "forms.sailor.rank",
-      "forms.sailor.officer",
-      "forms.sailor.rate",
-      "forms.sailor.designation",
-      "forms.sailor.ssn",
-      "forms.sailor.memberStatus",
+      "forms.sailorAdd.lastName",
+      "forms.sailorAdd.firstName",
+      "forms.sailorAdd.middleInitial",
+      "forms.sailorAdd.rank",
+      "forms.sailorAdd.officer",
+      "forms.sailorAdd.rate",
+      "forms.sailorAdd.designation",
+      "forms.sailorAdd.ssn",
+      "forms.sailorAdd.memberStatus",
     ]),
     dialog: {
       get() {
@@ -122,18 +122,14 @@ export default Vue.extend({
         this.$emit("input", newValue);
       }
     },
-    memberStatus: {
-      get() {
-        return this.$store.getters.memberStatus;
-      },
+    memberStatus() {
+      return this.$store.getters.memberStatus;
     },
-    ranks: {
-      get() {
-        if (this.officer) {
-          return this.$store.getters.ranksOfficer;
-        }
-        return this.$store.getters.ranksEnlisted;
-      },
+    ranks() {
+      if (this.officer) {
+        return this.$store.getters.ranksOfficer;
+      }
+      return this.$store.getters.ranksEnlisted;
     }
   },
   watch: {
@@ -142,7 +138,7 @@ export default Vue.extend({
     }
   },
   beforeCreate() {
-    this.$store.dispatch("clearSelectedSailor");
+    this.$store.dispatch("setSailorAddForm");
   },
   methods: {
     officerCheckBox() {
@@ -156,6 +152,7 @@ export default Vue.extend({
     },
     clear() {
       this.$refs.form.reset();
+      this.$store.dispatch("clearSailorAddForm");
     },
   },
 });

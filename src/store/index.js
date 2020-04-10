@@ -1,8 +1,10 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { getField, updateField } from "vuex-map-fields";
-import db from "./db";
 import INITIAL_STATE from "./state";
+import actions from "./actions";
+import forms from "./modules/forms";
+import selected from "./modules/selected";
 
 Vue.use(Vuex);
 
@@ -11,46 +13,20 @@ export default new Vuex.Store({
   state: INITIAL_STATE,
   mutations: {
     updateField,
-    setState(state, payload) {
-      Vue.set(state.defaults.ranks, payload.defaults.ranks, payload.defaults.ranks);
-      Vue.set(state.defaults.memberStatus, payload.defaults.memberStatus, payload.defaults.memberStatus);
-      Vue.set(state.defaults.promotionStatus, payload.defaults.promotionStatus, payload.defaults.promotionStatus);
-      state.sailors = payload.sailors;
+    SET_DEFAULTS(state, payload) {
+      state.defaults = payload;
     },
-    setSailorForm(state, payload) {
-      Vue.set(state.forms, "sailor", payload);
+    SET_COMMAND(state, payload) {
+      state.commandInfo = payload;
     },
-    clearSailorForm(state) {
-      Vue.set(state.forms, "sailor", {});
+    SET_SAILORS(state, payload) {
+      state.sailors = payload;
     },
-  },
-  actions: {
-    loadDb({ commit }) {
-      commit("setState", db.readDatabase());
-    },
-    addSailor({ dispatch }) {
-      db.addSailor(this.getters.getFormSailor);
-      dispatch("loadDb");
-    },
-    updateSailor({ dispatch }) {
-      db.updateSailor({ uuid: this.getters.getFormSailor.uuid, form: this.getters.getFormSailor });
-      dispatch("loadDb");
-    },
-    deleteSailor({ dispatch }, payload) {
-      db.deleteSailor(payload);
-      dispatch("loadDb");
-    },
-    addRecord({ dispatch }, payload) {
-      db.addRecord(payload);
-      dispatch("loadDb");
-    },
-    setSelectedSailor({ commit }, payload) {
-      commit("setSailorForm", this.getters.getSailorById(payload));
-    },
-    clearSelectedSailor({ commit }) {
-      commit("clearSailorForm");
+    SET_COMMAND_INFO(state, payload) {
+      state.commandInfo = payload;
     },
   },
+  actions,
   getters: {
     getField,
     memberStatus: state => state.defaults.memberStatus,
@@ -68,7 +44,10 @@ export default new Vuex.Store({
     })),
     getSailorById: state => givenUuid => state.sailors.find(sailor => sailor.uuid === givenUuid),
     getRecordsById: state => givenUuid => state.sailors.find(sailor => sailor.uuid === givenUuid).records || null,
-    getFormSailor: state => state.forms.sailor,
+    getCommandInfo: state => state.commandInfo,
   },
-  modules: {}
+  modules: {
+    forms,
+    selected,
+  }
 });

@@ -13,23 +13,32 @@ export default {
   readDatabase() {
     return db.getState();
   },
-  addSailor(payload) {
-    db.get("sailors").push({ uuid: shortid.generate(), ...payload, records: [] }).write();
+  async addSailor(payload) {
+    return db.get("sailors")
+      .push({ uuid: shortid.generate(), ...payload, records: [] })
+      .write();
   },
-  updateSailor({ uuid, form }) {
-    db.get("sailors")
+  async updateSailor({ uuid, form }) {
+    return db.get("sailors")
       .find({ uuid })
-      .update({ id: shortid.generate(), ...form })
+      .update(form)
       .write();
   },
   deleteSailor(payload) {
-    db.get("sailors").remove({ uuid: payload }).write();
+    db.get("sailors")
+      .remove({ uuid: payload })
+      .write();
   },
   addRecord({ uuid, form }) {
     db.get("sailors")
       .find({ uuid })
       .get("records")
       .push({ id: shortid.generate(), ...form })
+      .write();
+  },
+  async saveCommandDefaults(payload) {
+    return db.get("commandInfo")
+      .assign(payload)
       .write();
   },
 };
