@@ -53,7 +53,7 @@
         <v-card-actions>
           <v-spacer />
           <v-btn text
-                 @click="dialog = false">
+                 @click="clear">
             Cancel
           </v-btn>
           <v-btn color="primary"
@@ -126,6 +126,7 @@ export default Vue.extend({
       this.clear();
     },
     clear() {
+      this.dialog = false;
       this.$refs.form.reset();
     },
   },
