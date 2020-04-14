@@ -2,10 +2,12 @@ import db from "./db";
 
 export default {
   loadDb({ commit }) {
-    const data = db.readDatabase();
-    commit("SET_DEFAULTS", data.defaults);
-    commit("SET_COMMAND", data.commandInfo);
-    commit("SET_SAILORS", data.sailors);
+    db.readDatabase().then(response => {
+      if (response.commandInfo) {
+        commit("SET_COMMAND", response.commandInfo);
+      }
+      commit("SET_SAILORS", response.sailors);
+    });
   },
   addSailor({ commit }) {
     db.addSailor(this.getters.getSailorAddForm).then(response => {
@@ -25,8 +27,8 @@ export default {
     db.addRecord(payload);
     dispatch("loadDb");
   },
-  saveCommandDefaults({ commit }) {
-    db.saveCommandDefaults(this.getters.getCommandInfo).then(response => {
+  saveCommandDefaults({ commit }, payload) {
+    db.saveCommandDefaults(payload).then(response => {
       commit("SET_COMMAND_INFO", response);
     });
   },

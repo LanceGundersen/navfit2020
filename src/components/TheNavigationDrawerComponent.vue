@@ -72,12 +72,12 @@ export default Vue.extend({
         {
           id: 1,
           name: "Enlisted",
-          children: this.$store.getters.enlistedSummaryList,
+          children: this.$store.getters.enlistedSummaryList || [],
         },
         {
           id: 2,
           name: "Officer",
-          children: this.$store.getters.officerSummaryList,
+          children: this.$store.getters.officerSummaryList || [],
         },
       ];
     },

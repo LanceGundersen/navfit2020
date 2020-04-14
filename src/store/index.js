@@ -1,10 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { getField, updateField } from "vuex-map-fields";
-import INITIAL_STATE from "./state";
 import actions from "./actions";
+import commandInfo from "./modules/commandInfo";
 import forms from "./modules/forms";
+import sailors from "./modules/sailors";
 import selected from "./modules/selected";
+import INITIAL_STATE from "./state";
 
 Vue.use(Vuex);
 
@@ -13,18 +15,6 @@ export default new Vuex.Store({
   state: INITIAL_STATE,
   mutations: {
     updateField,
-    SET_DEFAULTS(state, payload) {
-      state.defaults = payload;
-    },
-    SET_COMMAND(state, payload) {
-      state.commandInfo = payload;
-    },
-    SET_SAILORS(state, payload) {
-      state.sailors = payload;
-    },
-    SET_COMMAND_INFO(state, payload) {
-      state.commandInfo = payload;
-    },
   },
   actions,
   getters: {
@@ -32,22 +22,13 @@ export default new Vuex.Store({
     memberStatus: state => state.defaults.memberStatus,
     promotionStatus: state => state.defaults.promotionStatus,
     ranksAll: state => state.defaults.ranks,
-    ranksEnlisted: state => state.defaults.ranks.filter(rank => rank.charAt(0) === "E"),
-    ranksOfficer: state => state.defaults.ranks.filter(rank => rank.charAt(0) === "O"),
-    enlistedSummaryList: state => state.sailors?.filter(sailor => !sailor.officer).map(sailor => ({
-      uuid: sailor.uuid,
-      name: `${sailor.lastName}, ${sailor.firstName} : ${sailor.rank}`
-    })),
-    officerSummaryList: state => state.sailors?.filter(sailor => sailor.officer).map(sailor => ({
-      uuid: sailor.uuid,
-      name: `${sailor.lastName}, ${sailor.firstName} : ${sailor.rank}`
-    })),
-    getSailorById: state => givenUuid => state.sailors.find(sailor => sailor.uuid === givenUuid),
-    getRecordsById: state => givenUuid => state.sailors.find(sailor => sailor.uuid === givenUuid).records || null,
-    getCommandInfo: state => state.commandInfo,
+    ranksEnlisted: state => state.defaults.ranks.enlisted,
+    ranksOfficer: state => state.defaults.ranks.officer,
   },
   modules: {
+    commandInfo,
     forms,
+    sailors,
     selected,
   }
 });

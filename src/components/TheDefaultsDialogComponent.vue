@@ -14,18 +14,18 @@
             <v-card-subtitle>Command Info</v-card-subtitle>
             <v-card-text>
               <v-layout>
-                <v-text-field v-model="uic"
+                <v-text-field v-model="form.uic"
                               class="pa-1"
                               label="UIC"
                               :rules="requiredRules"
                               required />
-                <v-text-field v-model="shipStation"
+                <v-text-field v-model="form.shipStation"
                               class="pa-1"
                               label="Ship/Station"
                               :rules="requiredRules"
                               required />
               </v-layout>
-              <v-textarea v-model="commandDescription"
+              <v-textarea v-model="form.commandDescription"
                           class="pa-1"
                           auto-grow
                           rows="1"
@@ -38,47 +38,47 @@
             <v-card-subtitle>Reporting Senior</v-card-subtitle>
             <v-card-text>
               <v-layout>
-                <v-text-field v-model="lastName"
+                <v-text-field v-model="form.lastName"
                               class="pa-1"
                               label="Last Name"
                               :rules="requiredRules"
                               required />
-                <v-text-field v-model="firstName"
+                <v-text-field v-model="form.firstName"
                               class="pa-1"
                               label="First Name"
                               :rules="requiredRules"
                               required />
-                <v-text-field v-model="middleInitial"
+                <v-text-field v-model="form.middleInitial"
                               class="pa-1"
                               label="Middle Initial (optional)" />
               </v-layout>
               <v-layout>
-                <v-text-field v-model="grade"
+                <v-text-field v-model="form.grade"
                               class="pa-1"
                               label="Grade"
                               :rules="requiredRules"
                               required />
-                <v-text-field v-model="designation"
+                <v-text-field v-model="form.designation"
                               class="pa-1"
                               label="Designation"
                               :rules="requiredRules"
                               required />
-                <v-text-field v-model="title"
+                <v-text-field v-model="form.title"
                               class="pa-1"
                               label="Title"
                               :rules="requiredRules"
                               required />
-                <v-text-field v-model="reportingSeniorUic"
+                <v-text-field v-model="form.reportingSeniorUic"
                               label="UIC (if different)"
                               class="pa-1" />
-                <v-text-field v-model="ssn"
+                <v-text-field v-model="form.ssn"
                               class="pa-1"
                               label="SSN"
                               placeholder="111-11-1111"
                               :rules="requiredRules"
                               required />
               </v-layout>
-              <v-textarea v-model="address"
+              <v-textarea v-model="form.address"
                           label="Address"
                           auto-grow
                           rows="1"
@@ -95,6 +95,7 @@
             Cancel
           </v-btn>
           <v-btn color="primary"
+                 :disabled="!valid"
                  @click="submit">
             Save Command Defaults
           </v-btn>
@@ -106,7 +107,6 @@
 
 <script>
 import Vue from "vue";
-import { mapFields } from "vuex-map-fields";
 
 export default Vue.extend({
   name: "TheDefaultsDialogComponent",
@@ -119,25 +119,30 @@ export default Vue.extend({
   },
   data: () => ({
     valid: false,
+    form: {
+      uic: "",
+      shipStation: "",
+      commandDescription: "",
+      reportingSenior: {
+        lastName: "",
+        firstName: "",
+        middleInitial: "",
+        grade: "",
+        designation: "",
+        title: "",
+        reportingSeniorUic: "",
+        ssn: "",
+        address: ""
+      },
+    },
     requiredRules: [
       v => !!v || "Is required",
     ],
   }),
   computed: {
-    ...mapFields([
-      "commandInfo.uic",
-      "commandInfo.shipStation",
-      "commandInfo.commandDescription",
-      "commandInfo.reportingSenior.firstName",
-      "commandInfo.reportingSenior.lastName",
-      "commandInfo.reportingSenior.middleInitial",
-      "commandInfo.reportingSenior.grade",
-      "commandInfo.reportingSenior.designation",
-      "commandInfo.reportingSenior.title",
-      "commandInfo.reportingSenior.reportingSeniorUic",
-      "commandInfo.reportingSenior.ssn",
-      "commandInfo.reportingSenior.address",
-    ]),
+    getCommandInfo() {
+      return this.$store.getters.getCommandInfo;
+    },
     dialog: {
       get() {
         return this.value;
@@ -147,10 +152,13 @@ export default Vue.extend({
       }
     },
   },
+  beforeUpdate() {
+    this.form = this.getCommandInfo;
+  },
   methods: {
     submit() {
-      // this.$refs.form.validate();
-      this.$store.dispatch("saveCommandDefaults");
+      this.$refs.form.validate();
+      this.$store.dispatch("saveCommandDefaults", this.form);
       this.dialog = false;
     },
   },
