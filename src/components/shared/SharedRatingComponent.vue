@@ -4,7 +4,7 @@
     <v-row align="center"
            class="mx-0">
       <v-rating :value="Number(rating)"
-                color="amber"
+                color="accent"
                 dense
                 readonly
                 size="14" />
