@@ -32,7 +32,7 @@ export default {
       .remove({ uuid: payload })
       .write();
   },
-  addRecord({ uuid, form }) {
+  async addRecord({ uuid, form }) {
     return db.get("sailors")
       .find({ uuid })
       .get("records")

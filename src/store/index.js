@@ -25,6 +25,8 @@ export default new Vuex.Store({
     ranksEnlisted: state => state.defaults.ranks.enlisted,
     ranksOfficer: state => state.defaults.ranks.officer,
     traits: state => state.defaults.traits,
+    promotionRecommendations: state => state.defaults.promotionRecommendation,
+    fonts: state => state.defaults.fonts,
   },
   modules: {
     commandInfo,
