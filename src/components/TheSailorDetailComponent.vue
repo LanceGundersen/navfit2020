@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <v-toolbar dense>
+  <v-card flat>
+    <v-toolbar dense
+               flat>
       <v-toolbar-title>
         {{ rate }} {{ lastName }}, {{ firstName }}
         <v-btn icon
@@ -19,17 +20,27 @@
         {{ officer ? 'ADD FITREP' : 'ADD EVAL' }}
       </v-btn>
     </v-toolbar>
-    <v-expansion-panels>
+    <v-expansion-panels hover
+                        class="pa-2">
       <v-expansion-panel v-for="record in records"
                          :key="record.id">
-        <v-expansion-panel-header>
-          Reporting Period: {{ record.date.from }} - {{ record.date.to }}
+        <v-expansion-panel-header color="grey lighten-5">
+          <v-row no-gutters>
+            <v-col cols="3">
+              {{ record.date.from }} - {{ record.date.to }}
+            </v-col>
+            <v-col cols="2">
+              {{ record.promotionRecommendation }}
+            </v-col>
+            <v-col cols="2">
+              Trait Average: 3.4
+            </v-col>
+          </v-row>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          {{ JSON.stringify(record) }}
           <v-card flat>
             <v-card-text>
-              <v-layout>
+              <v-layout class="mb-2">
                 <v-layout column>
                   <h4>Promotion Status</h4>
                   {{ record.promotionStatus }}
@@ -39,8 +50,12 @@
                   {{ record.reportType }}
                   <h4>Physical Readiness</h4>
                   {{ record.physicalReadiness }}
-                  <h4>Billet Subcategory</h4>
-                  {{ record.billetSubcategory }}
+                </v-layout>
+                <v-layout column>
+                  <template v-if="record.billetSubcategory">
+                    <h4>Billet Subcategory</h4>
+                    {{ record.billetSubcategory }}
+                  </template>
                   <h4>Reporting Senior</h4>
                   TODO
                   <h4>Mid-Term Counseling</h4>
@@ -55,6 +70,8 @@
                                          :rating="record.performanceTraits.commandClimate" />
                   <SharedRatingComponent :label="'Military Bearing/Character'"
                                          :rating="record.performanceTraits.militaryBearing" />
+                </v-layout>
+                <v-layout column>
                   <SharedRatingComponent :label="'Personal Job Accomplishment/Initiative'"
                                          :rating="record.performanceTraits.personalInitiative" />
                   <SharedRatingComponent :label="'Teamwork'"
@@ -63,11 +80,13 @@
                                          :rating="record.performanceTraits.leadership" />
                 </v-layout>
               </v-layout>
-              <v-layout column>
+              <v-layout column
+                        class="mb-2">
                 <h4>Comments on Performance</h4>
                 {{ record.performanceComments }}
               </v-layout>
-              <v-layout column>
+              <v-layout column
+                        class="mb-2">
                 <h4>Qualifications/Achievements</h4>
                 {{ record.qualificationsComments }}
               </v-layout>
@@ -78,7 +97,7 @@
     </v-expansion-panels>
     <TheAddEvalDialogComponent v-model="showAddEvalDialog" />
     <TheEditSailorDialogComponent v-model="showEditSailorDialog" />
-  </div>
+  </v-card>
 </template>
 
 <script>
