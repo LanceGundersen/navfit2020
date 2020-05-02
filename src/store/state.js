@@ -33,17 +33,17 @@ const INITIAL_STATE = {
         "O-11",
       ],
     },
-    memberStatus: [
+    memberStatuses: [
       "ACT",
       "TAR",
       "INACT",
       "AT/ADSW/265",
     ],
-    promotionStatus: [
+    promotionStatuses: [
       "REGULAR",
       "FROCKED",
       "SELECTED",
-      "SPOT"
+      "SPOT",
     ],
     physicalReadiness: [
       "P/WS",
@@ -61,15 +61,27 @@ const INITIAL_STATE = {
       "N/WS",
       "N/NS",
       "N/MW",
-      "N/XX"
+      "N/XX",
     ],
-    promotionRecommendation: [
+    promotionRecommendations: [
       "NOB",
       "Significant Problems",
       "Progressing",
       "Promotable",
       "Must Promote",
-      "Early Promote"
+      "Early Promote",
+    ],
+    reportOccasions: [
+      "Periodic",
+      "Detachment of Individual",
+      "Promotion/Frocking",
+      "Detachment of Reporting Senior",
+      "Special",
+    ],
+    reportTypes: [
+      "Regular",
+      "Concurrent",
+      "Ops Cdr",
     ],
     fonts: ["10 Point", "12 Point"],
     traits: {

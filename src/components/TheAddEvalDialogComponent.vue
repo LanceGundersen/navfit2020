@@ -21,49 +21,32 @@
           </v-layout>
           <v-layout>
             <v-col cols="4">
-              <h4>Occasion for Report</h4>
-              <v-checkbox v-model="form.periodic"
-                          class="mr-2"
-                          label="Periodic"
-                          type="checkbox" />
-              <v-checkbox :value="form.detachmentOfIndividual"
-                          class="mr-2"
-                          label="Detachment of Individual"
-                          type="checkbox" />
-              <v-checkbox :value="form.detachmentOfReportingSenior"
-                          class="mr-2"
-                          label="Detachment of Reporting Senior"
-                          type="checkbox" />
-              <v-checkbox :value="form.special"
-                          class="mr-2"
-                          label="Special"
-                          type="checkbox" />
+              <v-select v-model="form.reportOccasion"
+                        :items="reportOccasions"
+                        label="Occasion for Report"
+                        item-text="label"
+                        :rules="requiredRules"
+                        required />
+              <v-layout>
+                <v-select v-model="form.reportType"
+                          :items="reportTypes"
+                          label="Type of Report"
+                          item-text="label"
+                          :rules="requiredRules"
+                          required />
+                <v-checkbox v-model="form.notObserved"
+                            dense
+                            label="NOB"
+                            type="checkbox" />
+              </v-layout>
+              <v-checkbox v-model="form.retention"
+                          dense
+                          label="Recommended for Retention" />
             </v-col>
             <v-col cols="4">
-              <h4>Type of Report</h4>
-              <v-checkbox v-model="form.notObserved"
-                          class="mr-2"
-                          label="Not Observed Report"
-                          type="checkbox" />
-              <v-checkbox v-model="form.regular"
-                          class="mr-2"
-                          label="Regular"
-                          type="checkbox" />
-              <v-checkbox v-model="form.concurrent"
-                          class="mr-2"
-                          label="Concurrent"
-                          type="checkbox" />
-              <v-checkbox v-model="form.opsCdr"
-                          class="mr-2"
-                          label="Ops Cdr"
-                          type="checkbox" />
-            </v-col>
-            <v-col cols="4">
-              <h4>Promotion</h4>
               <v-select v-model="form.promotionStatus"
                         :items="promotionStatus"
-                        class="pa-1"
-                        label="Status"
+                        label="Promotion Status"
                         :rules="requiredRules"
                         required>
                 <template v-slot:selection="{ item }">
@@ -71,11 +54,11 @@
                 </template>
               </v-select>
               <v-text-field v-model="form.billetSubcategory"
-                            class="pa-1"
                             label="Billet Subcategory (if any)" />
+            </v-col>
+            <v-col cols="4">
               <v-select v-model="form.promotionRecommendation"
                         :items="promotionRecommendations"
-                        class="pa-1"
                         label="Recommendation"
                         :rules="requiredRules"
                         required>
@@ -83,55 +66,65 @@
                   <span>{{ item }}</span>
                 </template>
               </v-select>
-              <v-checkbox v-model="form.retention"
-                          label="Retention"
-                          class="pa-1" />
+              <v-select v-model="form.physicalReadiness"
+                        :items="physicalReadiness"
+                        label="Physical Readiness"
+                        :rules="requiredRules"
+                        required>
+                <template v-slot:selection="{ item }">
+                  <span>{{ item }}</span>
+                </template>
+              </v-select>
             </v-col>
           </v-layout>
           <h4>Performance Traits</h4>
-          <v-layout column>
-            <v-select v-model="form.performanceTraits.professionalKnowledge"
-                      :items="traits.professionalKnowledge.standards"
-                      :label="traits.professionalKnowledge.title"
-                      item-text="label"
-                      :rules="requiredRules"
-                      required />
-            <v-select v-model="form.performanceTraits.qualityOfWork"
-                      :items="traits.qualityOfWork.standards"
-                      :label="traits.qualityOfWork.title"
-                      item-text="label"
-                      :rules="requiredRules"
-                      required />
-            <v-select v-model="form.performanceTraits.commandClimate"
-                      :items="traits.commandClimate.standards"
-                      :label="traits.commandClimate.title"
-                      item-text="label"
-                      :rules="requiredRules"
-                      required />
-            <v-select v-model="form.performanceTraits.militaryBearing"
-                      :items="traits.militaryBearing.standards"
-                      :label="traits.militaryBearing.title"
-                      item-text="label"
-                      :rules="requiredRules"
-                      required />
-            <v-select v-model="form.performanceTraits.personalInitiative"
-                      :items="traits.personalInitiative.standards"
-                      :label="traits.personalInitiative.title"
-                      item-text="label"
-                      :rules="requiredRules"
-                      required />
-            <v-select v-model="form.performanceTraits.teamwork"
-                      :items="traits.teamwork.standards"
-                      :label="traits.teamwork.title"
-                      item-text="label"
-                      :rules="requiredRules"
-                      required />
-            <v-select v-model="form.performanceTraits.leadership"
-                      :items="traits.leadership.standards"
-                      :label="traits.leadership.title"
-                      item-text="label"
-                      :rules="requiredRules"
-                      required />
+          <v-layout>
+            <v-col cols="6">
+              <v-select v-model="form.performanceTraits.professionalKnowledge"
+                        :items="traits.professionalKnowledge.standards"
+                        :label="traits.professionalKnowledge.title"
+                        item-text="label"
+                        :rules="requiredRules"
+                        required />
+              <v-select v-model="form.performanceTraits.qualityOfWork"
+                        :items="traits.qualityOfWork.standards"
+                        :label="traits.qualityOfWork.title"
+                        item-text="label"
+                        :rules="requiredRules"
+                        required />
+              <v-select v-model="form.performanceTraits.commandClimate"
+                        :items="traits.commandClimate.standards"
+                        :label="traits.commandClimate.title"
+                        item-text="label"
+                        :rules="requiredRules"
+                        required />
+              <v-select v-model="form.performanceTraits.militaryBearing"
+                        :items="traits.militaryBearing.standards"
+                        :label="traits.militaryBearing.title"
+                        item-text="label"
+                        :rules="requiredRules"
+                        required />
+            </v-col>
+            <v-col cols="6">
+              <v-select v-model="form.performanceTraits.personalInitiative"
+                        :items="traits.personalInitiative.standards"
+                        :label="traits.personalInitiative.title"
+                        item-text="label"
+                        :rules="requiredRules"
+                        required />
+              <v-select v-model="form.performanceTraits.teamwork"
+                        :items="traits.teamwork.standards"
+                        :label="traits.teamwork.title"
+                        item-text="label"
+                        :rules="requiredRules"
+                        required />
+              <v-select v-model="form.performanceTraits.leadership"
+                        :items="traits.leadership.standards"
+                        :label="traits.leadership.title"
+                        item-text="label"
+                        :rules="requiredRules"
+                        required />
+            </v-col>
           </v-layout>
           <h4>Comments on Performance.</h4>
           <v-layout>
@@ -139,16 +132,19 @@
               *All 1.0 marks, three 2.0 marks, and 2.0 marks in Block 35 must be specifically substantiated in comments.
               Comments must be verifiable. Use upper and lower case.
             </v-subheader>
-            <v-select dense
+            <v-select v-model="form.fontSize"
+                      dense
                       :items="fonts"
                       label="Font Size" />
           </v-layout>
-          <v-textarea filled
+          <v-textarea v-model="form.performanceComments"
+                      filled
                       counter />
           <v-layout column>
             <h4>Qualifications/Achievements</h4>
             <v-subheader>Education, awards, community involvement, etc., during this period.</v-subheader>
-            <v-textarea filled
+            <v-textarea v-model="form.qualificationsComments"
+                        filled
                         counter />
           </v-layout>
         </v-card-text>
@@ -187,15 +183,10 @@ export default Vue.extend({
   data: () => ({
     valid: false,
     form: {
+      reportType: null,
+      reportOccasion: null,
       promotionStatus: null,
-      periodic: null,
-      detachmentOfIndividual: null,
-      detachmentOfReportingSenior: null,
-      special: null,
       notObserved: null,
-      regular: null,
-      concurrent: null,
-      opsCdr: null,
       physicalReadiness: null,
       billetSubcategory: null,
       date: {
@@ -213,6 +204,9 @@ export default Vue.extend({
       },
       promotionRecommendation: null,
       retention: null,
+      fontSize: null,
+      performanceComments: null,
+      qualificationsComments: null,
     },
     requiredRules: [
       v => !!v || "Is required",
@@ -244,7 +238,22 @@ export default Vue.extend({
     },
     promotionStatus: {
       get() {
-        return this.$store.getters.promotionStatus || [];
+        return this.$store.getters.promotionStatuses || [];
+      },
+    },
+    physicalReadiness: {
+      get() {
+        return this.$store.getters.physicalReadiness || [];
+      },
+    },
+    reportTypes: {
+      get() {
+        return this.$store.getters.reportTypes || [];
+      },
+    },
+    reportOccasions: {
+      get() {
+        return this.$store.getters.reportOccasions || [];
       },
     },
     uuid() {
