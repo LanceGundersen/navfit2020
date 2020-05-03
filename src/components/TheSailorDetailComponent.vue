@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <v-card outlined>
     <v-toolbar dense
                flat>
       <v-toolbar-title>
@@ -61,6 +61,8 @@
                   <h4>Mid-Term Counseling</h4>
                   TODO
                 </v-layout>
+                <v-divider vertical
+                           class="mr-4 "/>
                 <v-layout column>
                   <SharedRatingComponent :label="'Professional Knowledge'"
                                          :rating="record.performanceTraits.professionalKnowledge" />
@@ -83,11 +85,13 @@
               <v-layout column
                         class="mb-2">
                 <h4>Comments on Performance</h4>
+                <v-divider />
                 {{ record.performanceComments }}
               </v-layout>
               <v-layout column
                         class="mb-2">
                 <h4>Qualifications/Achievements</h4>
+                <v-divider />
                 {{ record.qualificationsComments }}
               </v-layout>
             </v-card-text>
