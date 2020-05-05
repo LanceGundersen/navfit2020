@@ -5,10 +5,97 @@
     <v-card class="pa-4">
       <v-card-title>
         Add Eval/Fitrep
+        <v-spacer />
+        <v-btn small
+               outlined
+               color="primary"
+               @click.stop="defaultsDrawer = !defaultsDrawer">
+          Command Defaults
+        </v-btn>
       </v-card-title>
       <v-form ref="form"
               v-model="valid">
         <v-card-text>
+          <v-card v-show="showCommandInfo"
+                  outlined
+                  class="mb-2">
+            <v-card-subtitle>Command Info</v-card-subtitle>
+            <v-card-text>
+              <v-layout>
+                <v-text-field v-model="form.commandInfo.uic"
+                              class="pa-1"
+                              label="UIC"
+                              :rules="requiredRules"
+                              required />
+                <v-text-field v-model="form.commandInfo.shipStation"
+                              class="pa-1"
+                              label="Ship/Station"
+                              :rules="requiredRules"
+                              required />
+              </v-layout>
+              <v-textarea v-model="form.commandInfo.commandDescription"
+                          class="pa-1"
+                          auto-grow
+                          rows="1"
+                          label="Command Employment and Command Achievements"
+                          :rules="requiredRules"
+                          required />
+            </v-card-text>
+          </v-card>
+          <v-card v-show="showSeniorInfo"
+                  outlined
+                  class="mb-2">
+            <v-card-subtitle>Reporting Senior</v-card-subtitle>
+            <v-card-text>
+              <v-layout>
+                <v-text-field v-model="form.commandInfo.lastName"
+                              class="pa-1"
+                              label="Last Name"
+                              :rules="requiredRules"
+                              required />
+                <v-text-field v-model="form.commandInfo.firstName"
+                              class="pa-1"
+                              label="First Name"
+                              :rules="requiredRules"
+                              required />
+                <v-text-field v-model="form.commandInfo.middleInitial"
+                              class="pa-1"
+                              label="Middle Initial (optional)" />
+              </v-layout>
+              <v-layout>
+                <v-text-field v-model="form.commandInfo.grade"
+                              class="pa-1"
+                              label="Grade"
+                              :rules="requiredRules"
+                              required />
+                <v-text-field v-model="form.commandInfo.designation"
+                              class="pa-1"
+                              label="Designation"
+                              :rules="requiredRules"
+                              required />
+                <v-text-field v-model="form.commandInfo.title"
+                              class="pa-1"
+                              label="Title"
+                              :rules="requiredRules"
+                              required />
+                <v-text-field v-model="form.commandInfo.reportingSeniorUic"
+                              label="UIC (if different)"
+                              class="pa-1" />
+                <v-text-field v-model="form.commandInfo.ssn"
+                              class="pa-1"
+                              label="SSN"
+                              placeholder="111-11-1111"
+                              :rules="requiredRules"
+                              required />
+              </v-layout>
+              <v-textarea v-model="form.commandInfo.address"
+                          label="Address"
+                          auto-grow
+                          rows="1"
+                          :rules="requiredRules"
+                          required />
+            </v-card-text>
+          </v-card>
           <v-layout>
             <TheDatePickerComponent :label="'From Date'"
                                     :rules="requiredRules"
@@ -161,6 +248,65 @@
         </v-card-actions>
       </v-form>
     </v-card>
+    <v-navigation-drawer v-model="defaultsDrawer"
+                         absolute
+                         temporary
+                         left>
+      <v-list>
+        <v-subheader>
+          Command Info
+          <v-spacer />
+          <v-btn small
+                 icon
+                 color="warning"
+                 @click.stop="showCommandDefaults()">
+            <v-icon small>
+              mdi-pencil
+            </v-icon>
+          </v-btn>
+        </v-subheader>
+        <v-divider />
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>Ship/Station</v-list-item-title>
+            <v-list-item-subtitle>{{ form.commandInfo.shipStation }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>UIC</v-list-item-title>
+            <v-list-item-subtitle>{{ form.commandInfo.uic }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-subheader>
+          Reporting Senior Info
+          <v-spacer />
+          <v-btn small
+                 icon
+                 color="warning"
+                 @click="showReportingSeniorDefaults()">
+            <v-icon small>
+              mdi-pencil
+            </v-icon>
+          </v-btn>
+        </v-subheader>
+        <v-divider />
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>Grade</v-list-item-title>
+            <v-list-item-subtitle>{{ form.commandInfo.grade }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>Name</v-list-item-title>
+            <v-list-item-subtitle>
+              {{ form.commandInfo.lastName }}, {{ form.commandInfo.firstName }}, {{ form.commandInfo.middleInitial }}
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
   </v-dialog>
 </template>
 
@@ -181,6 +327,9 @@ export default Vue.extend({
     },
   },
   data: () => ({
+    defaultsDrawer: false,
+    showCommandInfo: false,
+    showSeniorInfo: false,
     valid: false,
     form: {
       reportType: null,
@@ -207,6 +356,22 @@ export default Vue.extend({
       fontSize: null,
       performanceComments: null,
       qualificationsComments: null,
+      commandInfo: {
+        uic: "",
+        shipStation: "",
+        commandDescription: "",
+        reportingSenior: {
+          lastName: "",
+          firstName: "",
+          middleInitial: "",
+          grade: "",
+          designation: "",
+          title: "",
+          reportingSeniorUic: "",
+          ssn: "",
+          address: "",
+        },
+      },
     },
     requiredRules: [
       v => !!v || "Is required",
@@ -261,9 +426,25 @@ export default Vue.extend({
     },
     records() {
       return this.$store.getters.getRecordsById(this.uuid);
-    }
+    },
+    getCommandInfo: {
+      get() {
+        return this.$store.getters.getCommandInfo;
+      },
+    },
+  },
+  created() {
+    this.form.commandInfo = this.getCommandInfo;
   },
   methods: {
+    showCommandDefaults() {
+      this.showCommandInfo = !this.showCommandInfo;
+      this.defaultsDrawer = !this.defaultsDrawer;
+    },
+    showReportingSeniorDefaults() {
+      this.showSeniorInfo = !this.showSeniorInfo;
+      this.defaultsDrawer = !this.defaultsDrawer;
+    },
     submit() {
       this.$refs.form.validate();
       console.log({ form: this.form });

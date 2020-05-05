@@ -57,12 +57,13 @@
                     {{ record.billetSubcategory }}
                   </template>
                   <h4>Reporting Senior</h4>
-                  TODO
+                  {{ record.commandInfo.grade }} {{ record.commandInfo.firstName }},
+                  {{ record.commandInfo.lastName }} {{ record.commandInfo.middleInitial }}
                   <h4>Mid-Term Counseling</h4>
                   TODO
                 </v-layout>
                 <v-divider vertical
-                           class="mr-4 "/>
+                           class="mr-4 " />
                 <v-layout column>
                   <SharedRatingComponent :label="'Professional Knowledge'"
                                          :rating="record.performanceTraits.professionalKnowledge" />
