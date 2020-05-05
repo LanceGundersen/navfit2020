@@ -17,7 +17,7 @@
       <v-btn text
              color="primary"
              @click="showAddEvalDialog = !showAddEvalDialog">
-        {{ officer ? 'ADD FITREP' : 'ADD EVAL' }}
+        {{ 'ADD EVAL' }}
       </v-btn>
     </v-toolbar>
     <v-expansion-panels hover

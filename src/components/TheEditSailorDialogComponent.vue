@@ -111,7 +111,7 @@ export default Vue.extend({
     },
     memberStatus: {
       get() {
-        return this.$store.getters.memberStatus;
+        return this.$store.getters.memberStatuses;
       },
     },
     ranks() {

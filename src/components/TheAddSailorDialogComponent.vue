@@ -24,18 +24,11 @@
               <v-text-field v-model="middleInitial"
                             class="pa-1"
                             label="Middle Initial (optional)" />
-              <div class="d-flex">
-                <v-checkbox v-model="officer"
-                            class="mr-2"
-                            label="Officer"
-                            type="checkbox"
-                            @change="officerCheckBox()" />
-                <v-select v-model="rank"
-                          :items="ranks"
-                          label="Rank"
-                          :rules="ranksRequired"
-                          required />
-              </div>
+              <v-select v-model="rank"
+                        :items="ranks"
+                        label="Rank"
+                        :rules="ranksRequired"
+                        required />
             </v-col>
             <v-col>
               <v-text-field v-model="ssn"
@@ -55,10 +48,9 @@
                             class="pa-1"
                             label="Designation (optional)"
                             placeholder="BM3" />
-              <v-text-field v-if="!officer"
-                            v-model="designation"
+              <v-text-field v-model="designation"
                             class="pa-1"
-                            label="Rate (optional)"
+                            label="Warfare (optional)"
                             placeholder="ESWS/SS" />
             </v-col>
           </v-row>
@@ -123,12 +115,9 @@ export default Vue.extend({
       }
     },
     memberStatus() {
-      return this.$store.getters.memberStatus;
+      return this.$store.getters.memberStatuses;
     },
     ranks() {
-      if (this.officer) {
-        return this.$store.getters.ranksOfficer;
-      }
       return this.$store.getters.ranksEnlisted;
     }
   },
