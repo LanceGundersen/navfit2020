@@ -64,7 +64,7 @@ export default Vue.extend({
   },
   methods: {
     viewSailorDetail(givenUuid) {
-      this.$router.push({ name: "detail", params: { uuid: givenUuid } });
+      this.$router.push({ name: "detail", params: { uuid: givenUuid } }).catch(() => {});
       this.$store.dispatch("setSelectedSailor", this.$router.currentRoute.params);
     },
     deleteSailor(givenUuid) {
