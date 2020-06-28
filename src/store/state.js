@@ -1,4 +1,9 @@
 const INITIAL_STATE = {
+  app: {
+    isError: false,
+    errorObj: "",
+    errorMsg: "",
+  },
   defaults: {
     ranks: {
       enlisted: [

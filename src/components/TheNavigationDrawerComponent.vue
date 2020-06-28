@@ -7,8 +7,8 @@
     <v-list>
       <v-list-item v-for="(sailor, uuid) in sailors"
                    :key="uuid"
-                   @click="viewSailorDetail(sailor.uuid)"
-                   class="pointer">
+                   class="pointer"
+                   @click="viewSailorDetail(sailor.uuid)">
         <v-list-item-content>
           <v-list-item-title class="d-flex flex-nowrap">
             {{ sailor.name }}
@@ -59,17 +59,21 @@ export default Vue.extend({
       },
     },
     sailors() {
-      return this.$store.getters.enlistedSummaryList || {};
+      return this.$store.getters.getSailorsSummaryList;
     },
   },
   methods: {
     viewSailorDetail(givenUuid) {
-      this.$router.push({ name: "detail", params: { uuid: givenUuid } }).catch(() => {});
-      this.$store.dispatch("setSelectedSailor", this.$router.currentRoute.params);
+      this.$store.dispatch("setSelectedSailor", givenUuid)
+        .then(() => this.$router.push({ name: "detail", params: { uuid: givenUuid } }))
+        .catch(() => {
+          this.drawer = !this.drawer;
+        });
+      // this.$router.push({ name: "detail", params: { uuid: givenUuid } }).catch(() => {});
     },
     deleteSailor(givenUuid) {
       this.uuid = givenUuid;
-      this.showDeleteSailorDialog = true;
+      this.a = true;
     },
   },
 });

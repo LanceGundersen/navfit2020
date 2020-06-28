@@ -12,14 +12,20 @@ export default {
   async readDatabase() {
     return db.getState();
   },
-  async addSailor(payload) {
+  async addSailor(form) {
     if (!db.has("sailors").value()) {
       db.set("sailors", [])
         .write();
     }
-    return db.get("sailors")
-      .push({ uuid: shortid.generate(), ...payload, records: [] })
-      .write();
+    try {
+      const uuid = shortid.generate();
+      db.get("sailors")
+        .push({ uuid, ...form, records: [] })
+        .write();
+      return { uuid };
+    } catch (error) {
+      return { error };
+    }
   },
   async updateSailor({ uuid, form }) {
     return db.get("sailors")
@@ -27,8 +33,8 @@ export default {
       .update(form)
       .write();
   },
-  deleteSailor(payload) {
-    db.get("sailors")
+  async deleteSailor(payload) {
+    return db.get("sailors")
       .remove({ uuid: payload })
       .write();
   },

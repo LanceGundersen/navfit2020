@@ -11,31 +11,31 @@
         <v-card-text>
           <v-row>
             <v-col>
-              <v-text-field v-model="lastName"
+              <v-text-field v-model="form.lastName"
                             class="pa-1"
                             label="Last Name"
                             :rules="requiredRules"
                             required />
-              <v-text-field v-model="firstName"
+              <v-text-field v-model="form.firstName"
                             class="pa-1"
                             label="First Name"
                             :rules="requiredRules"
                             required />
-              <v-text-field v-model="middleInitial"
+              <v-text-field v-model="form.middleInitial"
                             class="pa-1"
                             label="Middle Initial (optional)" />
-              <v-select v-model="rank"
+              <v-select v-model="form.rank"
                         :items="ranks"
                         label="Rank"
                         :rules="ranksRequired"
                         required />
             </v-col>
             <v-col>
-              <v-text-field v-model="ssn"
+              <v-text-field v-model="form.ssn"
                             class="pa-1"
                             label="SSN (optional)"
                             placeholder="111-11-1111" />
-              <v-select v-model="memberStatus"
+              <v-select v-model="form.memberStatus"
                         :items="memberStatus"
                         class="pa-1"
                         label="Member Status (optional)">
@@ -43,12 +43,11 @@
                   <span>{{ item }}</span>
                 </template>
               </v-select>
-              <v-text-field v-if="!officer"
-                            v-model="rate"
+              <v-text-field v-model="form.rate"
                             class="pa-1"
                             label="Designation (optional)"
                             placeholder="BM3" />
-              <v-text-field v-model="designation"
+              <v-text-field v-model="form.designation"
                             class="pa-1"
                             label="Warfare (optional)"
                             placeholder="ESWS/SS" />
@@ -74,7 +73,6 @@
 
 <script>
 import Vue from "vue";
-import { mapFields } from "vuex-map-fields";
 
 export default Vue.extend({
   name: "TheAddSailorDialogComponent",
@@ -87,6 +85,17 @@ export default Vue.extend({
   },
   data: () => ({
     valid: false,
+    form: {
+      lastName: null,
+      firstName: null,
+      middleInitial: null,
+      rank: null,
+      officer: null,
+      rate: null,
+      designation: null,
+      ssn: null,
+      memberStatus: null,
+    },
     requiredRules: [
       v => !!v || "Is required",
     ],
@@ -95,17 +104,6 @@ export default Vue.extend({
     ],
   }),
   computed: {
-    ...mapFields([
-      "forms.sailorAdd.lastName",
-      "forms.sailorAdd.firstName",
-      "forms.sailorAdd.middleInitial",
-      "forms.sailorAdd.rank",
-      "forms.sailorAdd.officer",
-      "forms.sailorAdd.rate",
-      "forms.sailorAdd.designation",
-      "forms.sailorAdd.ssn",
-      "forms.sailorAdd.memberStatus",
-    ]),
     dialog: {
       get() {
         return this.value;
@@ -121,27 +119,17 @@ export default Vue.extend({
       return this.$store.getters.ranksEnlisted;
     }
   },
-  watch: {
-    officer(val) {
-      this.officer = val;
-    }
-  },
-  beforeCreate() {
-    this.$store.dispatch("setSailorAddForm");
-  },
   methods: {
-    officerCheckBox() {
-      this.rank = null;
-    },
     submit() {
       this.$refs.form.validate();
-      this.$store.dispatch("addSailor");
-      this.dialog = false;
-      this.clear();
-    },
-    clear() {
-      this.$refs.form.reset();
-      this.$store.dispatch("clearSailorAddForm");
+      this.$store.dispatch("addSailor", this.form)
+        .then(() => {
+          if (!this.$store.getters.isError) {
+            this.$router.push({ name: "detail", params: { uuid: this.$store.getters.getSelectedSailor.uuid } }).catch(() => {});
+            this.dialog = false;
+            this.$refs.form.reset();
+          }
+        });
     },
   },
 });

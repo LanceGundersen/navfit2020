@@ -15,10 +15,14 @@ export default new Vuex.Store({
   state: INITIAL_STATE,
   mutations: {
     updateField,
+    setError: state => { state.app.isError = !state.app.isError; },
+    setErrorMsg: (state, payload) => { state.app.errorMsg = payload; },
+    setErrorObj: (state, payload) => { state.app.errorObj = { ...payload }; },
   },
   actions,
   getters: {
     getField,
+    isError: state => state.app.isError,
     memberStatuses: state => state.defaults.memberStatuses,
     promotionStatuses: state => state.defaults.promotionStatuses,
     ranksAll: state => state.defaults.ranks,
