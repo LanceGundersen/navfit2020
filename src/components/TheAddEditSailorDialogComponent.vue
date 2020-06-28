@@ -12,6 +12,7 @@
           <v-row>
             <v-col>
               <v-text-field v-model="form.lastName"
+                            :value="form.lastName"
                             class="pa-1"
                             label="Last Name"
                             required />
@@ -90,6 +91,7 @@ export default Vue.extend({
   data: () => ({
     valid: false,
     form: {
+      uuid: null,
       lastName: null,
       firstName: null,
       middleInitial: null,
@@ -99,6 +101,7 @@ export default Vue.extend({
       designation: null,
       ssn: null,
       memberStatus: null,
+      warfare: null,
     },
     requiredRules: [
       v => !!v || "Is required",
@@ -130,7 +133,7 @@ export default Vue.extend({
     }
   },
   beforeUpdate() {
-    this.form = this.getSailorEditForm;
+    if (this.edit) this.buildForm(this.getSailorEditForm);
   },
   methods: {
     submit() {
@@ -143,16 +146,28 @@ export default Vue.extend({
               this.$refs.form.reset();
             }
           });
+      } else {
+        this.$store.dispatch("addSailor", this.form)
+          .then(() => {
+            if (!this.$store.getters.isError) {
+              this.$router.push({ name: "detail", params: { uuid: this.$store.getters.getSelectedSailor.uuid } }).catch(() => {});
+              this.dialog = false;
+              this.$refs.form.reset();
+            }
+          });
       }
-      this.$store.dispatch("addSailor", this.form)
-        .then(() => {
-          if (!this.$store.getters.isError) {
-            this.$router.push({ name: "detail", params: { uuid: this.$store.getters.getSelectedSailor.uuid } }).catch(() => {});
-            this.dialog = false;
-            this.$refs.form.reset();
-          }
-        });
     },
+    buildForm(givenSailor) {
+      this.form.uuid = givenSailor.uuid;
+      this.form.lastName = givenSailor.lastName;
+      this.form.firstName = givenSailor.firstName;
+      this.form.middleInitial = givenSailor.middleInitial;
+      this.form.rank = givenSailor.rank;
+      this.form.ssn = givenSailor.ssn;
+      this.form.memberStatus = givenSailor.memberStatus;
+      this.form.designation = givenSailor.designation;
+      this.form.warfare = givenSailor.warfare;
+    }
   },
 });
 </script>

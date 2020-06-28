@@ -27,11 +27,17 @@ export default {
       return { error };
     }
   },
-  async updateSailor({ uuid, form }) {
-    return db.get("sailors")
-      .find({ uuid })
-      .update(form)
-      .write();
+  async updateSailor(payload) {
+    const { uuid } = payload;
+    try {
+      db.get("sailors")
+        .find(uuid)
+        .update(payload)
+        .write();
+      return { uuid };
+    } catch (error) {
+      return { error };
+    }
   },
   async deleteSailor(payload) {
     return db.get("sailors")

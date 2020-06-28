@@ -20,10 +20,14 @@ export default {
       dispatch("setSelectedSailor", response.uuid);
     });
   },
-  updateSailor(payload) {
-    db.updateSailor({
-      uuid: this.getters.getSailorEditForm.uuid,
-      form: payload
+  updateSailor({ commit, dispatch }, payload) {
+    db.updateSailor(payload).then(response => {
+      if (response.error) {
+        commit("setError");
+        commit("setErrorMsg", response.error?.toString());
+        commit("setErrorObj", response);
+      }
+      dispatch("loadDb");
     });
   },
   deleteSailor({ commit }, payload) {

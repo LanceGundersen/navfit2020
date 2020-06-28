@@ -102,7 +102,7 @@
     </v-expansion-panels>
     <TheAddEvalDialogComponent v-model="showAddEvalDialog" />
     <TheAddEditSailorDialogComponent v-model="showAddSailorDialog"
-                                 :edit="true" />
+                                     :edit="true" />
   </v-card>
 </template>
 
