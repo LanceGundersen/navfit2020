@@ -3,7 +3,7 @@
     <v-toolbar dense
                flat>
       <v-toolbar-title>
-        {{ rate }} {{ lastName }}, {{ firstName }}
+        {{ sailor.rate }} {{ sailor.lastName }}, {{ sailor.firstName }}
         <v-btn icon
                small
                color="primary"
@@ -22,7 +22,7 @@
     </v-toolbar>
     <v-expansion-panels hover
                         class="pa-2">
-      <v-expansion-panel v-for="record in records"
+      <v-expansion-panel v-for="record in sailor.records"
                          :key="record.id">
         <v-expansion-panel-header color="grey lighten-5">
           <v-row no-gutters>
@@ -107,7 +107,6 @@
 
 <script>
 import Vue from "vue";
-import { mapFields } from "vuex-map-fields";
 import TheAddEvalDialogComponent from "./TheAddEvalDialogComponent";
 import TheEditSailorDialogComponent from "./TheEditSailorDialogComponent";
 import SharedRatingComponent from "./shared/SharedRatingComponent";
@@ -131,13 +130,9 @@ export default Vue.extend({
     showEditSailorDialog: false,
   }),
   computed: {
-    ...mapFields([
-      "selected.sailor.lastName",
-      "selected.sailor.firstName",
-      "selected.sailor.rate",
-      "selected.sailor.officer",
-      "selected.sailor.records",
-    ]),
+    sailor() {
+      return this.$store.getters.getSelectedSailor;
+    }
   },
   beforeCreate() {
     if (!this.$store.getters.getSelectedSailor.uuid) {
