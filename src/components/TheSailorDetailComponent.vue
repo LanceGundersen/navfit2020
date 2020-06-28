@@ -7,7 +7,7 @@
         <v-btn icon
                small
                color="primary"
-               @click.stop="showEditSailorDialog = !showEditSailorDialog">
+               @click="showEditSailorDialog(sailor.uuid)">
           <v-icon small>
             mdi-pencil
           </v-icon>
@@ -101,21 +101,22 @@
       </v-expansion-panel>
     </v-expansion-panels>
     <TheAddEvalDialogComponent v-model="showAddEvalDialog" />
-    <TheEditSailorDialogComponent v-model="showEditSailorDialog" />
+    <TheAddEditSailorDialogComponent v-model="showAddSailorDialog"
+                                 :edit="true" />
   </v-card>
 </template>
 
 <script>
 import Vue from "vue";
+import TheAddEditSailorDialogComponent from "./TheAddEditSailorDialogComponent";
 import TheAddEvalDialogComponent from "./TheAddEvalDialogComponent";
-import TheEditSailorDialogComponent from "./TheEditSailorDialogComponent";
 import SharedRatingComponent from "./shared/SharedRatingComponent";
 
 export default Vue.extend({
   name: "TheSailorDetailComponent",
   components: {
     TheAddEvalDialogComponent,
-    TheEditSailorDialogComponent,
+    TheAddEditSailorDialogComponent,
     SharedRatingComponent,
   },
   props: {
@@ -127,7 +128,7 @@ export default Vue.extend({
   },
   data: () => ({
     showAddEvalDialog: false,
-    showEditSailorDialog: false,
+    showAddSailorDialog: false,
   }),
   computed: {
     sailor() {
@@ -140,6 +141,10 @@ export default Vue.extend({
     }
   },
   methods: {
+    showEditSailorDialog(givenUuid) {
+      this.$store.dispatch("setSailorEditForm", givenUuid);
+      this.showAddSailorDialog = !this.showAddSailorDialog;
+    },
     deleteEval(givenUuid) {
       this.uuid = givenUuid;
       this.showDeleteSailorDialog = true;

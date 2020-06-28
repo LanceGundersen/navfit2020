@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { getField, updateField } from "vuex-map-fields";
 import actions from "./actions";
 import commandInfo from "./modules/commandInfo";
 import forms from "./modules/forms";
@@ -14,14 +13,12 @@ export default new Vuex.Store({
   strict: process.env.NODE_ENV !== "production",
   state: INITIAL_STATE,
   mutations: {
-    updateField,
     setError: state => { state.app.isError = !state.app.isError; },
     setErrorMsg: (state, payload) => { state.app.errorMsg = payload; },
     setErrorObj: (state, payload) => { state.app.errorObj = { ...payload }; },
   },
   actions,
   getters: {
-    getField,
     isError: state => state.app.isError,
     memberStatuses: state => state.defaults.memberStatuses,
     promotionStatuses: state => state.defaults.promotionStatuses,

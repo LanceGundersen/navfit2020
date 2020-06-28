@@ -4,7 +4,7 @@
             max-width="75%">
     <v-card class="ma-0">
       <v-card-title>
-        Add Sailor
+        {{ edit ? 'Edit' : 'Add' }} Sailor
       </v-card-title>
       <v-form ref="form"
               v-model="valid">
@@ -12,9 +12,9 @@
           <v-row>
             <v-col>
               <v-text-field v-model="form.lastName"
+                            value="this.getSailorEditForm.lastName"
                             class="pa-1"
                             label="Last Name"
-                            :rules="requiredRules"
                             required />
               <v-text-field v-model="form.firstName"
                             class="pa-1"
@@ -63,7 +63,7 @@
           <v-btn color="primary"
                  :disabled="!valid"
                  @click="submit">
-            Add Sailor
+            {{ edit ? 'Edit' : 'Add' }} Sailor
           </v-btn>
         </v-card-actions>
       </v-form>
@@ -75,12 +75,17 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "TheAddSailorDialogComponent",
+  name: "TheAddEditSailorDialogComponent",
   props: {
     value: {
       type: Boolean,
       required: false,
       default: true,
+    },
+    edit: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   data: () => ({
@@ -117,11 +122,29 @@ export default Vue.extend({
     },
     ranks() {
       return this.$store.getters.ranksEnlisted;
+    },
+    getCommandInfo() {
+      return this.$store.getters.getCommandInfo;
+    },
+    getSailorEditForm() {
+      return this.$store.getters.getSailorEditForm;
     }
+  },
+  beforeUpdate() {
+    this.form = this.getSailorEditForm;
   },
   methods: {
     submit() {
       this.$refs.form.validate();
+      if (this.edit) {
+        this.$store.dispatch("updateSailor", this.form)
+          .then(() => {
+            if (!this.$store.getters.isError) {
+              this.dialog = false;
+              this.$refs.form.reset();
+            }
+          });
+      }
       this.$store.dispatch("addSailor", this.form)
         .then(() => {
           if (!this.$store.getters.isError) {

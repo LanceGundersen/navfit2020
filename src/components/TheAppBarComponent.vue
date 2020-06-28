@@ -31,7 +31,7 @@
 <script>
 import Vue from "vue";
 import TheNavigationDrawerComponent from "./TheNavigationDrawerComponent";
-import TheAddSailorDialogComponent from "./TheAddSailorDialogComponent";
+import TheAddSailorDialogComponent from "./TheAddEditSailorDialogComponent";
 import TheDefaultsDialogComponent from "./TheDefaultsDialogComponent";
 
 export default Vue.extend({

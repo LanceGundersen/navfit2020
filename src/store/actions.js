@@ -43,6 +43,10 @@ export default {
   setSelectedSailor({ commit }, uuid) {
     const sailorData = this.getters.getSailorById(uuid);
     commit("SET_SELECTED_SAILOR", sailorData);
+  },
+  setSailorEditForm({ commit }, uuid) {
+    const sailorData = this.getters.getSailorById(uuid);
+    delete sailorData.records;
     commit("SET_SAILOR_EDIT_FORM", sailorData);
   },
 };
