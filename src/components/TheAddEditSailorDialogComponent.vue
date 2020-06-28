@@ -12,7 +12,6 @@
           <v-row>
             <v-col>
               <v-text-field v-model="form.lastName"
-                            value="this.getSailorEditForm.lastName"
                             class="pa-1"
                             label="Last Name"
                             required />
