@@ -20,7 +20,7 @@ export default {
     try {
       const uuid = shortid.generate();
       db.get("sailors")
-        .push({ uuid, ...form, records: [] })
+        .push({ ...form, uuid, records: [] })
         .write();
       return { uuid };
     } catch (error) {
