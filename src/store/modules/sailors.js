@@ -4,12 +4,12 @@ export default {
   },
   mutations: {
     SET_SAILORS(state, payload) {
-      state.data = payload;
+      state.data = [...payload];
     },
   },
   getters: {
     getSailorsSummaryList: state => {
-      if (state.data.length) {
+      if (state.data && state.data.length) {
         return state.data.map(sailor => ({
           uuid: sailor.uuid,
           name: `${sailor.lastName}, ${sailor.firstName} : ${sailor.rank}`
@@ -18,7 +18,7 @@ export default {
       return [];
     },
     getSailorById: state => givenUuid => {
-      if (state.data.length) {
+      if (state.data && state.data.length) {
         return state.data.find(sailor => sailor.uuid === givenUuid);
       }
       return {};

@@ -16,8 +16,9 @@ export default {
         commit("setErrorMsg", response.error?.toString());
         commit("setErrorObj", response);
       }
-      dispatch("loadDb");
-      dispatch("setSelectedSailor", response.uuid);
+      dispatch("loadDb").then(() => {
+        dispatch("setSelectedSailor", response.uuid);
+      });
     });
   },
   updateSailor({ commit, dispatch }, payload) {

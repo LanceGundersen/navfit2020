@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import TheAppBarComponent from "./components/TheAppBarComponent";
+import TheAppBarComponent from "./components/TheAppBarComponent.vue";
 import SharedAlertComponent from "./components/shared/SharedAlertComponent.vue";
 
 export default Vue.extend({
