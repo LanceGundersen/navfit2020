@@ -1,0 +1,13 @@
+diff --git a/src/App.vue b/src/App.vue
+index 5e15c0d..b903814 100644
+--- a/src/App.vue
++++ b/src/App.vue
+@@ -14,7 +14,7 @@
+ 
+ <script lang="ts">
+ import Vue from "vue";
+-import TheAppBarComponent from "./components/TheAppBarComponent";
++import TheAppBarComponent from "./components/TheAppBarComponent.vue";
+ import SharedAlertComponent from "./components/shared/SharedAlertComponent.vue";
+ 
+ export default Vue.extend({
