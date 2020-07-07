@@ -142,8 +142,10 @@ export default Vue.extend({
   },
   methods: {
     showEditSailorDialog(givenUuid) {
-      this.$store.dispatch("setSailorEditForm", givenUuid);
-      this.showAddSailorDialog = !this.showAddSailorDialog;
+      this.$store.dispatch("setSelectedSailor", givenUuid).then(() => {
+        this.$store.dispatch("setSailorEditForm", givenUuid);
+        this.showAddSailorDialog = !this.showAddSailorDialog;
+      });
     },
     deleteEval(givenUuid) {
       this.uuid = givenUuid;

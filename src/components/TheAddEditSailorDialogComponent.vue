@@ -128,12 +128,12 @@ export default Vue.extend({
     getCommandInfo() {
       return this.$store.getters.getCommandInfo;
     },
-    getSailorEditForm() {
-      return this.$store.getters.getSailorEditForm;
-    }
   },
-  beforeUpdate() {
-    if (this.edit) this.buildForm(this.getSailorEditForm);
+  created() {
+    if (this.edit) {
+      this.form = this.$store.getters.getSelectedSailor;
+    }
+    // if (this.edit) this.buildForm(this.getSailorEditForm);
   },
   methods: {
     submit() {
