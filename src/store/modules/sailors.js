@@ -10,7 +10,7 @@ export default {
   getters: {
     getSailorsSummaryList: state => {
       if (state.data.length) {
-        return state.data?.map(sailor => ({
+        return state.data.map(sailor => ({
           uuid: sailor.uuid,
           name: `${sailor.lastName}, ${sailor.firstName} : ${sailor.rank}`
         }));
@@ -19,7 +19,7 @@ export default {
     },
     getSailorById: state => givenUuid => {
       if (state.data.length) {
-        return state.data?.find(sailor => sailor.uuid === givenUuid);
+        return state.data.find(sailor => sailor.uuid === givenUuid);
       }
       return {};
     },

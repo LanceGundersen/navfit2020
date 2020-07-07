@@ -45,11 +45,16 @@ export default {
       .write();
   },
   async addRecord({ uuid, form }) {
-    return db.get("sailors")
-      .find({ uuid })
-      .get("records")
-      .push({ id: shortid.generate(), ...form })
-      .write();
+    try {
+      db.get("sailors")
+        .find({ uuid })
+        .get("records")
+        .push({ id: shortid.generate(), ...form })
+        .write();
+      return { uuid };
+    } catch (error) {
+      return { error };
+    }
   },
   async saveCommandDefaults(payload) {
     if (!db.has("commandInfo").value()) {
