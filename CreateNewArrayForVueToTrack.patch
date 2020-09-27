@@ -1,0 +1,13 @@
+diff --git a/src/store/modules/sailors.js b/src/store/modules/sailors.js
+index 89acc2a..91e76ba 100644
+--- a/src/store/modules/sailors.js
++++ b/src/store/modules/sailors.js
+@@ -4,7 +4,7 @@ export default {
+   },
+   mutations: {
+     SET_SAILORS(state, payload) {
+-      state.data = payload;
++      state.data = [...payload];
+     },
+   },
+   getters: {

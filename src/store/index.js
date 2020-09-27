@@ -1,7 +1,10 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { getField, updateField } from "vuex-map-fields";
-import db from "./db";
+import actions from "./actions";
+import commandInfo from "./modules/commandInfo";
+import forms from "./modules/forms";
+import sailors from "./modules/sailors";
+import selected from "./modules/selected";
 import INITIAL_STATE from "./state";
 
 Vue.use(Vuex);
@@ -10,65 +13,29 @@ export default new Vuex.Store({
   strict: process.env.NODE_ENV !== "production",
   state: INITIAL_STATE,
   mutations: {
-    updateField,
-    setState(state, payload) {
-      Vue.set(state.defaults.ranks, payload.defaults.ranks, payload.defaults.ranks);
-      Vue.set(state.defaults.memberStatus, payload.defaults.memberStatus, payload.defaults.memberStatus);
-      Vue.set(state.defaults.promotionStatus, payload.defaults.promotionStatus, payload.defaults.promotionStatus);
-      state.sailors = payload.sailors;
-    },
-    setSailorForm(state, payload) {
-      Vue.set(state.forms, "sailor", payload);
-    },
-    clearSailorForm(state) {
-      Vue.set(state.forms, "sailor", {});
-    },
+    setError: state => { state.app.isError = !state.app.isError; },
+    setErrorMsg: (state, payload) => { state.app.errorMsg = payload; },
+    setErrorObj: (state, payload) => { state.app.errorObj = { ...payload }; },
   },
-  actions: {
-    loadDb({ commit }) {
-      commit("setState", db.readDatabase());
-    },
-    addSailor({ dispatch }) {
-      db.addSailor(this.getters.getFormSailor);
-      dispatch("loadDb");
-    },
-    updateSailor({ dispatch }) {
-      db.updateSailor({ uuid: this.getters.getFormSailor.uuid, form: this.getters.getFormSailor });
-      dispatch("loadDb");
-    },
-    deleteSailor({ dispatch }, payload) {
-      db.deleteSailor(payload);
-      dispatch("loadDb");
-    },
-    addRecord({ dispatch }, payload) {
-      db.addRecord(payload);
-      dispatch("loadDb");
-    },
-    setSelectedSailor({ commit }, payload) {
-      commit("setSailorForm", this.getters.getSailorById(payload));
-    },
-    clearSelectedSailor({ commit }) {
-      commit("clearSailorForm");
-    },
-  },
+  actions,
   getters: {
-    getField,
-    memberStatus: state => state.defaults.memberStatus,
-    promotionStatus: state => state.defaults.promotionStatus,
+    isError: state => state.app.isError,
+    memberStatuses: state => state.defaults.memberStatuses,
+    promotionStatuses: state => state.defaults.promotionStatuses,
     ranksAll: state => state.defaults.ranks,
-    ranksEnlisted: state => state.defaults.ranks.filter(rank => rank.charAt(0) === "E"),
-    ranksOfficer: state => state.defaults.ranks.filter(rank => rank.charAt(0) === "O"),
-    enlistedSummaryList: state => state.sailors?.filter(sailor => !sailor.officer).map(sailor => ({
-      uuid: sailor.uuid,
-      name: `${sailor.lastName}, ${sailor.firstName} : ${sailor.rank}`
-    })),
-    officerSummaryList: state => state.sailors?.filter(sailor => sailor.officer).map(sailor => ({
-      uuid: sailor.uuid,
-      name: `${sailor.lastName}, ${sailor.firstName} : ${sailor.rank}`
-    })),
-    getSailorById: state => givenUuid => state.sailors.find(sailor => sailor.uuid === givenUuid),
-    getRecordsById: state => givenUuid => state.sailors.find(sailor => sailor.uuid === givenUuid).records || null,
-    getFormSailor: state => state.forms.sailor,
+    ranksEnlisted: state => state.defaults.ranks.enlisted,
+    ranksOfficer: state => state.defaults.ranks.officer,
+    traits: state => state.defaults.traits,
+    promotionRecommendations: state => state.defaults.promotionRecommendations,
+    fonts: state => state.defaults.fonts,
+    physicalReadiness: state => state.defaults.physicalReadiness,
+    reportTypes: state => state.defaults.reportTypes,
+    reportOccasions: state => state.defaults.reportOccasions,
   },
-  modules: {}
+  modules: {
+    commandInfo,
+    forms,
+    sailors,
+    selected,
+  }
 });

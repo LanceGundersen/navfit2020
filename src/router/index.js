@@ -3,7 +3,6 @@ import VueRouter from "vue-router";
 import HomeView from "../views/HomeView";
 import DetailsView from "../views/DetailsView";
 
-
 Vue.use(VueRouter);
 
 const routes = [

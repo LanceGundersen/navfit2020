@@ -1,5 +1,6 @@
 import { app, protocol, BrowserWindow, shell } from "electron";
-import { createProtocol, installVueDevtools } from "vue-cli-plugin-electron-builder/lib";
+import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
+import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -72,7 +73,7 @@ app.on("ready", async () => {
     // In addition, if the linked issue is closed, you can upgrade electron and uncomment these
     // lines
     try {
-      await installVueDevtools();
+      await installExtension(VUEJS_DEVTOOLS);
     } catch (e) {
       console.error("Vue Devtools failed to install:", e.toString());
     }

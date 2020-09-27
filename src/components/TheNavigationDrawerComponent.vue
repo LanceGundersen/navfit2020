@@ -4,34 +4,25 @@
                        left
                        width="auto"
                        class="pa-2">
-    <v-text-field v-model="search"
-                  label="Search Sailors"
-                  hide-details
-                  clearable
-                  clear-icon="mdi-close"
-                  disabled />
-    <v-treeview shaped
-                hoverable
-                dense
-                min-width="250px"
-                :items="sailors">
-      <template slot="label"
-                slot-scope="{ item }">
-        <span class="d-flex flex-nowrap justify-space-between align-center">
-          <span class="pr-4"
-                :class="item.uuid ? 'pointer' : null"
-                @click="viewSailorDetail(item.uuid)">
-            {{ item.name }}
-          </span>
-          <v-btn v-if="item.uuid"
-                 icon
+    <v-list>
+      <v-list-item v-for="(sailor, uuid) in sailors"
+                   :key="uuid"
+                   class="pointer"
+                   @click="viewSailorDetail(sailor.uuid)">
+        <v-list-item-content>
+          <v-list-item-title class="d-flex flex-nowrap">
+            {{ sailor.name }}
+          </v-list-item-title>
+        </v-list-item-content>
+        <v-list-item-action>
+          <v-btn icon
                  small
-                 @click.stop="deleteSailor(item.uuid)">
+                 @click.stop="deleteSailor(sailor.uuid)">
             <v-icon>mdi-delete</v-icon>
           </v-btn>
-        </span>
-      </template>
-    </v-treeview>
+        </v-list-item-action>
+      </v-list-item>
+    </v-list>
     <TheDeleteSailorDialogComponent v-model="showDeleteSailorDialog"
                                     :uuid="uuid" />
   </v-navigation-drawer>
@@ -68,28 +59,21 @@ export default Vue.extend({
       },
     },
     sailors() {
-      return [
-        {
-          id: 1,
-          name: "Enlisted",
-          children: this.$store.getters.enlistedSummaryList,
-        },
-        {
-          id: 2,
-          name: "Officer",
-          children: this.$store.getters.officerSummaryList,
-        },
-      ];
+      return this.$store.getters.getSailorsSummaryList;
     },
   },
   methods: {
     viewSailorDetail(givenUuid) {
-      this.$store.dispatch("setActiveSailor", givenUuid);
-      this.$router.push({ name: "detail", params: { uuid: givenUuid } });
+      this.$store.dispatch("setSelectedSailor", givenUuid)
+        .then(() => this.$router.push({ name: "detail", params: { uuid: givenUuid } }))
+        .catch(() => {
+          this.drawer = !this.drawer;
+        });
+      // this.$router.push({ name: "detail", params: { uuid: givenUuid } }).catch(() => {});
     },
     deleteSailor(givenUuid) {
       this.uuid = givenUuid;
-      this.showDeleteSailorDialog = true;
+      this.a = true;
     },
   },
 });

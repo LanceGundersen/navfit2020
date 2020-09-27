@@ -1,22 +1,27 @@
 <template>
   <v-app fluid>
     <TheAppBarComponent />
-    <v-content>
+    <v-main>
       <v-container fluid>
         <router-view />
       </v-container>
-    </v-content>
+    </v-main>
+    <div class="d-flex justify-center">
+      <SharedAlertComponent />
+    </div>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import TheAppBarComponent from "./components/TheAppBarComponent";
+import TheAppBarComponent from "./components/TheAppBarComponent.vue";
+import SharedAlertComponent from "./components/shared/SharedAlertComponent.vue";
 
 export default Vue.extend({
   name: "App",
   components: {
     TheAppBarComponent,
+    SharedAlertComponent,
   },
   data: () => ({}),
   created() {
