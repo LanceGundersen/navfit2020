@@ -2,7 +2,6 @@
   <TheStartComponent />
 </template>
 
-
 <script>
 import Vue from "vue";
 import TheStartComponent from "../components/TheStartComponent";

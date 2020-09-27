@@ -4,7 +4,7 @@ export default {
   },
   mutations: {
     SET_SAILORS(state, payload) {
-      state.data = [...payload];
+      state.data = payload ? [...payload] : payload;
     },
   },
   getters: {
