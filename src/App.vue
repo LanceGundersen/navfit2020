@@ -1,11 +1,11 @@
 <template>
   <v-app fluid>
     <TheAppBarComponent />
-    <v-content>
+    <v-main>
       <v-container fluid>
         <router-view />
       </v-container>
-    </v-content>
+    </v-main>
     <div class="d-flex justify-center">
       <SharedAlertComponent />
     </div>

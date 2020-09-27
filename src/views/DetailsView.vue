@@ -2,7 +2,6 @@
   <TheSailorDetailComponent />
 </template>
 
-
 <script>
 import Vue from "vue";
 import TheSailorDetailComponent from "../components/TheSailorDetailComponent";
