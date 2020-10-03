@@ -13,6 +13,9 @@ export default {
   async readDatabase() {
     return db.getState();
   },
+  async readSailors() {
+    return db.get("sailors");
+  },
   async addSailor(form) {
     if (!db.has("sailors").value()) {
       db.set("sailors", [])
@@ -41,9 +44,13 @@ export default {
     }
   },
   async deleteSailor(payload) {
-    return db.get("sailors")
-      .remove({ uuid: payload })
-      .write();
+    try {
+      return db.get("sailors")
+        .remove({ uuid: payload })
+        .write();
+    } catch (error) {
+      return { error };
+    }
   },
   async addRecord({ uuid, form }) {
     try {
