@@ -9,8 +9,9 @@ export default {
       commit("SET_SAILORS", response.sailors);
     });
   },
-  addSailor({ commit, dispatch }, payload) {
-    db.addSailor(payload).then(response => {
+  addSailor({ commit, dispatch }) {
+    const form = this.getters.getSailorEditForm;
+    db.addSailor(form).then(response => {
       if (response.error) {
         commit("setError");
         commit("setErrorMsg", response.error?.toString());
@@ -21,8 +22,9 @@ export default {
       });
     });
   },
-  updateSailor({ commit, dispatch }, payload) {
-    db.updateSailor(payload).then(response => {
+  updateSailor({ commit, dispatch }) {
+    const form = this.getters.getSailorEditForm;
+    db.updateSailor(form).then(response => {
       if (response.error) {
         commit("setError");
         commit("setErrorMsg", response.error?.toString());
@@ -54,9 +56,15 @@ export default {
   setSelectedSailor({ commit }, uuid) {
     const sailorData = this.getters.getSailorById(uuid);
     commit("SET_SELECTED_SAILOR", sailorData);
+    commit("SET_SAILOR_EDIT_FORM", sailorData);
   },
-  setSailorEditForm({ commit }, uuid) {
-    commit("SET_SELECTED_SAILOR", this.getters.getSailorById(uuid));
-    // commit("SET_SAILOR_EDIT_FORM", );
+  setSailorEditForm({ commit }, payload) {
+    commit("SET_SAILOR_EDIT_FORM", payload);
   },
+  updateSailorEditForm({ commit }, payload) {
+    commit("UPDATE_SAILOR_EDIT_FORM", payload);
+  },
+  clearSailorEditForm({ commit }) {
+    commit("CLEAR_SAILOR_EDIT_FORM");
+  }
 };
