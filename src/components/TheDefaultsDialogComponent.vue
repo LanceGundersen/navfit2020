@@ -165,7 +165,6 @@ export default Vue.extend({
             this.closeDialog();
           } else {
             // TODO: Handle error
-            console.log({ "Add/Edit Command Defaults": this.$store.getters.errorMsg });
           }
         });
     },
