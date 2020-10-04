@@ -13,7 +13,7 @@
       <v-btn text
              tile
              color="white"
-             @click.stop="showAddSailorDialog = !showAddSailorDialog">
+             @click.stop="showAddEditSailorDialog()">
         Add Sailor
       </v-btn>
       <v-btn icon
@@ -62,5 +62,12 @@ export default Vue.extend({
       },
     },
   },
+  methods: {
+    showAddEditSailorDialog() {
+      this.$store.dispatch("clearSailorEditForm").then(() => {
+        this.showAddSailorDialog = !this.showAddSailorDialog;
+      });
+    }
+  }
 });
 </script>

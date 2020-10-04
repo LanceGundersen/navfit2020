@@ -4,66 +4,69 @@
             max-width="75%">
     <v-card class="ma-0">
       <v-card-title>
-        {{ edit ? 'Edit' : 'Add' }} Sailor
+        {{ sailor ? 'Edit' : 'Add' }} Sailor
       </v-card-title>
       <v-form ref="form"
               v-model="valid">
         <v-card-text>
           <v-row>
             <v-col>
-              <v-text-field v-model="form.lastName"
-                            :value="form.lastName"
+              <v-text-field :value="sailor ? sailor.lastName : ''"
                             class="pa-1"
                             label="Last Name"
-                            required />
-              <v-text-field v-model="form.firstName"
+                            required
+                            @input="updateForm('lastName', $event)" />
+              <v-text-field :value="sailor ? sailor.firstName : ''"
                             class="pa-1"
                             label="First Name"
                             :rules="requiredRules"
-                            required />
-              <v-text-field v-model="form.middleInitial"
+                            required
+                            @input="updateForm('firstName', $event)" />
+              <v-text-field :value="sailor ? sailor.middleInitial : ''"
                             class="pa-1"
-                            label="Middle Initial (optional)" />
-              <v-select v-model="form.rank"
+                            label="Middle Initial (optional)"
+                            @input="updateForm('middleInitial', $event)" />
+              <v-select :value="sailor ? sailor.rank : ''"
                         :items="ranks"
                         label="Rank"
                         :rules="ranksRequired"
-                        required />
+                        required
+                        @change="updateForm('rank', $event)" />
             </v-col>
             <v-col>
-              <v-text-field v-model="form.ssn"
+              <v-text-field :value="sailor ? sailor.ssn : ''"
                             class="pa-1"
                             label="SSN (optional)"
-                            placeholder="111-11-1111" />
-              <v-select v-model="form.memberStatus"
+                            placeholder="111-11-1111"
+                            @input="updateForm('ssn', $event)" />
+              <v-select :value="sailor ? sailor.memberStatus : ''"
                         :items="memberStatus"
                         class="pa-1"
-                        label="Member Status (optional)">
-                <template v-slot:selection="{ item }">
-                  <span>{{ item }}</span>
-                </template>
-              </v-select>
-              <v-text-field v-model="form.rate"
+                        label="Member Status (optional)"
+                        @change="updateForm('memberStatus', $event)" />
+              <v-text-field :value="sailor ? sailor.rate : ''"
                             class="pa-1"
                             label="Designation (optional)"
-                            placeholder="BM3" />
-              <v-text-field v-model="form.designation"
+                            placeholder="BM3"
+                            @input="updateForm('rate', $event)" />
+              <v-text-field :value="sailor ? sailor.designation : ''"
                             class="pa-1"
                             label="Warfare (optional)"
-                            placeholder="ESWS/SS" />
+                            placeholder="ESWS/SS"
+                            @input="updateForm('designation', $event)" />
             </v-col>
           </v-row>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
           <v-btn text
-                 @click="dialog = false">
+                 @click="closeDialog()">
             Cancel
           </v-btn>
           <v-btn color="primary"
                  :disabled="!valid"
                  @click="submit">
-            {{ edit ? 'Edit' : 'Add' }} Sailor
+            {{ sailor ? 'Edit' : 'Add' }} Sailor
           </v-btn>
         </v-card-actions>
       </v-form>
@@ -82,27 +85,15 @@ export default Vue.extend({
       required: false,
       default: true,
     },
-    edit: {
-      type: Boolean,
+    sailor: {
+      type: Object,
       required: false,
-      default: false,
-    },
+      default: null,
+    }
   },
   data: () => ({
     valid: false,
-    form: {
-      uuid: null,
-      lastName: null,
-      firstName: null,
-      middleInitial: null,
-      rank: null,
-      officer: null,
-      rate: null,
-      designation: null,
-      ssn: null,
-      memberStatus: null,
-      warfare: null,
-    },
+    formEditing: false,
     requiredRules: [
       v => !!v || "Is required",
     ],
@@ -128,46 +119,42 @@ export default Vue.extend({
     getCommandInfo() {
       return this.$store.getters.getCommandInfo;
     },
-  },
-  created() {
-    if (this.edit) {
-      this.form = this.$store.getters.getSelectedSailor;
-    }
-    // if (this.edit) this.buildForm(this.getSailorEditForm);
+    getSelectedSailor() {
+      return this.$store.getters.getSelectedSailor;
+    },
+    getSailorEditForm() {
+      return this.$store.getters.getSailorEditForm;
+    },
   },
   methods: {
+    updateForm(input, value) {
+      this.$store.dispatch("updateSailorEditForm", { input, value });
+    },
+    closeDialog() {
+      this.dialog = false;
+    },
     submit() {
       this.$refs.form.validate();
-      if (this.edit) {
-        this.$store.dispatch("updateSailor", this.form)
+      if (this.sailor) {
+        this.$store.dispatch("updateSailor")
           .then(() => {
             if (!this.$store.getters.isError) {
-              this.dialog = false;
-              this.$refs.form.reset();
+              this.closeDialog();
+            } else {
+              // TODO: Handle error
+              console.log({ "Add/Edit Sailor": this.$store.getters.errorMsg });
             }
           });
       } else {
-        this.$store.dispatch("addSailor", this.form)
+        this.$store.dispatch("addSailor")
           .then(() => {
             if (!this.$store.getters.isError) {
-              this.$router.push({ name: "detail", params: { uuid: this.$store.getters.getSelectedSailor.uuid } }).catch(() => {});
-              this.dialog = false;
-              this.$refs.form.reset();
+              this.$router.push({ name: "detail", params: { uuid: this.getSelectedSailor.uuid } }).catch(() => {});
+              this.closeDialog();
             }
           });
       }
     },
-    buildForm(givenSailor) {
-      this.form.uuid = givenSailor.uuid;
-      this.form.lastName = givenSailor.lastName;
-      this.form.firstName = givenSailor.firstName;
-      this.form.middleInitial = givenSailor.middleInitial;
-      this.form.rank = givenSailor.rank;
-      this.form.ssn = givenSailor.ssn;
-      this.form.memberStatus = givenSailor.memberStatus;
-      this.form.designation = givenSailor.designation;
-      this.form.warfare = givenSailor.warfare;
-    }
   },
 });
 </script>

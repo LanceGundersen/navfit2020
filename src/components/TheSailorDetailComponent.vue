@@ -7,7 +7,7 @@
         <v-btn icon
                small
                color="primary"
-               @click="showEditSailorDialog(sailor.uuid)">
+               @click="showEditSailorDialog()">
           <v-icon small>
             mdi-pencil
           </v-icon>
@@ -102,7 +102,7 @@
     </v-expansion-panels>
     <TheAddEvalDialogComponent v-model="showAddEvalDialog" />
     <TheAddEditSailorDialogComponent v-model="showAddSailorDialog"
-                                     :edit="true" />
+                                     :sailor="sailor" />
   </v-card>
 </template>
 
@@ -141,9 +141,8 @@ export default Vue.extend({
     }
   },
   methods: {
-    showEditSailorDialog(givenUuid) {
-      this.$store.dispatch("setSelectedSailor", givenUuid).then(() => {
-        this.$store.dispatch("setSailorEditForm", givenUuid);
+    showEditSailorDialog() {
+      this.$store.dispatch("setSailorEditForm", this.sailor).then(() => {
         this.showAddSailorDialog = !this.showAddSailorDialog;
       });
     },
