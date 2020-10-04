@@ -33,9 +33,14 @@ export default {
       dispatch("loadDb");
     });
   },
-  deleteSailor({ commit }, payload) {
+  deleteSailor({ commit, dispatch }, payload) {
     db.deleteSailor(payload).then(response => {
-      commit("SET_SAILORS", { sailors: response });
+      if (response.error) {
+        commit("setError");
+        commit("setErrorMsg", response.error?.toString());
+        commit("setErrorObj", response);
+      }
+      dispatch("loadDb");
     });
   },
   addRecord({ commit, dispatch }, payload) {
