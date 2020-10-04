@@ -20,6 +20,7 @@ export default new Vuex.Store({
   actions,
   getters: {
     isError: state => state.app.isError,
+    errorMsg: state => state.app.errorMsg,
     memberStatuses: state => state.defaults.memberStatuses,
     promotionStatuses: state => state.defaults.promotionStatuses,
     ranksAll: state => state.defaults.ranks,

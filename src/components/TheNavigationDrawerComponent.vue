@@ -73,7 +73,7 @@ export default Vue.extend({
     },
     deleteSailor(givenUuid) {
       this.uuid = givenUuid;
-      this.a = true;
+      this.showDeleteSailorDialog = !this.showDeleteSailorDialog;
     },
   },
 });
