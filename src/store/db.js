@@ -65,12 +65,16 @@ export default {
     }
   },
   async saveCommandDefaults(payload) {
-    if (!db.has("commandInfo").value()) {
-      db.set("commandInfo", {})
+    try {
+      if (!db.has("commandInfo").value()) {
+        db.set("commandInfo", {})
+          .write();
+      }
+      return db.get("commandInfo")
+        .assign(payload)
         .write();
+    } catch (error) {
+      return { error };
     }
-    return db.get("commandInfo")
-      .assign(payload)
-      .write();
   },
 };
