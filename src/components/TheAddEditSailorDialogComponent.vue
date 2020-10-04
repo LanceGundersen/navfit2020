@@ -93,7 +93,6 @@ export default Vue.extend({
   },
   data: () => ({
     valid: false,
-    formEditing: false,
     requiredRules: [
       v => !!v || "Is required",
     ],

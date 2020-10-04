@@ -9,6 +9,11 @@ export default {
       commit("SET_SAILORS", response.sailors);
     });
   },
+  loadCommandInfo({ commit }) {
+    db.readDatabase().then(response => {
+      commit("SET_COMMAND", response.commandInfo);
+    });
+  },
   addSailor({ commit, dispatch }) {
     const form = this.getters.getSailorEditForm;
     db.addSailor(form).then(response => {
@@ -53,10 +58,25 @@ export default {
       dispatch("loadDb");
     });
   },
-  saveCommandDefaults({ commit }, payload) {
-    db.saveCommandDefaults(payload).then(response => {
-      commit("SET_COMMAND_INFO", response);
+  saveCommandDefaults({ commit, dispatch }) {
+    const form = this.getters.getSailorEditForm;
+    db.saveCommandDefaults(form).then(response => {
+      if (response.error) {
+        commit("setError");
+        commit("setErrorMsg", response.error?.toString());
+        commit("setErrorObj", response);
+      }
+      dispatch("loadCommandInfo");
     });
+  },
+  setCommandEditForm({ commit }, payload) {
+    commit("SET_COMMAND_EDIT_FORM", payload);
+  },
+  updateCommandEditForm({ commit }, payload) {
+    commit("UPDATE_COMMAND_EDIT_FORM", payload);
+  },
+  clearCommandEditForm({ commit }) {
+    commit("CLEAR_COMMAND_EDIT_FORM");
   },
   setSelectedSailor({ commit }, uuid) {
     const sailorData = this.getters.getSailorById(uuid);

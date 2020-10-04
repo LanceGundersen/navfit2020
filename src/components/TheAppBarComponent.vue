@@ -18,7 +18,7 @@
       </v-btn>
       <v-btn icon
              color="white"
-             @click.stop="showDefaultsDialog = !showDefaultsDialog">
+             @click.stop="showCommandDefaultsDialog()">
         <v-icon>mdi-cog</v-icon>
       </v-btn>
     </v-app-bar>
@@ -66,6 +66,11 @@ export default Vue.extend({
     showAddEditSailorDialog() {
       this.$store.dispatch("clearSailorEditForm").then(() => {
         this.showAddSailorDialog = !this.showAddSailorDialog;
+      });
+    },
+    showCommandDefaultsDialog() {
+      this.$store.dispatch("clearCommandEditForm").then(() => {
+        this.showDefaultsDialog = !this.showDefaultsDialog;
       });
     }
   }
