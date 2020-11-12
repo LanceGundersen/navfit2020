@@ -23,6 +23,9 @@ export default {
       }
       return {};
     },
-    getRecordsById: state => givenUuid => state.data?.find(sailor => sailor.uuid === givenUuid).records || null,
+    getRecordsById: state => sailorUuid => state.data?.find(sailor => sailor.uuid === sailorUuid).records || [],
+    getRecordById: state => payload => state.data?.find(sailor => sailor.uuid === payload.uuid).records.find(
+      record => record.uuid === payload.recordid
+    ) || {},
   },
 };
