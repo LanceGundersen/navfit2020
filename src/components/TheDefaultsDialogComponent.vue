@@ -14,90 +14,76 @@
             <v-card-subtitle>Command Info</v-card-subtitle>
             <v-card-text>
               <v-layout>
-                <v-text-field :value="getCommandInfo.uic ? getCommandInfo.uic : ''"
+                <v-text-field v-model="form.uic"
                               class="pa-1"
                               label="UIC"
                               :rules="requiredRules"
-                              required
-                              @input="updateForm('uic', $event)" />
-                <v-text-field :value="getCommandInfo ? getCommandInfo.shipStation : ''"
+                              required />
+                <v-text-field v-model="form.shipStation"
                               class="pa-1"
                               label="Ship/Station"
                               :rules="requiredRules"
-                              required
-                              @input="updateForm('shipStation', $event)" />
+                              required />
               </v-layout>
-              <v-textarea :value="getCommandInfo ? getCommandInfo.commandDescription : ''"
+              <v-textarea v-model="form.commandDescription"
                           class="pa-1"
                           auto-grow
                           rows="1"
                           label="Command Employment and Command Achievements"
                           :rules="requiredRules"
-                          required
-                          @input="updateForm('commandDescription', $event)" />
+                          required />
             </v-card-text>
           </v-card>
           <v-card outlined>
             <v-card-subtitle>Reporting Senior</v-card-subtitle>
             <v-card-text>
               <v-layout>
-                <v-text-field :value="getCommandInfo ? getCommandInfo.lastName : ''"
+                <v-text-field v-model="form.lastName"
                               class="pa-1"
                               label="Last Name"
                               :rules="requiredRules"
-                              required
-                              @input="updateForm('lastName', $event)" />
-                <v-text-field :value="getCommandInfo ? getCommandInfo.firstName : ''"
+                              required />
+                <v-text-field v-model="form.firstName"
                               class="pa-1"
                               label="First Name"
                               :rules="requiredRules"
-                              required
-                              @input="updateForm('firstName', $event)" />
-                <v-text-field :value="getCommandInfo ? getCommandInfo.middleInitial : ''"
+                              required />
+                <v-text-field v-model="form.middleInitial"
                               class="pa-1"
-                              label="Middle Initial (optional)"
-                              @input="updateForm('middleInitial', $event)" />
+                              label="Middle Initial (optional)" />
               </v-layout>
               <v-layout>
-                <v-text-field :value="getCommandInfo ? getCommandInfo.grade : ''"
+                <v-text-field v-model="form.grade"
                               class="pa-1"
                               label="Grade"
                               :rules="requiredRules"
-                              required
-                              @input="updateForm('grade', $event)" />
-                <v-text-field :value="getCommandInfo ? getCommandInfo.designation : ''"
+                              required />
+                <v-text-field v-model="form.designation"
                               class="pa-1"
                               label="Designation"
                               :rules="requiredRules"
-                              required
-                              @input="updateForm('designation', $event)" />
-                <v-text-field :value="getCommandInfo ? getCommandInfo.title : ''"
+                              required />
+                <v-text-field v-model="form.title"
                               class="pa-1"
                               label="Title"
                               :rules="requiredRules"
-                              required
-                              @input="updateForm('title', $event)" />
-                <v-text-field :value="getCommandInfo ? getCommandInfo.reportingSeniorUic : ''"
+                              required />
+                <v-text-field v-model="form.reportingSeniorUic"
                               label="UIC (if different)"
-                              class="pa-1"
-                              @input="updateForm('reportingSeniorUic', $event)" />
-                <v-text-field :value="getCommandInfo ? getCommandInfo.ssn : ''"
+                              class="pa-1" />
+                <v-text-field v-model="form.ssn"
                               class="pa-1"
                               label="SSN"
                               placeholder="111-11-1111"
                               :rules="requiredRules"
-                              required
-                              return-masked-value
-                              mask="***-**-****"
-                              @input="updateForm('ssn', $event)" />
+                              required />
               </v-layout>
-              <v-textarea :value="getCommandInfo ? getCommandInfo.address : ''"
+              <v-textarea v-model="form.address"
                           label="Address"
                           auto-grow
                           rows="1"
                           :rules="requiredRules"
-                          required
-                          @input="updateForm('address', $event)" />
+                          required />
             </v-card-text>
           </v-card>
         </v-card-text>
@@ -105,7 +91,7 @@
         <v-card-actions>
           <v-spacer />
           <v-btn text
-                 @click="closeDialog">
+                 @click="dialog = false">
             Cancel
           </v-btn>
           <v-btn color="primary"
@@ -133,6 +119,22 @@ export default Vue.extend({
   },
   data: () => ({
     valid: false,
+    form: {
+      uic: "",
+      shipStation: "",
+      commandDescription: "",
+      reportingSenior: {
+        lastName: "",
+        firstName: "",
+        middleInitial: "",
+        grade: "",
+        designation: "",
+        title: "",
+        reportingSeniorUic: "",
+        ssn: "",
+        address: ""
+      },
+    },
     requiredRules: [
       v => !!v || "Is required",
     ],
@@ -150,24 +152,14 @@ export default Vue.extend({
       }
     },
   },
+  beforeUpdate() {
+    this.form = this.getCommandInfo;
+  },
   methods: {
-    updateForm(input, value) {
-      this.$store.dispatch("updateCommandEditForm", { input, value });
-    },
-    closeDialog() {
-      this.$store.dispatch("clearCommandEditForm");
-      this.dialog = false;
-    },
     submit() {
       this.$refs.form.validate();
-      this.$store.dispatch("saveCommandDefaults")
-        .then(() => {
-          if (!this.$store.getters.isError) {
-            this.closeDialog();
-          } else {
-            // TODO: Handle error
-          }
-        });
+      this.$store.dispatch("saveCommandDefaults", this.form);
+      this.dialog = false;
     },
   },
 });

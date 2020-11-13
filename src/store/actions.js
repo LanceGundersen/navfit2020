@@ -9,11 +9,6 @@ export default {
       commit("SET_SAILORS", response.sailors);
     });
   },
-  loadCommandInfo({ commit }) {
-    db.readDatabase().then(response => {
-      commit("SET_COMMAND", response.commandInfo);
-    });
-  },
   addSailor({ commit, dispatch }) {
     const form = this.getters.getSailorEditForm;
     db.addSailor(form).then(response => {
@@ -48,53 +43,20 @@ export default {
       dispatch("loadDb");
     });
   },
-  addEval({ commit, dispatch }) {
-    const form = this.getters.getEvalEditForm;
-    const { uuid } = this.getters.getSelectedSailor;
-    db.addRecord({ uuid, form }).then(response => {
-      if (response.error) {
-        commit("setError");
-        commit("setErrorMsg", response.error?.toString());
-        commit("setErrorObj", response);
-      } else {
-        dispatch("clearEvalEditForm");
-        dispatch("loadDb");
-      }
-    });
-  },
-  updateEval({ commit, dispatch }) {
-    const form = this.getters.getEvalEditForm;
-    const { uuid } = this.getters.getSelectedSailor.uuid;
-    db.updateRecord({ uuid, form }).then(response => {
-      if (response.error) {
-        commit("setError");
-        commit("setErrorMsg", response.error?.toString());
-        commit("setErrorObj", response);
-      } else {
-        dispatch("clearEvalEditForm");
-        dispatch("loadDb");
-      }
-    });
-  },
-  saveCommandDefaults({ commit, dispatch }) {
-    const form = this.getters.getSailorEditForm;
-    db.saveCommandDefaults(form).then(response => {
+  addRecord({ commit, dispatch }, payload) {
+    db.addRecord(payload).then(response => {
       if (response.error) {
         commit("setError");
         commit("setErrorMsg", response.error?.toString());
         commit("setErrorObj", response);
       }
-      dispatch("loadCommandInfo");
+      dispatch("loadDb");
     });
   },
-  setCommandEditForm({ commit }, payload) {
-    commit("SET_COMMAND_EDIT_FORM", payload);
-  },
-  updateCommandEditForm({ commit }, payload) {
-    commit("UPDATE_COMMAND_EDIT_FORM", payload);
-  },
-  clearCommandEditForm({ commit }) {
-    commit("CLEAR_COMMAND_EDIT_FORM");
+  saveCommandDefaults({ commit }, payload) {
+    db.saveCommandDefaults(payload).then(response => {
+      commit("SET_COMMAND_INFO", response);
+    });
   },
   setSelectedSailor({ commit }, uuid) {
     const sailorData = this.getters.getSailorById(uuid);
@@ -109,19 +71,5 @@ export default {
   },
   clearSailorEditForm({ commit }) {
     commit("CLEAR_SAILOR_EDIT_FORM");
-  },
-  setEvalEditForm({ commit }, payload) {
-    if (payload) {
-      const selectedRecord = this.getters.getRecordsById(payload.sailorUuid).find(record => record.uuid === payload.recordId);
-      commit("SET_EVAL_EDIT_FORM", selectedRecord);
-    } else {
-      commit("SET_EVAL_EDIT_FORM", {});
-    }
-  },
-  updateEvalEditForm({ commit }, payload) {
-    commit("UPDATE_EVAL_EDIT_FORM", payload);
-  },
-  clearEvalEditForm({ commit }) {
-    commit("CLEAR_EVAL_EDIT_FORM");
-  },
+  }
 };

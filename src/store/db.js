@@ -32,12 +32,13 @@ export default {
     }
   },
   async updateSailor(payload) {
+    const { uuid } = payload;
     try {
       db.get("sailors")
-        .find(payload.uuid)
+        .find(uuid)
         .update(payload)
         .write();
-      return { uuid: payload.uuid };
+      return { uuid };
     } catch (error) {
       return { error };
     }
@@ -51,41 +52,25 @@ export default {
       return { error };
     }
   },
-  async addRecord(payload) {
+  async addRecord({ uuid, form }) {
     try {
       db.get("sailors")
-        .find({ uuid: payload.uuid })
+        .find({ uuid })
         .get("records")
-        .push({ id: shortid.generate(), ...payload.form })
+        .push({ id: shortid.generate(), ...form })
         .write();
-      return true;
-    } catch (error) {
-      return { error };
-    }
-  },
-  async updateRecord(payload) {
-    try {
-      db.get("sailors")
-        .find({ uuid: payload.uuid })
-        .get("records")
-        .assign(payload.form)
-        .write();
-      return true;
+      return { uuid };
     } catch (error) {
       return { error };
     }
   },
   async saveCommandDefaults(payload) {
-    try {
-      if (!db.has("commandInfo").value()) {
-        db.set("commandInfo", {})
-          .write();
-      }
-      return db.get("commandInfo")
-        .assign(payload)
+    if (!db.has("commandInfo").value()) {
+      db.set("commandInfo", {})
         .write();
-    } catch (error) {
-      return { error };
     }
+    return db.get("commandInfo")
+      .assign(payload)
+      .write();
   },
 };
