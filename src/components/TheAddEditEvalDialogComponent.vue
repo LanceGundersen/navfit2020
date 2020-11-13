@@ -238,7 +238,7 @@ export default Vue.extend({
       return this.$store.getters.reportOccasions || [];
     },
     uuid() {
-      return this.$router.currentRoute.params.uuid;
+      return this.$router.currentRoute.params.uuid || "";
     },
     record() {
       return this.$store.getters.getRecordById(this.uuid, this.recordid);

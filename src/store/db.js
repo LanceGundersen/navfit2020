@@ -33,10 +33,11 @@ export default {
   },
   async updateSailor(payload) {
     try {
-      return db.get("sailors")
+      db.get("sailors")
         .find(payload.uuid)
         .update(payload)
         .write();
+      return { uuid: payload.uuid };
     } catch (error) {
       return { error };
     }
