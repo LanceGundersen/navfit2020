@@ -48,14 +48,32 @@ export default {
       dispatch("loadDb");
     });
   },
-  addRecord({ commit, dispatch }, payload) {
-    db.addRecord(payload).then(response => {
+  addEval({ commit, dispatch }) {
+    const form = this.getters.getEvalEditForm;
+    const { uuid } = this.getters.getSelectedSailor;
+    db.addRecord({ uuid, form }).then(response => {
       if (response.error) {
         commit("setError");
         commit("setErrorMsg", response.error?.toString());
         commit("setErrorObj", response);
+      } else {
+        dispatch("clearEvalEditForm");
+        dispatch("loadDb");
       }
-      dispatch("loadDb");
+    });
+  },
+  updateEval({ commit, dispatch }) {
+    const form = this.getters.getEvalEditForm;
+    const { uuid } = this.getters.getSelectedSailor.uuid;
+    db.updateRecord({ uuid, form }).then(response => {
+      if (response.error) {
+        commit("setError");
+        commit("setErrorMsg", response.error?.toString());
+        commit("setErrorObj", response);
+      } else {
+        dispatch("clearEvalEditForm");
+        dispatch("loadDb");
+      }
     });
   },
   saveCommandDefaults({ commit, dispatch }) {
@@ -91,5 +109,19 @@ export default {
   },
   clearSailorEditForm({ commit }) {
     commit("CLEAR_SAILOR_EDIT_FORM");
-  }
+  },
+  setEvalEditForm({ commit }, payload) {
+    if (payload) {
+      const selectedRecord = this.getters.getRecordsById(payload.sailorUuid).find(record => record.uuid === payload.recordId);
+      commit("SET_EVAL_EDIT_FORM", selectedRecord);
+    } else {
+      commit("SET_EVAL_EDIT_FORM", {});
+    }
+  },
+  updateEvalEditForm({ commit }, payload) {
+    commit("UPDATE_EVAL_EDIT_FORM", payload);
+  },
+  clearEvalEditForm({ commit }) {
+    commit("CLEAR_EVAL_EDIT_FORM");
+  },
 };

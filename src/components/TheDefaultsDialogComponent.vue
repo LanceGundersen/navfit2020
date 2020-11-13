@@ -14,7 +14,7 @@
             <v-card-subtitle>Command Info</v-card-subtitle>
             <v-card-text>
               <v-layout>
-                <v-text-field :value="getCommandInfo ? getCommandInfo.uic : ''"
+                <v-text-field :value="getCommandInfo.uic ? getCommandInfo.uic : ''"
                               class="pa-1"
                               label="UIC"
                               :rules="requiredRules"
@@ -155,6 +155,7 @@ export default Vue.extend({
       this.$store.dispatch("updateCommandEditForm", { input, value });
     },
     closeDialog() {
+      this.$store.dispatch("clearCommandEditForm");
       this.dialog = false;
     },
     submit() {

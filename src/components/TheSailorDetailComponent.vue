@@ -7,7 +7,7 @@
         <v-btn icon
                small
                color="primary"
-               @click="showEditSailorDialog()">
+               @click="showAddSailorDialog = !showAddSailorDialog">
           <v-icon small>
             mdi-pencil
           </v-icon>
@@ -16,7 +16,7 @@
       <v-spacer />
       <v-btn text
              color="primary"
-             @click="showAddEvalDialog = !showAddEvalDialog">
+             @click="showAddEditEvalDialog()">
         {{ 'ADD EVAL' }}
       </v-btn>
     </v-toolbar>
@@ -27,13 +27,13 @@
         <v-expansion-panel-header color="grey lighten-5">
           <v-row no-gutters>
             <v-col cols="3">
-              {{ record.date.from }} - {{ record.date.to }}
+              {{ record.fromDate }} - {{ record.toDate }}
             </v-col>
             <v-col cols="2">
               {{ record.promotionRecommendation }}
             </v-col>
             <v-col cols="2">
-              Trait Average: 3.4
+              Trait Average: TODO
             </v-col>
           </v-row>
         </v-expansion-panel-header>
@@ -43,22 +43,24 @@
               <v-layout class="mb-2">
                 <v-layout column>
                   <h4>Promotion Status</h4>
-                  {{ record.promotionStatus }}
+                  {{ record.promotionStatus ? record.promotionStatus : '' }}
                   <h4>Occasion for Report</h4>
-                  {{ record.reportOccasion }}
+                  {{ record.reportOccasion ? record.reportOccasion : '' }}
                   <h4>Report Type</h4>
-                  {{ record.reportType }}
+                  {{ record.reportType ? record.reportType : '' }}
                   <h4>Physical Readiness</h4>
-                  {{ record.physicalReadiness }}
+                  {{ record.physicalReadiness ? record.physicalReadiness : '' }}
                 </v-layout>
                 <v-layout column>
                   <template v-if="record.billetSubcategory">
                     <h4>Billet Subcategory</h4>
-                    {{ record.billetSubcategory }}
+                    {{ record.billetSubcategory ? record.billetSubcategory : '' }}
                   </template>
                   <h4>Reporting Senior</h4>
-                  {{ record.commandInfo.grade }} {{ record.commandInfo.firstName }},
-                  {{ record.commandInfo.lastName }} {{ record.commandInfo.middleInitial }}
+                  {{ record.commandInfo && record.commandInfo.grade ? record.commandInfo.grade : "" }}
+                  {{ record.commandInfo && record.commandInfo.firstName ? record.commandInfo.firstName + ',' : "" }}
+                  {{ record.commandInfo && record.commandInfo.lastName ? record.commandInfo.lastName : "" }}
+                  {{ record.commandInfo && record.commandInfo.middleInitial ?record.commandInfo.middleInitial : "" }}
                   <h4>Mid-Term Counseling</h4>
                   TODO
                 </v-layout>
@@ -66,41 +68,42 @@
                            class="mr-4 " />
                 <v-layout column>
                   <SharedRatingComponent :label="'Professional Knowledge'"
-                                         :rating="record.performanceTraits.professionalKnowledge" />
+                                         :rating="record.professionalKnowledge ? record.professionalKnowledge : ''" />
                   <SharedRatingComponent :label="'Quality of Work'"
-                                         :rating="record.performanceTraits.qualityOfWork" />
+                                         :rating="record.qualityOfWork ? record.qualityOfWork : ''" />
                   <SharedRatingComponent :label="'Command or Organizational Climate/Equal Opportunity'"
-                                         :rating="record.performanceTraits.commandClimate" />
+                                         :rating="record.commandClimate ? record.commandClimate : ''" />
                   <SharedRatingComponent :label="'Military Bearing/Character'"
-                                         :rating="record.performanceTraits.militaryBearing" />
+                                         :rating="record.militaryBearing ? record.militaryBearing : ''" />
                 </v-layout>
                 <v-layout column>
                   <SharedRatingComponent :label="'Personal Job Accomplishment/Initiative'"
-                                         :rating="record.performanceTraits.personalInitiative" />
+                                         :rating="record.personalInitiative ? record.personalInitiative : ''" />
                   <SharedRatingComponent :label="'Teamwork'"
-                                         :rating="record.performanceTraits.teamwork" />
+                                         :rating="record.teamwork ? record.teamwork : ''" />
                   <SharedRatingComponent :label="'Leadership'"
-                                         :rating="record.performanceTraits.leadership" />
+                                         :rating="record.leadership ? record.leadership : ''" />
                 </v-layout>
               </v-layout>
               <v-layout column
                         class="mb-2">
                 <h4>Comments on Performance</h4>
                 <v-divider />
-                {{ record.performanceComments }}
+                {{ record.performanceComments ? record.performanceComments : '' }}
               </v-layout>
               <v-layout column
                         class="mb-2">
                 <h4>Qualifications/Achievements</h4>
                 <v-divider />
-                {{ record.qualificationsComments }}
+                {{ record.qualificationsComments ? record.qualificationsComments : '' }}
               </v-layout>
             </v-card-text>
           </v-card>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
-    <TheAddEvalDialogComponent v-model="showAddEvalDialog" />
+    <TheAddEditEvalDialogComponent v-model="showEvalDialog"
+                                   :recordid="givenRecordId" />
     <TheAddEditSailorDialogComponent v-model="showAddSailorDialog"
                                      :sailor="sailor" />
   </v-card>
@@ -109,13 +112,13 @@
 <script>
 import Vue from "vue";
 import TheAddEditSailorDialogComponent from "./TheAddEditSailorDialogComponent";
-import TheAddEvalDialogComponent from "./TheAddEvalDialogComponent";
+import TheAddEditEvalDialogComponent from "./TheAddEditEvalDialogComponent";
 import SharedRatingComponent from "./shared/SharedRatingComponent";
 
 export default Vue.extend({
   name: "TheSailorDetailComponent",
   components: {
-    TheAddEvalDialogComponent,
+    TheAddEditEvalDialogComponent,
     TheAddEditSailorDialogComponent,
     SharedRatingComponent,
   },
@@ -127,13 +130,20 @@ export default Vue.extend({
     },
   },
   data: () => ({
-    showAddEvalDialog: false,
+    showEvalDialog: false,
     showAddSailorDialog: false,
+    givenRecordId: null,
   }),
   computed: {
     sailor() {
       return this.$store.getters.getSelectedSailor;
-    }
+    },
+    getRecord() {
+      return null;
+    },
+    getSelectedSailorUuid() {
+      return this.$store.getters.getSelectedSailor.uuid;
+    },
   },
   beforeCreate() {
     if (!this.$store.getters.getSelectedSailor.uuid) {
@@ -141,6 +151,17 @@ export default Vue.extend({
     }
   },
   methods: {
+    showAddEditEvalDialog(givenRecordId) {
+      if (givenRecordId) {
+        this.$store.dispatch("setEvalEditForm", { sailorUuid: this.getSelectedSailorUuid, recordId: givenRecordId }).then(() => {
+          this.givenRecordId = givenRecordId;
+          this.showEvalDialog = !this.showEvalDialog;
+        });
+      }
+      this.$store.dispatch("setEvalEditForm").then(() => {
+        this.showEvalDialog = !this.showEvalDialog;
+      });
+    },
     showEditSailorDialog() {
       this.$store.dispatch("setSailorEditForm", this.sailor).then(() => {
         this.showAddSailorDialog = !this.showAddSailorDialog;

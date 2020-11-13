@@ -32,13 +32,12 @@ export default {
     }
   },
   async updateSailor(payload) {
-    const { uuid } = payload;
     try {
       db.get("sailors")
-        .find(uuid)
+        .find(payload.uuid)
         .update(payload)
         .write();
-      return { uuid };
+      return { uuid: payload.uuid };
     } catch (error) {
       return { error };
     }
@@ -52,14 +51,26 @@ export default {
       return { error };
     }
   },
-  async addRecord({ uuid, form }) {
+  async addRecord(payload) {
     try {
       db.get("sailors")
-        .find({ uuid })
+        .find({ uuid: payload.uuid })
         .get("records")
-        .push({ id: shortid.generate(), ...form })
+        .push({ id: shortid.generate(), ...payload.form })
         .write();
-      return { uuid };
+      return true;
+    } catch (error) {
+      return { error };
+    }
+  },
+  async updateRecord(payload) {
+    try {
+      db.get("sailors")
+        .find({ uuid: payload.uuid })
+        .get("records")
+        .assign(payload.form)
+        .write();
+      return true;
     } catch (error) {
       return { error };
     }
