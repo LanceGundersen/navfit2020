@@ -35,12 +35,6 @@
             <v-col cols="2">
               Trait Average: TODO
             </v-col>
-            <v-spacer />
-            <v-btn text
-                   color="primary"
-                   @click="showAddEditEvalDialog(record.id)">
-              {{ 'Edit EVAL' }}
-            </v-btn>
           </v-row>
         </v-expansion-panel-header>
         <v-expansion-panel-content>

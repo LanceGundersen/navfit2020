@@ -260,12 +260,12 @@ export default Vue.extend({
       this.defaultsDrawer = !this.defaultsDrawer;
     },
     closeDialog() {
+      this.$store.dispatch("clearEvalEditForm");
       this.dialog = false;
     },
     submit() {
       this.$refs.eval.validate();
       if (this.eval) {
-        console.log("in here with eval");
         this.$store.dispatch("updateEval")
           .then(() => {
             if (!this.$store.getters.isError) {
@@ -275,7 +275,6 @@ export default Vue.extend({
             }
           });
       } else {
-        console.log("in here");
         this.$store.dispatch("addEval")
           .then(() => {
             if (!this.$store.getters.isError) {

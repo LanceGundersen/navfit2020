@@ -7,14 +7,14 @@
             v-model="valid">
       <v-card-text>
         <v-layout>
-          <v-text-field :input="edit
+          <v-text-field :input="edit.length
                           ? edit.commandInfo.uic : getCommandInfo
                             ? getCommandInfo.uic : ''"
                         class="pa-1"
                         label="UIC"
                         :rules="requiredRules"
                         required />
-          <v-text-field :input="edit
+          <v-text-field :input="edit.length
                           ? edit.commandInfo.shipStation : getCommandInfo
                             ? getCommandInfo.shipStation : ''"
                         class="pa-1"
@@ -22,7 +22,7 @@
                         :rules="requiredRules"
                         required />
         </v-layout>
-        <v-textarea :input="edit
+        <v-textarea :input="edit.length
                       ? edit.commandInfo.commandDescription : getCommandInfo
                         ? getCommandInfo.commandDescription : ''"
                     class="pa-1"

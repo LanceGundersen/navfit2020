@@ -69,9 +69,7 @@ export default Vue.extend({
       });
     },
     showCommandDefaultsDialog() {
-      this.$store.dispatch("clearCommandEditForm").then(() => {
-        this.showDefaultsDialog = !this.showDefaultsDialog;
-      });
+      this.showDefaultsDialog = !this.showDefaultsDialog;
     }
   }
 });
