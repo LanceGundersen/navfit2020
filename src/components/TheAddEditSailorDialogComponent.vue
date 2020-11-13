@@ -93,7 +93,6 @@ export default Vue.extend({
   },
   data: () => ({
     valid: false,
-    formEditing: false,
     requiredRules: [
       v => !!v || "Is required",
     ],
@@ -142,7 +141,6 @@ export default Vue.extend({
               this.closeDialog();
             } else {
               // TODO: Handle error
-              console.log({ "Add/Edit Sailor": this.$store.getters.errorMsg });
             }
           });
       } else {
