@@ -44,6 +44,15 @@
                 mdi-pencil
               </v-icon>
             </v-btn>
+            <v-btn
+              icon
+              small
+              color="primary"
+              @click.native.stop="pdfFillerTestCall(record.id)">
+              <v-icon small>
+                mdi-file-export-outline
+              </v-icon>
+            </v-btn>
           </v-row>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -176,6 +185,13 @@ export default Vue.extend({
       this.uuid = givenUuid;
       this.showDeleteSailorDialog = true;
     },
+    pdfFillerTestCall(recordId) {
+      const
+      this.$store.dispatch("exportEval", this.$store.getters.getRecordById({
+        uuid: this.sailor.uuid,
+        recordId
+      }));
+    }
   },
 });
 </script>
