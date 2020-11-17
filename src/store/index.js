@@ -30,6 +30,7 @@ export default new Vuex.Store({
     promotionRecommendations: state => state.defaults.promotionRecommendations,
     fonts: state => state.defaults.fonts,
     physicalReadiness: state => state.defaults.physicalReadiness,
+    billetSubcategory: state => state.defaults.billetSubcategory,
     reportTypes: state => state.defaults.reportTypes,
     reportOccasions: state => state.defaults.reportOccasions,
   },

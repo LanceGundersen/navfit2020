@@ -20,14 +20,17 @@
                                       :edit="getEvalEditForm" />
           <TheSeniorInfoComponentVue v-model="showSeniorInfo"
                                      :edit="getEvalEditForm" />
-          <v-layout>
-            <TheDatePickerComponent :datestr="getEvalEditForm.fromDate ? getEvalEditForm.fromDate : ''"
-                                    :label="'From Date'"
-                                    @date-string="updateForm('fromDate', $event)" />
-            <TheDatePickerComponent :datestr="getEvalEditForm.toDate ? getEvalEditForm.toDate : ''"
-                                    :label="'To Date'"
-                                    @date-string="updateForm('toDate', $event)" />
-          </v-layout>
+          <v-card outlined>
+            <v-card-subtitle>Period of Report</v-card-subtitle>
+            <v-layout class="px-5">
+              <TheDatePickerComponent :datestr="getEvalEditForm.fromDate ? getEvalEditForm.fromDate : ''"
+                                      :label="'Period of Report: From'"
+                                      @date-string="updateForm('fromDate', $event)" />
+              <TheDatePickerComponent :datestr="getEvalEditForm.toDate ? getEvalEditForm.toDate : ''"
+                                      :label="'Period of Report: To'"
+                                      @date-string="updateForm('toDate', $event)" />
+            </v-layout>
+          </v-card>
           <v-layout>
             <v-col cols="4">
               <v-select :value="getEvalEditForm.reportOccasion ? getEvalEditForm.reportOccasion : ''"
@@ -61,9 +64,14 @@
                   <span>{{ item }}</span>
                 </template>
               </v-select>
-              <v-text-field :input="getEvalEditForm.billetSubcategory ? getEvalEditForm.billetSubcategory : ''"
-                            label="Billet Subcategory (if any)"
-                            @input="updateForm('billetSubcategory', $event)" />
+              <v-select :value="getEvalEditForm.billetSubcategory ? getEvalEditForm.billetSubcategory : ''"
+                        :items="billetSubcategory"
+                        label="Billet Subcategory"
+                        @change="updateForm('billetSubcategory', $event)">
+                <template v-slot:selection="{ item }">
+                  <span>{{ item }}</span>
+                </template>
+              </v-select>
             </v-col>
             <v-col cols="4">
               <v-select :value="getEvalEditForm.promotionRecommendation ? getEvalEditForm.promotionRecommendation : ''"
@@ -223,6 +231,9 @@ export default Vue.extend({
     },
     physicalReadiness() {
       return this.$store.getters.physicalReadiness || [];
+    },
+    billetSubcategory() {
+      return this.$store.getters.billetSubcategory || [];
     },
     reportTypes() {
       return this.$store.getters.reportTypes || [];
