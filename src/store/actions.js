@@ -111,12 +111,7 @@ export default {
     commit("CLEAR_SAILOR_EDIT_FORM");
   },
   setEvalEditForm({ commit }, payload) {
-    if (payload) {
-      const selectedRecord = this.getters.getRecordsById(payload.sailorUuid).find(record => record.uuid === payload.recordId);
-      commit("SET_EVAL_EDIT_FORM", selectedRecord);
-    } else {
-      commit("SET_EVAL_EDIT_FORM", {});
-    }
+    commit("SET_EVAL_EDIT_FORM", payload);
   },
   updateEvalEditForm({ commit }, payload) {
     commit("UPDATE_EVAL_EDIT_FORM", payload);

@@ -35,6 +35,15 @@
             <v-col cols="2">
               Trait Average: TODO
             </v-col>
+            <v-spacer />
+            <v-btn icon
+                   small
+                   color="primary"
+                   @click.native.stop="showAddEditEvalDialog(record.id)">
+              <v-icon small>
+                mdi-pencil
+              </v-icon>
+            </v-btn>
           </v-row>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -102,8 +111,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
-    <TheAddEditEvalDialogComponent v-model="showEvalDialog"
-                                   :recordid="givenRecordId" />
+    <TheAddEditEvalDialogComponent v-model="showEvalDialog" />
     <TheAddEditSailorDialogComponent v-model="showAddSailorDialog"
                                      :sailor="sailor" />
   </v-card>
@@ -132,7 +140,6 @@ export default Vue.extend({
   data: () => ({
     showEvalDialog: false,
     showAddSailorDialog: false,
-    givenRecordId: null,
   }),
   computed: {
     sailor() {
@@ -141,9 +148,6 @@ export default Vue.extend({
     getRecord() {
       return null;
     },
-    getSelectedSailorUuid() {
-      return this.$store.getters.getSelectedSailor.uuid;
-    },
   },
   beforeCreate() {
     if (!this.$store.getters.getSelectedSailor.uuid) {
@@ -151,16 +155,17 @@ export default Vue.extend({
     }
   },
   methods: {
-    showAddEditEvalDialog(givenRecordId) {
-      if (givenRecordId) {
-        this.$store.dispatch("setEvalEditForm", { sailorUuid: this.getSelectedSailorUuid, recordId: givenRecordId }).then(() => {
-          this.givenRecordId = givenRecordId;
-          this.showEvalDialog = !this.showEvalDialog;
-        });
+    showAddEditEvalDialog(recordId) {
+      this.$store.dispatch("clearEvalEditForm");
+
+      if (recordId) {
+        this.$store.dispatch("setEvalEditForm", this.$store.getters.getRecordById({
+          uuid: this.sailor.uuid,
+          recordId
+        }));
       }
-      this.$store.dispatch("setEvalEditForm").then(() => {
-        this.showEvalDialog = !this.showEvalDialog;
-      });
+
+      this.showEvalDialog = !this.showEvalDialog;
     },
     showEditSailorDialog() {
       this.$store.dispatch("setSailorEditForm", this.sailor).then(() => {
