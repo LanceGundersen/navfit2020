@@ -26,6 +26,6 @@ export default {
     getRecordsById: state => sailorUuid => state.data?.find(sailor => sailor.uuid === sailorUuid).records || [],
     getRecordById: state => payload => (
       state.data?.find(sailor => Object.prototype.hasOwnProperty.call(sailor, "uuid") && sailor.uuid === payload.uuid) || { records: [] }
-    ).records.find(record => Object.prototype.hasOwnProperty.call(record, "uuid") && record.uuid === payload.recordid) || {}
+    ).records.find(record => Object.prototype.hasOwnProperty.call(record, "id") && record.id === payload.recordId) || {}
   },
 };
