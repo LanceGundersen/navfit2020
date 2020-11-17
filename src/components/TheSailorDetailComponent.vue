@@ -154,9 +154,6 @@ export default Vue.extend({
     sailor() {
       return this.$store.getters.getSelectedSailor;
     },
-    getRecord() {
-      return null;
-    },
   },
   beforeCreate() {
     if (!this.$store.getters.getSelectedSailor.uuid) {
@@ -186,11 +183,7 @@ export default Vue.extend({
       this.showDeleteSailorDialog = true;
     },
     pdfFillerTestCall(recordId) {
-      const
-      this.$store.dispatch("exportEval", this.$store.getters.getRecordById({
-        uuid: this.sailor.uuid,
-        recordId
-      }));
+      this.$store.dispatch("exportEval", { recordId });
     }
   },
 });

@@ -119,4 +119,7 @@ export default {
   clearEvalEditForm({ commit }) {
     commit("CLEAR_EVAL_EDIT_FORM");
   },
+  exportEval({ commit }, { recordId }) {
+    commit("EXPORT_EVAL", { recordId });
+  }
 };
