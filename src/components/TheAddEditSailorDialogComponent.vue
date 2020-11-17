@@ -36,18 +36,20 @@
             <v-col>
               <v-text-field :value="sailor ? sailor.ssn : ''"
                             class="pa-1"
-                            label="SSN (optional)"
-                            placeholder="111-11-1111"
+                            label="SSN"
+                            placeholder="###-##-####"
                             @input="updateForm('ssn', $event)" />
               <v-select :value="sailor ? sailor.memberStatus : ''"
                         :items="memberStatus"
                         class="pa-1"
-                        label="Member Status (optional)"
+                        label="Member Status"
                         @change="updateForm('memberStatus', $event)" />
               <v-text-field :value="sailor ? sailor.rate : ''"
                             class="pa-1"
-                            label="Designation (optional)"
+                            label="Rate"
                             placeholder="BM3"
+                            :rules="requiredRules"
+                            required
                             @input="updateForm('rate', $event)" />
               <v-text-field :value="sailor ? sailor.designation : ''"
                             class="pa-1"

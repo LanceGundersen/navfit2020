@@ -40,7 +40,7 @@ const INITIAL_STATE = {
     },
     memberStatuses: [
       "ACT",
-      "TAR",
+      "FTS",
       "INACT",
       "AT/ADSW/265",
     ],
