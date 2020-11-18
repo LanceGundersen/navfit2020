@@ -92,6 +92,19 @@
               </v-select>
             </v-col>
           </v-layout>
+          <h4 class="pb-2">
+            Primary/Collateral/Watchstanding duties
+          </h4>
+          <v-text-field :value="getEvalEditForm.primaryCollateralShort ? getEvalEditForm.primaryCollateralShort : ''"
+                        filled
+                        label="Primary Duty Abbreviation"
+                        counter
+                        @input="updateForm('primaryCollateralShort', $event)" />
+          <v-textarea :value="getEvalEditForm.primaryCollateral ? getEvalEditForm.primaryCollateral : ''"
+                      filled
+                      label="Duties"
+                      counter
+                      @input="updateForm('primaryCollateral', $event)" />
           <h4>Performance Traits</h4>
           <v-layout>
             <v-col cols="6">
