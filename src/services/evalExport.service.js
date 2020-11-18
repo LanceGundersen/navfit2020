@@ -27,7 +27,7 @@ export function exportEval({ sailor, recordId }) {
 
   const record = buildEval(sailor, selectedRecord);
 
-  pdfFiller.fillForm(sourcePDF, pdfName, record, shouldFlatten, err => {
+  pdfFiller.fillFormWithFlatten(sourcePDF, pdfName, record, shouldFlatten, err => {
     if (err) throw err;
     console.log("In callback (we're done).");
   });
