@@ -34,6 +34,9 @@
                         @change="updateForm('rank', $event)" />
             </v-col>
             <v-col>
+              <TheDatePickerComponent :datestr="sailor && sailor.dateReported ? sailor.dateReported : ''"
+                                      :label="'Date Reported'"
+                                      @date-string="updateForm('dateReported', $event)" />
               <v-text-field :value="sailor ? sailor.ssn : ''"
                             class="pa-1"
                             label="SSN"
@@ -78,9 +81,13 @@
 
 <script>
 import Vue from "vue";
+import TheDatePickerComponent from "@/components/shared/SharedDatePickerComponent";
 
 export default Vue.extend({
   name: "TheAddEditSailorDialogComponent",
+  components: {
+    TheDatePickerComponent,
+  },
   props: {
     value: {
       type: Boolean,
