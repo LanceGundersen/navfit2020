@@ -7,7 +7,6 @@ const destinationDir = "src/static/";
 const shouldFlatten = false;
 
 function nameBuilder(sailor) {
-  console.log({ sailor });
   return `${sailor.lastName}, ${sailor.firstName}${sailor.middleInitial ? ", " : ""}${sailor.middleInitial}`;
 }
 
