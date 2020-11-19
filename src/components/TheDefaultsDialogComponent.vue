@@ -164,8 +164,6 @@ export default Vue.extend({
         .then(() => {
           if (!this.$store.getters.isError) {
             this.closeDialog();
-          } else {
-            // TODO: Handle error
           }
         });
     },

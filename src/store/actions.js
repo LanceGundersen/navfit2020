@@ -49,8 +49,12 @@ export default {
     });
   },
   addEval({ commit, dispatch }) {
-    const form = this.getters.getEvalEditForm;
     const { uuid } = this.getters.getSelectedSailor;
+    const form = {
+      ...this.getters.getEvalEditForm,
+      command: { ...this.getters.getCommandInfo },
+    };
+
     db.addRecord({ uuid, form }).then(response => {
       if (response.error) {
         commit("setError");
@@ -77,7 +81,7 @@ export default {
     });
   },
   saveCommandDefaults({ commit, dispatch }) {
-    const form = this.getters.getSailorEditForm;
+    const form = this.getters.getCommandEditForm;
     db.saveCommandDefaults(form).then(response => {
       if (response.error) {
         commit("setError");

@@ -75,14 +75,14 @@ export default {
       return { error };
     }
   },
-  async saveCommandDefaults(payload) {
+  async saveCommandDefaults(form) {
+    if (!db.has("commandInfo").value()) {
+      db.set("commandInfo", {})
+        .write();
+    }
     try {
-      if (!db.has("commandInfo").value()) {
-        db.set("commandInfo", {})
-          .write();
-      }
       return db.get("commandInfo")
-        .assign(payload)
+        .assign(form)
         .write();
     } catch (error) {
       return { error };
