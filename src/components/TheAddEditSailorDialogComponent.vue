@@ -40,7 +40,7 @@
                             placeholder="###-##-####"
                             @input="updateForm('ssn', $event)" />
               <v-select :value="sailor ? sailor.memberStatus : ''"
-                        :items="memberStatus"
+                        :items="memberStatuses"
                         class="pa-1"
                         label="Member Status"
                         @change="updateForm('memberStatus', $event)" />
@@ -111,7 +111,7 @@ export default Vue.extend({
         this.$emit("input", newValue);
       }
     },
-    memberStatus() {
+    memberStatuses() {
       return this.$store.getters.memberStatuses;
     },
     ranks() {

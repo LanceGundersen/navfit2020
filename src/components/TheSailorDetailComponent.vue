@@ -113,7 +113,7 @@
                         class="mb-2">
                 <h4>Qualifications/Achievements</h4>
                 <v-divider />
-                {{ record.qualificationsComments ? record.qualificationsComments : '' }}
+                {{ record.qualificationComments ? record.qualificationComments : '' }}
               </v-layout>
             </v-card-text>
           </v-card>
