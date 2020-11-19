@@ -7,6 +7,7 @@ const destinationDir = "src/static/";
 const shouldFlatten = false;
 
 function nameBuilder(sailor) {
+  console.log({ sailor });
   return `${sailor.lastName}, ${sailor.firstName}${sailor.middleInitial ? ", " : ""}${sailor.middleInitial}`;
 }
 
@@ -37,7 +38,14 @@ function buildEval(sailor, selectedRecord) {
   } else if (sailor.memberStatus === "AT/ADSW/265") {
     evalCopy["form1[0].Page1[0]._5_Status[0]"] = 4;
   }
-  // TODO: Add Blocks 6-7
+  // Block 6: UIC
+  if (selectedRecord.command.uic) {
+    evalCopy["form1[0].Page1[0]._6_UIC[0]"] = selectedRecord.command.uic;
+  }
+  // Block 7: Ship/Station
+  if (selectedRecord.command.shipStation) {
+    evalCopy["form1[0].Page1[0]._7_ShipStation[0]"] = selectedRecord.command.shipStation;
+  }
   // Block 8: Promotion Status
   if (selectedRecord.promotionStatus) {
     evalCopy["form1[0].Page1[0]._8_Promotion_Status[0]"] = selectedRecord.promotionStatus;
@@ -56,7 +64,6 @@ function buildEval(sailor, selectedRecord) {
   } else if (selectedRecord.reportOccasion === "Special") {
     evalCopy["form1[0].Page1[0]._13_Special[0]"] = 1;
   }
-
   // Block 14: Period of Report From
   if (selectedRecord.fromDate) {
     evalCopy["form1[0].Page1[0]._14_PeriodDate_From[0]"] = selectedRecord.fromDate;
@@ -80,10 +87,39 @@ function buildEval(sailor, selectedRecord) {
     evalCopy["form1[0].Page1[0]._20_Physical_Readiness[0]"] = selectedRecord.physicalReadiness;
   }
   // Block 21: Billet Subcategory
-  if (selectedRecord.performanceComments) {
-    evalCopy["form1[0].Page2[0]._41_Comments_on_Perf[0]"] = selectedRecord.performanceComments;
+  if (selectedRecord.billetSubcategory) {
+    evalCopy["form1[0].Page1[0]._21_Billet[0]"] = selectedRecord.billetSubcategory;
   }
-  // TODO: Add Command Blocks 22-28
+  // Block 22: Reporting Senior Name
+  if (selectedRecord.command.lastName || selectedRecord.command.firstName) {
+    evalCopy["form1[0].Page1[0]._22_Reporting_Senior_Last__FI_MI[0]"] = nameBuilder(selectedRecord.command);
+  }
+  // Block 23: Reporting Senior Grade
+  if (selectedRecord.command.grade) {
+    evalCopy["form1[0].Page1[0]._23_Grade_Rpt_Sr[0]"] = selectedRecord.command.grade;
+  }
+  // Block 24: Reporting Senior Designation
+  if (selectedRecord.command.designation) {
+    evalCopy["form1[0].Page1[0]._24_Desig_Rpt_Sr[0]"] = selectedRecord.command.designation;
+  }
+  // Block 25: Reporting Senior Title
+  if (selectedRecord.command.title) {
+    evalCopy["form1[0].Page1[0]._25_Title_Rpt_Sr[0]"] = selectedRecord.command.title;
+  }
+  // Block 26: Reporting Senior UIC
+  if (selectedRecord.command.uic) {
+    evalCopy["form1[0].Page1[0]._26_UIC_Rpt_Sr[0]"] = selectedRecord.command.uic;
+  } else {
+    evalCopy["form1[0].Page1[0]._26_UIC_Rpt_Sr[0]"] = sailor.uic;
+  }
+  // Block 27: Reporting Senior Social Security Number
+  if (selectedRecord.command.ssn) {
+    evalCopy["form1[0].Page1[0]._27_SSN_Rpt_Sr[0]"] = selectedRecord.command.ssn;
+  }
+  // Block 28: Command employment and command achievements
+  if (selectedRecord.command.commandDescription) {
+    evalCopy["form1[0].Page1[0]._28_Command_achievements[0]"] = selectedRecord.command.commandDescription;
+  }
   // Block 29 Primary Collateral Abbreviation
   if (selectedRecord.primaryCollateralShort) {
     evalCopy["form1[0].Page1[0]._29_PrimaryCollat_Short[0]"] = selectedRecord.primaryCollateralShort;
@@ -121,7 +157,8 @@ function buildEval(sailor, selectedRecord) {
   if (selectedRecord.leadership) {
     evalCopy["form1[0].Page2[0]._39_Heritage[0]"] = selectedRecord.leadership;
   }
-  // TODO: Add Mid Term Couseling Blocks 40-42
+  // TODO: Add Trait average Block 40
+  // TODO: Add recommendations Block 41
   // Block for Fonts
   if (selectedRecord.fontSize) {
     evalCopy["form1[0].Page2[0].fontsize[0]"] = selectedRecord.fontSize;
@@ -153,7 +190,10 @@ function buildEval(sailor, selectedRecord) {
   if (selectedRecord.retention) {
     selectedRecord.retention ? evalCopy["form1[0].Page2[0]._47_No_Submit[0]"] = 1 : evalCopy["form1[0].Page2[0]._47_Submit[0]"] = 1;
   }
-  // TODO: Add reporting senior value Block 48: Reporting Senior Address
+  // Block 48: Reporting Senior Address
+  if (selectedRecord.command.address) {
+    evalCopy["form1[0].Page2[0]._44_Rpt_Sr_Address[0]"] = selectedRecord.command.address;
+  }
   // TODO: Add Group Summary
   return evalCopy;
 }
