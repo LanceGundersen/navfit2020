@@ -50,7 +50,7 @@
                             type="checkbox"
                             @change="updateForm('notObserved', $event)" />
               </v-layout>
-              <v-checkbox :value="getEvalEditForm.retention ? getEvalEditForm.retention : ''"
+              <v-checkbox :value="getEvalEditForm.retention ? getEvalEditForm.retention : false"
                           dense
                           label="Recommended for Retention"
                           @change="updateForm('retention', $event)" />
