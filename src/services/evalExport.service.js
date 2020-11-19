@@ -32,6 +32,10 @@ function buildEval(sailor, selectedRecord) {
     evalCopy["form1[0].Page1[0]._5_Status[0]"] = 1;
   } else if (sailor.memberStatus === "FTS") {
     evalCopy["form1[0].Page1[0]._5_Status[0]"] = 2;
+  } else if (sailor.memberStatus === "INACT") {
+    evalCopy["form1[0].Page1[0]._5_Status[0]"] = 3;
+  } else if (sailor.memberStatus === "AT/ADSW/265") {
+    evalCopy["form1[0].Page1[0]._5_Status[0]"] = 4;
   }
   // TODO: Add Blocks 6-7
   // Block 8: Promotion Status
