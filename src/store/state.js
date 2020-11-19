@@ -106,7 +106,7 @@ const INITIAL_STATE = {
       "Regular",
       "Concurrent",
     ],
-    fonts: ["10 Point", "12 Point"],
+    fonts: ["10", "12"],
     traits: {
       professionalKnowledge: {
         title: "Professional Knowledge",
@@ -118,7 +118,7 @@ const INITIAL_STATE = {
             notes: [],
           },
           {
-            value: "1.0",
+            value: "1",
             label: "1.0 | Below Standards",
             notes: [
               "Marginal knowledge of rating, specialty or job.",
@@ -127,12 +127,12 @@ const INITIAL_STATE = {
             ],
           },
           {
-            value: "2.0",
+            value: "2",
             label: "2.0 | Progressing",
             notes: [],
           },
           {
-            value: "3.0",
+            value: "3",
             label: "3.0 | Meets Standards",
             notes: [
               "Strong working knowledge of rating, specialty and job.",
@@ -141,12 +141,12 @@ const INITIAL_STATE = {
             ],
           },
           {
-            value: "4.0",
+            value: "4",
             label: "4.0 | Above Standards",
             notes: [],
           },
           {
-            value: "5.0",
+            value: "5",
             label: "5.0 | Greatly Exceeds Standards",
             notes: [
               "Recognized expert, sought out by all for technical knowledge.",
@@ -167,7 +167,7 @@ const INITIAL_STATE = {
               notes: [],
             },
             {
-              value: "1.0",
+              value: "1",
               label: "1.0 | Below Standards",
               notes: [
                 "Needs excessive supervision.",
@@ -176,12 +176,12 @@ const INITIAL_STATE = {
               ],
             },
             {
-              value: "2.0",
+              value: "2",
               label: "2.0 | Progressing",
               notes: [],
             },
             {
-              value: "3.0",
+              value: "3",
               label: "3.0 | Meets Standards",
               notes: [
                 "Needs little supervision.",
@@ -190,12 +190,12 @@ const INITIAL_STATE = {
               ],
             },
             {
-              value: "4.0",
+              value: "4",
               label: "4.0 | Above Standards",
               notes: [],
             },
             {
-              value: "5.0",
+              value: "5",
               label: "5.0 | Greatly Exceeds Standards",
               notes: [
                 "Needs no supervision.",
@@ -218,7 +218,7 @@ const INITIAL_STATE = {
               notes: [],
             },
             {
-              value: "1.0",
+              value: "1",
               label: "1.0 | Below Standards",
               notes: [
                 "Actions counter to Navy's retention/reenlistment goals.",
@@ -228,12 +228,12 @@ const INITIAL_STATE = {
               ],
             },
             {
-              value: "2.0",
+              value: "2",
               label: "2.0 | Progressing",
               notes: [],
             },
             {
-              value: "3.0",
+              value: "3",
               label: "3.0 | Meets Standards",
               notes: [
                 "Positive leadership supports Navy's increased retention goals. Active in decreasing attrition.",
@@ -243,12 +243,12 @@ const INITIAL_STATE = {
               ],
             },
             {
-              value: "4.0",
+              value: "4",
               label: "4.0 | Above Standards",
               notes: [],
             },
             {
-              value: "5.0",
+              value: "5",
               label: "5.0 | Greatly Exceeds Standards",
               notes: [
                 "Measurably contributes to Navy's increased retention and reduced attrition objectives.",
@@ -272,7 +272,7 @@ const INITIAL_STATE = {
               notes: [],
             },
             {
-              value: "1.0",
+              value: "1",
               label: "1.0 | Below Standards",
               notes: [
                 "Consistently unsatisfactory appearance.",
@@ -282,12 +282,12 @@ const INITIAL_STATE = {
               ],
             },
             {
-              value: "2.0",
+              value: "2",
               label: "2.0 | Progressing",
               notes: [],
             },
             {
-              value: "3.0",
+              value: "3",
               label: "3.0 | Meets Standards",
               notes: [
                 "Excellent personal appearance.",
@@ -297,12 +297,12 @@ const INITIAL_STATE = {
               ],
             },
             {
-              value: "4.0",
+              value: "4",
               label: "4.0 | Above Standards",
               notes: [],
             },
             {
-              value: "5.0",
+              value: "5",
               label: "5.0 | Greatly Exceeds Standards",
               notes: [
                 "Exemplary personal appearance.",
@@ -326,7 +326,7 @@ const INITIAL_STATE = {
               notes: [],
             },
             {
-              value: "1.0",
+              value: "1",
               label: "1.0 | Below Standards",
               notes: [
                 "Needs prodding to attain qualification or finish job.",
@@ -335,12 +335,12 @@ const INITIAL_STATE = {
               ],
             },
             {
-              value: "2.0",
+              value: "2",
               label: "2.0 | Progressing",
               notes: [],
             },
             {
-              value: "3.0",
+              value: "3",
               label: "3.0 | Meets Standards",
               notes: [
                 "Productive and motivated. Completes tasks and qualifications fully and on time.",
@@ -349,12 +349,12 @@ const INITIAL_STATE = {
               ],
             },
             {
-              value: "4.0",
+              value: "4",
               label: "4.0 | Above Standards",
               notes: [],
             },
             {
-              value: "5.0",
+              value: "5",
               label: "5.0 | Greatly Exceeds Standards",
               notes: [
                 "Energetic self-starter. Completes tasks or qualifications early, far better than expected.",
@@ -377,7 +377,7 @@ const INITIAL_STATE = {
               notes: [],
             },
             {
-              value: "1.0",
+              value: "1",
               label: "1.0 | Below Standards",
               notes: [
                 "Creates conflict, unwilling to work with others, puts self above team.",
@@ -386,12 +386,12 @@ const INITIAL_STATE = {
               ],
             },
             {
-              value: "2.0",
+              value: "2",
               label: "2.0 | Progressing",
               notes: [],
             },
             {
-              value: "3.0",
+              value: "3",
               label: "3.0 | Meets Standards",
               notes: [
                 "Reinforces others' efforts, meets commitments to team.",
@@ -400,12 +400,12 @@ const INITIAL_STATE = {
               ],
             },
             {
-              value: "4.0",
+              value: "4",
               label: "4.0 | Above Standards",
               notes: [],
             },
             {
-              value: "5.0",
+              value: "5",
               label: "5.0 | Greatly Exceeds Standards",
               notes: [
                 "Team builder, inspires cooperation and progress.",
@@ -428,7 +428,7 @@ const INITIAL_STATE = {
               notes: [],
             },
             {
-              value: "1.0",
+              value: "1",
               label: "1.0 | Below Standards",
               notes: [
                 "Neglects growth/development or welfare of subordinates.",
@@ -440,12 +440,12 @@ const INITIAL_STATE = {
               ],
             },
             {
-              value: "2.0",
+              value: "2",
               label: "2.0 | Progressing",
               notes: [],
             },
             {
-              value: "3.0",
+              value: "3",
               label: "3.0 | Meets Standards",
               notes: [
                 "Effectively stimulates growth/development in subordinates.",
@@ -457,12 +457,12 @@ const INITIAL_STATE = {
               ],
             },
             {
-              value: "4.0",
+              value: "4",
               label: "4.0 | Above Standards",
               notes: [],
             },
             {
-              value: "5.0",
+              value: "5",
               label: "5.0 | Greatly Exceeds Standards",
               notes: [
                 "Inspiring motivator and trainer, subordinates reach highest level of growth and development.",
