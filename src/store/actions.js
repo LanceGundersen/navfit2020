@@ -1,13 +1,12 @@
-import db from "./db";
+const db = {};
 
 export default {
   loadDb({ commit }) {
-    db.readDatabase().then(response => {
-      if (response.commandInfo) {
-        commit("SET_COMMAND", response.commandInfo);
-      }
-      commit("SET_SAILORS", response.sailors);
-    });
+    const data = JSON.parse(window.ipcRenderer.sendSync("db:load", ""));
+    if (data.commandInfo) {
+      commit("SET_COMMAND", data.commandInfo);
+    }
+    commit("SET_SAILORS", data.sailors);
   },
   loadCommandInfo({ commit }) {
     db.readDatabase().then(response => {
@@ -19,7 +18,7 @@ export default {
     db.addSailor(form).then(response => {
       if (response.error) {
         commit("setError");
-        commit("setErrorMsg", response.error?.toString());
+        commit("setErrorMsg", response.error.toString());
         commit("setErrorObj", response);
       }
       dispatch("loadDb").then(() => {
@@ -32,7 +31,7 @@ export default {
     db.updateSailor(form).then(response => {
       if (response.error) {
         commit("setError");
-        commit("setErrorMsg", response.error?.toString());
+        commit("setErrorMsg", response.error.toString());
         commit("setErrorObj", response);
       }
       dispatch("loadDb");
@@ -42,7 +41,7 @@ export default {
     db.deleteSailor(payload).then(response => {
       if (response.error) {
         commit("setError");
-        commit("setErrorMsg", response.error?.toString());
+        commit("setErrorMsg", response.error.toString());
         commit("setErrorObj", response);
       }
       dispatch("loadDb");
@@ -58,7 +57,7 @@ export default {
     db.addRecord({ uuid, form }).then(response => {
       if (response.error) {
         commit("setError");
-        commit("setErrorMsg", response.error?.toString());
+        commit("setErrorMsg", response.error.toString());
         commit("setErrorObj", response);
       } else {
         dispatch("clearEvalEditForm");
@@ -72,7 +71,7 @@ export default {
     db.updateRecord({ uuid, form }).then(response => {
       if (response.error) {
         commit("setError");
-        commit("setErrorMsg", response.error?.toString());
+        commit("setErrorMsg", response.error.toString());
         commit("setErrorObj", response);
       } else {
         dispatch("clearEvalEditForm");
@@ -85,7 +84,7 @@ export default {
     db.saveCommandDefaults(form).then(response => {
       if (response.error) {
         commit("setError");
-        commit("setErrorMsg", response.error?.toString());
+        commit("setErrorMsg", response.error.toString());
         commit("setErrorObj", response);
       }
       dispatch("loadCommandInfo");
