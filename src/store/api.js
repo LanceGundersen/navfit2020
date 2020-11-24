@@ -1,12 +1,14 @@
-import lowdb from "lowdb";
 import shortid from "shortid";
+import { app } from "electron";
 
+const lowdb = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
 
-const adapter = new FileSync("data.json", {
+const databasePath = `${app.getPath("documents")}/navfit2020data.json`;
+
+const adapter = new FileSync(databasePath, {
   defaultValue: {}
 });
-
 const db = lowdb(adapter);
 
 export default {
@@ -18,12 +20,12 @@ export default {
   },
   async addSailor(form) {
     if (!db.has("sailors").value()) {
-      db.set("sailors", [])
+      await db.set("sailors", [])
         .write();
     }
     try {
       const uuid = shortid.generate();
-      db.get("sailors")
+      await db.get("sailors")
         .push({ ...form, uuid, records: [] })
         .write();
       return { uuid };

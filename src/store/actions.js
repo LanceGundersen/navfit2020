@@ -2,11 +2,13 @@ const db = {};
 
 export default {
   loadDb({ commit }) {
-    const data = JSON.parse(window.ipcRenderer.sendSync("db:load", ""));
-    if (data.commandInfo) {
-      commit("SET_COMMAND", data.commandInfo);
-    }
-    commit("SET_SAILORS", data.sailors);
+    window.ipcRenderer.send("db:load");
+    window.ipcRenderer.on("db:loaded", (event, args) => {
+      if (args.commandInfo) {
+        commit("SET_COMMAND", args.commandInfo);
+      }
+      commit("SET_SAILORS", args.sailors);
+    });
   },
   loadCommandInfo({ commit }) {
     db.readDatabase().then(response => {
@@ -15,14 +17,15 @@ export default {
   },
   addSailor({ commit, dispatch }) {
     const form = this.getters.getSailorEditForm;
-    db.addSailor(form).then(response => {
-      if (response.error) {
+    window.ipcRenderer.send("db:add:sailor", form);
+    window.ipcRenderer.on("db:add:sailor:result", (_, args) => {
+      if (args.error) {
         commit("setError");
-        commit("setErrorMsg", response.error.toString());
-        commit("setErrorObj", response);
+        commit("setErrorMsg", args.error.toString());
+        commit("setErrorObj", args);
       }
       dispatch("loadDb").then(() => {
-        dispatch("setSelectedSailor", response.uuid);
+        dispatch("setSelectedSailor", args.uuid);
       });
     });
   },
