@@ -1,8 +1,14 @@
-import { app, protocol, BrowserWindow, shell } from "electron";
+import { app, protocol, BrowserWindow, shell, ipcMain } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 
+const fs = require("fs");
+
 const isDevelopment = process.env.NODE_ENV !== "production";
+
+const databasePath = isDevelopment
+  ? `${app.getPath("documents")}/navfit2020data-dev.json`
+  : `${app.getPath("documents")}/navfit2020data.json`;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -13,13 +19,30 @@ protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } }
 ]);
 
+async function readDatabaseFile() {
+  return fs.readFileSync(databasePath, "utf8");
+}
+
+async function createDatabaseFile() {
+  try {
+    console.log("try to write file");
+    await fs.writeFileSync(databasePath, JSON.stringify({}), {
+      flag: "wx",
+      encoding: "utf8"
+    });
+  } catch (e) {
+    console.log("Error in file reading", e.message);
+  }
+}
+
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 1200,
     height: 800,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: false,
+      preload: isDevelopment ? `${__dirname}/preload.js` : "./preload.js",
     }
   });
 
@@ -95,3 +118,10 @@ if (isDevelopment) {
     });
   }
 }
+
+ipcMain.on("db:load", async event => {
+  if (!fs.existsSync(databasePath)) {
+    await createDatabaseFile();
+  }
+  event.returnValue = await readDatabaseFile();
+});

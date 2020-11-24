@@ -1,6 +1,6 @@
 import { NAVPERS_1616_26_REV11_11 } from "@/store/evalFormFields";
 
-const pdfFiller = window.require("pdffiller");
+const { pdfFiller } = window;
 
 const sourcePDF = "src/static/NAVPERS_1616-26_Rev11-11.pdf";
 const destinationDir = "src/static/";

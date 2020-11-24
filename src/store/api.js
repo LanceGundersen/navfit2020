@@ -1,7 +1,7 @@
 import lowdb from "lowdb";
 import shortid from "shortid";
 
-const FileSync = window.require("lowdb/adapters/FileSync");
+const FileSync = require("lowdb/adapters/FileSync");
 
 const adapter = new FileSync("data.json", {
   defaultValue: {}

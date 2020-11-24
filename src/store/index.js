@@ -39,5 +39,5 @@ export default new Vuex.Store({
     forms,
     sailors,
     selected,
-  }
+  },
 });
