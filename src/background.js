@@ -109,6 +109,31 @@ ipcMain.on("db:add:sailor", async (event, args) => {
   win.webContents.send("db:add:sailor:result", result);
 });
 
+ipcMain.on("db:update:sailor", async (event, args) => {
+  const result = await api.updateSailor(args);
+  win.webContents.send("db:update:sailor:result", result);
+});
+
+ipcMain.on("db:delete:sailor", async (event, args) => {
+  const result = await api.deleteSailor(args);
+  win.webContents.send("db:update:sailor:result", result);
+});
+
+ipcMain.on("db:add:record", async (event, args) => {
+  const result = await api.addRecord(args);
+  win.webContents.send("db:add:record:result", result);
+});
+
+ipcMain.on("db:update:record", async (event, args) => {
+  const result = await api.updateRecord(args);
+  win.webContents.send("db:update:record:result", result);
+});
+
+ipcMain.on("db:add:commandDefaults", async (event, args) => {
+  const result = await api.saveCommandDefaults(args);
+  win.webContents.send("db:add:commandDefaults:result", result);
+});
+
 ipcMain.on("open:feedback", event => {
   event.preventDefault();
   shell.openExternal("https://forms.gle/LqxFFZGTpViLxyF58");

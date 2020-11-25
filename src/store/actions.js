@@ -1,5 +1,3 @@
-const db = {};
-
 export default {
   loadDb({ commit }) {
     window.ipcRenderer.send("db:load");
@@ -8,11 +6,6 @@ export default {
         commit("SET_COMMAND", args.commandInfo);
       }
       commit("SET_SAILORS", args.sailors);
-    });
-  },
-  loadCommandInfo({ commit }) {
-    db.readDatabase().then(response => {
-      commit("SET_COMMAND", response.commandInfo);
     });
   },
   addSailor({ commit, dispatch }) {
@@ -31,21 +24,23 @@ export default {
   },
   updateSailor({ commit, dispatch }) {
     const form = this.getters.getSailorEditForm;
-    db.updateSailor(form).then(response => {
-      if (response.error) {
+    window.ipcRenderer.send("db:update:sailor", form);
+    window.ipcRenderer.on("db:update:sailor:result", (_, args) => {
+      if (args.error) {
         commit("setError");
-        commit("setErrorMsg", response.error.toString());
-        commit("setErrorObj", response);
+        commit("setErrorMsg", args.error.toString());
+        commit("setErrorObj", args);
       }
       dispatch("loadDb");
     });
   },
   deleteSailor({ commit, dispatch }, payload) {
-    db.deleteSailor(payload).then(response => {
-      if (response.error) {
+    window.ipcRenderer.send("db:delete:sailor", payload);
+    window.ipcRenderer.on("db:delete:sailor:result", (_, args) => {
+      if (args.error) {
         commit("setError");
-        commit("setErrorMsg", response.error.toString());
-        commit("setErrorObj", response);
+        commit("setErrorMsg", args.error.toString());
+        commit("setErrorObj", args);
       }
       dispatch("loadDb");
     });
@@ -57,11 +52,12 @@ export default {
       command: { ...this.getters.getCommandInfo },
     };
 
-    db.addRecord({ uuid, form }).then(response => {
-      if (response.error) {
+    window.ipcRenderer.send("db:add:record", { uuid, form });
+    window.ipcRenderer.on("db:add:record:result", (_, args) => {
+      if (args.error) {
         commit("setError");
-        commit("setErrorMsg", response.error.toString());
-        commit("setErrorObj", response);
+        commit("setErrorMsg", args.error.toString());
+        commit("setErrorObj", args);
       } else {
         dispatch("clearEvalEditForm");
         dispatch("loadDb");
@@ -70,12 +66,14 @@ export default {
   },
   updateEval({ commit, dispatch }) {
     const form = this.getters.getEvalEditForm;
-    const { uuid } = this.getters.getSelectedSailor.uuid;
-    db.updateRecord({ uuid, form }).then(response => {
-      if (response.error) {
+    const { uuid } = this.getters.getSelectedSailor;
+
+    window.ipcRenderer.send("db:update:record", { uuid, form });
+    window.ipcRenderer.on("db:update:record:result", (_, args) => {
+      if (args.error) {
         commit("setError");
-        commit("setErrorMsg", response.error.toString());
-        commit("setErrorObj", response);
+        commit("setErrorMsg", args.error.toString());
+        commit("setErrorObj", args);
       } else {
         dispatch("clearEvalEditForm");
         dispatch("loadDb");
@@ -84,13 +82,14 @@ export default {
   },
   saveCommandDefaults({ commit, dispatch }) {
     const form = this.getters.getCommandEditForm;
-    db.saveCommandDefaults(form).then(response => {
-      if (response.error) {
+    window.ipcRenderer.send("db:add:commandDefaults", form);
+    window.ipcRenderer.on("db:add:commandDefaults:result", (_, args) => {
+      if (args.error) {
         commit("setError");
-        commit("setErrorMsg", response.error.toString());
-        commit("setErrorObj", response);
+        commit("setErrorMsg", args.error.toString());
+        commit("setErrorObj", args);
       }
-      dispatch("loadCommandInfo");
+      dispatch("loadDb");
     });
   },
   setCommandEditForm({ commit }, payload) {
