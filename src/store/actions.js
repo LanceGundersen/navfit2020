@@ -10,11 +10,6 @@ export default {
       commit("SET_SAILORS", args.sailors);
     });
   },
-  loadCommandInfo({ commit }) {
-    db.readDatabase().then(response => {
-      commit("SET_COMMAND", response.commandInfo);
-    });
-  },
   addSailor({ commit, dispatch }) {
     const form = this.getters.getSailorEditForm;
     window.ipcRenderer.send("db:add:sailor", form);
@@ -84,13 +79,14 @@ export default {
   },
   saveCommandDefaults({ commit, dispatch }) {
     const form = this.getters.getCommandEditForm;
-    db.saveCommandDefaults(form).then(response => {
-      if (response.error) {
+    window.ipcRenderer.send("db:add:commandDefaults", form);
+    window.ipcRenderer.on("db:add:commandDefaults:result", (_, args) => {
+      if (args.error) {
         commit("setError");
-        commit("setErrorMsg", response.error.toString());
-        commit("setErrorObj", response);
+        commit("setErrorMsg", args.error.toString());
+        commit("setErrorObj", args);
       }
-      dispatch("loadCommandInfo");
+      dispatch("loadDb");
     });
   },
   setCommandEditForm({ commit }, payload) {
