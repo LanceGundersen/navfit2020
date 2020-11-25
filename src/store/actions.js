@@ -26,21 +26,23 @@ export default {
   },
   updateSailor({ commit, dispatch }) {
     const form = this.getters.getSailorEditForm;
-    db.updateSailor(form).then(response => {
-      if (response.error) {
+    window.ipcRenderer.send("db:update:sailor", form);
+    window.ipcRenderer.on("db:update:sailor:result", (_, args) => {
+      if (args.error) {
         commit("setError");
-        commit("setErrorMsg", response.error.toString());
-        commit("setErrorObj", response);
+        commit("setErrorMsg", args.error.toString());
+        commit("setErrorObj", args);
       }
       dispatch("loadDb");
     });
   },
   deleteSailor({ commit, dispatch }, payload) {
-    db.deleteSailor(payload).then(response => {
-      if (response.error) {
+    window.ipcRenderer.send("db:delete:sailor", payload);
+    window.ipcRenderer.on("db:delete:sailor:result", (_, args) => {
+      if (args.error) {
         commit("setError");
-        commit("setErrorMsg", response.error.toString());
-        commit("setErrorObj", response);
+        commit("setErrorMsg", args.error.toString());
+        commit("setErrorObj", args);
       }
       dispatch("loadDb");
     });

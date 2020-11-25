@@ -35,9 +35,9 @@ export default {
   },
   async updateSailor(payload) {
     try {
-      db.get("sailors")
-        .find(payload.uuid)
-        .update(payload)
+      await db.get("sailors")
+        .find({ uuid: payload.uuid })
+        .assign(payload)
         .write();
       return { uuid: payload.uuid };
     } catch (error) {
