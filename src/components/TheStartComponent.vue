@@ -62,7 +62,7 @@ export default Vue.extend({
   data: () => ({ }),
   methods: {
     openFeedbackForm() {
-      window.require("electron").shell.openExternal("https://forms.gle/esBBRR2foqwBc2m48");
+      this.$store.dispatch("openFeedbackForm");
     }
   }
 });
