@@ -1,5 +1,3 @@
-const db = {};
-
 export default {
   loadDb({ commit }) {
     window.ipcRenderer.send("db:load");
@@ -54,11 +52,12 @@ export default {
       command: { ...this.getters.getCommandInfo },
     };
 
-    db.addRecord({ uuid, form }).then(response => {
-      if (response.error) {
+    window.ipcRenderer.send("db:add:record", { uuid, form });
+    window.ipcRenderer.on("db:add:record:result", (_, args) => {
+      if (args.error) {
         commit("setError");
-        commit("setErrorMsg", response.error.toString());
-        commit("setErrorObj", response);
+        commit("setErrorMsg", args.error.toString());
+        commit("setErrorObj", args);
       } else {
         dispatch("clearEvalEditForm");
         dispatch("loadDb");
@@ -67,12 +66,14 @@ export default {
   },
   updateEval({ commit, dispatch }) {
     const form = this.getters.getEvalEditForm;
-    const { uuid } = this.getters.getSelectedSailor.uuid;
-    db.updateRecord({ uuid, form }).then(response => {
-      if (response.error) {
+    const { uuid } = this.getters.getSelectedSailor;
+
+    window.ipcRenderer.send("db:update:record", { uuid, form });
+    window.ipcRenderer.on("db:update:record:result", (_, args) => {
+      if (args.error) {
         commit("setError");
-        commit("setErrorMsg", response.error.toString());
-        commit("setErrorObj", response);
+        commit("setErrorMsg", args.error.toString());
+        commit("setErrorObj", args);
       } else {
         dispatch("clearEvalEditForm");
         dispatch("loadDb");

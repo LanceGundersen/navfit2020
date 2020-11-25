@@ -65,12 +65,13 @@ export default {
       return { error };
     }
   },
-  async updateRecord(payload) {
+  async updateRecord({ uuid, form }) {
     try {
-      db.get("sailors")
-        .find({ uuid: payload.uuid })
+      await db.get("sailors")
+        .find({ uuid })
         .get("records")
-        .assign(payload.form)
+        .find({ id: form.id })
+        .assign(form)
         .write();
       return true;
     } catch (error) {

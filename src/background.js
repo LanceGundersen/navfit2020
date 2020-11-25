@@ -119,6 +119,16 @@ ipcMain.on("db:delete:sailor", async (event, args) => {
   win.webContents.send("db:update:sailor:result", result);
 });
 
+ipcMain.on("db:add:record", async (event, args) => {
+  const result = await api.addRecord(args);
+  win.webContents.send("db:add:record:result", result);
+});
+
+ipcMain.on("db:update:record", async (event, args) => {
+  const result = await api.updateRecord(args);
+  win.webContents.send("db:update:record:result", result);
+});
+
 ipcMain.on("db:add:commandDefaults", async (event, args) => {
   const result = await api.saveCommandDefaults(args);
   win.webContents.send("db:add:commandDefaults:result", result);
