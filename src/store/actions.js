@@ -127,5 +127,8 @@ export default {
   },
   exportEval({ commit }, { recordId }) {
     commit("EXPORT_EVAL", { recordId });
+  },
+  openFeedbackForm() {
+    window.ipcRenderer.send("open:feedback");
   }
 };

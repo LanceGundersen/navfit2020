@@ -1,6 +1,6 @@
 {
-  "name": "navfitd2020",
-  "version": "0.2.0",
+  "name": "navfit2020",
+  "version": "0.2.1",
   "private": true,
   "description": "Navy Evaluation/Fitrep Writer Modernized.",
   "author": "Lance Gundersen",

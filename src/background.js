@@ -108,3 +108,8 @@ ipcMain.on("db:add:sailor", async (event, args) => {
   const result = await api.addSailor(args);
   win.webContents.send("db:add:sailor:result", result);
 });
+
+ipcMain.on("open:feedback", event => {
+  event.preventDefault();
+  shell.openExternal("https://forms.gle/LqxFFZGTpViLxyF58");
+});
