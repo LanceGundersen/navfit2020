@@ -183,7 +183,7 @@ export default Vue.extend({
       this.showDeleteSailorDialog = true;
     },
     pdfFillerTestCall(recordId) {
-      this.$store.dispatch("exportEval", { recordId });
+      this.$store.dispatch("exportEval", recordId);
     }
   },
 });

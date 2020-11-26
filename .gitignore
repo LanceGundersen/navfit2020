@@ -27,7 +27,7 @@ yarn-error.log*
 /dist_electron
 
 #dbfile
-data.json
+example-navfit2020data.json
 
 #coverage
 /coverage

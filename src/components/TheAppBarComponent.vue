@@ -8,7 +8,10 @@
       <v-avatar class="mr-2">
         <img :src="require('../static/logo.png')">
       </v-avatar>
-      <v-toolbar-title>NavFit 2020</v-toolbar-title>
+      <v-toolbar-title>
+        NavFit 2020
+        <span class="subtitle-2 orange--text text--lighten-2">ALPHA PRE-RELEASE</span>
+      </v-toolbar-title>
       <v-spacer />
       <v-btn text
              tile
