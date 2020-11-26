@@ -1,10 +1,21 @@
 import shortid from "shortid";
 import { app } from "electron";
 
+const fs = require("fs");
 const lowdb = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
 
-const databasePath = `${app.getPath("documents")}/navfit2020data.json`;
+const dir = `${app.getPath("documents")}/navfit2020`;
+
+fs.mkdir(dir, { recursive: true }, err => {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("New directory successfully created.");
+  }
+});
+
+const databasePath = `${dir}/navfit2020data.json`;
 
 const adapter = new FileSync(databasePath, {
   defaultValue: {}

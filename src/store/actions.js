@@ -1,4 +1,7 @@
 export default {
+  loadApp() {
+    window.ipcRenderer.send("app:load");
+  },
   loadDb({ commit }) {
     window.ipcRenderer.send("db:load");
     window.ipcRenderer.on("db:loaded", (event, args) => {
@@ -124,8 +127,9 @@ export default {
   clearEvalEditForm({ commit }) {
     commit("CLEAR_EVAL_EDIT_FORM");
   },
-  exportEval({ commit }, { recordId }) {
-    commit("EXPORT_EVAL", { recordId });
+  exportEval(_, payload) {
+    const sailor = this.getters.getSelectedSailor;
+    window.ipcRenderer.send("pdf:export", { sailor, id: payload });
   },
   openFeedbackForm() {
     window.ipcRenderer.send("open:feedback");

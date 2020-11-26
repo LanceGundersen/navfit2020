@@ -1,16 +1,10 @@
 import { NAVPERS_1616_26_REV11_11 } from "@/store/evalFormFields";
 
-const { pdfFiller } = window;
-
-const sourcePDF = "src/static/NAVPERS_1616-26_Rev11-11.pdf";
-const destinationDir = "src/static/";
-const shouldFlatten = false;
-
 function nameBuilder(sailor) {
   return `${sailor.lastName}, ${sailor.firstName}${sailor.middleInitial ? ", " : ""}${sailor.middleInitial}`;
 }
 
-function buildEval(sailor, selectedRecord) {
+export default function buildEval(sailor, selectedRecord) {
   const evalCopy = { ...NAVPERS_1616_26_REV11_11 };
 
   // Block 1: Name
@@ -197,15 +191,9 @@ function buildEval(sailor, selectedRecord) {
   return evalCopy;
 }
 
-export function exportEval({ sailor, recordId }) {
+export function exportEval(sailor, recordId) {
   const selectedRecord = sailor.records.find(record => record.id === recordId);
-  const pdfName = `${destinationDir}${sailor.rate}_${sailor.lastName}_${sailor.firstName}_`
-  + `${selectedRecord.fromDate}_${selectedRecord.toDate}.pdf`;
-
   const record = buildEval(sailor, selectedRecord);
 
-  pdfFiller.fillFormWithFlatten(sourcePDF, pdfName, record, shouldFlatten, err => {
-    if (err) throw err;
-    // console.log("In callback (we're done).");
-  });
+  return record;
 }

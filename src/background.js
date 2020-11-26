@@ -1,9 +1,16 @@
-import { app, protocol, BrowserWindow, shell, ipcMain } from "electron";
+import { app, protocol, BrowserWindow, shell, ipcMain, dialog } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+import { exportEval } from "@/services/evalExport";
 import api from "@/store/api";
 
+const fs = require("fs");
 const path = require("path");
+
+const pdfFiller = require("pdffiller");
+
+const dir = `${app.getPath("documents")}/navfit2020`;
+const sourcePDF = "src/static/NAVPERS_1616-26_Rev11-11.pdf";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -137,4 +144,28 @@ ipcMain.on("db:add:commandDefaults", async (event, args) => {
 ipcMain.on("open:feedback", event => {
   event.preventDefault();
   shell.openExternal("https://forms.gle/LqxFFZGTpViLxyF58");
+});
+
+ipcMain.on("pdf:export", async (event, args) => {
+  const shouldFlatten = false;
+  const options = {
+    title: "Save new file as...",
+    defaultPath: `${app.getPath("documents")}/navfit2020/new_file.pdf`,
+    filters: [
+      { name: "Custom File Type", extensions: ["pdf"] }
+    ]
+  };
+
+  const saveDialog = dialog.showSaveDialog(win, options);
+
+  saveDialog.then(saveTo => {
+    const record = exportEval(args.sailor, args.id);
+    try {
+      pdfFiller.fillFormWithFlatten(sourcePDF, saveTo.filePath, record, shouldFlatten, err => {
+        if (err) throw err;
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  });
 });
