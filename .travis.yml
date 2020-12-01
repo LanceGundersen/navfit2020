@@ -59,7 +59,7 @@ script:
 # only deploy to github on a merge to the prod branch
 deploy:
   provider: script
-  script: bash deploy.travis.sh
+  script: bash scripts/deploy.travis.sh
   skip_cleanup: true
   on:
     branch: prod
