@@ -6,6 +6,14 @@ module.exports = {
     electronBuilder: {
       preload: "src/preload.js",
       externals: ["pdffiller"],
+      build: {
+        win: {
+          publish: ["github"]
+        },
+        linux: {
+          publish: ["snap"]
+        }
+      }
     }
   },
 };
