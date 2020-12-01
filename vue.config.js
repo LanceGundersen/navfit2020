@@ -5,7 +5,7 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       preload: "src/preload.js",
-      externals: ["pdffiller"]
+      externals: ["pdffiller"],
     }
-  }
+  },
 };

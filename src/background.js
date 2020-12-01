@@ -8,15 +8,20 @@ const fs = require("fs");
 const path = require("path");
 
 const pdfFiller = require("pdffiller");
+const DownloadManager = require("electron-download-manager");
 
-const dir = `${app.getPath("documents")}/navfit2020`;
-const sourcePDF = "src/static/NAVPERS_1616-26_Rev11-11.pdf";
+const navpersURL = "https://github.com/LanceGundersen/navfit2020/raw/dev/pdfTemplates/NAVPERS_1616-26_Rev11-11.pdf";
+const sourcePDF = `${app.getAppPath()}src/pdfTemplates/NAVPERS_1616-26_Rev11-11.pdf`;
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+
+DownloadManager.register({
+  downloadFolder: `${app.getPath("documents")}/navfit2020`
+});
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -90,6 +95,15 @@ app.on("ready", async () => {
     }
   }
   createWindow();
+  DownloadManager.download({
+    url: navpersURL
+  }, (error, info) => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+    console.log(`DONE: ${info.url}`);
+  });
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -162,10 +176,14 @@ ipcMain.on("pdf:export", async (event, args) => {
     const record = exportEval(args.sailor, args.id);
     try {
       pdfFiller.fillFormWithFlatten(sourcePDF, saveTo.filePath, record, shouldFlatten, err => {
-        if (err) throw err;
+        if (err) {
+          console.error(err);
+          throw err;
+        }
       });
     } catch (e) {
       console.error(e);
     }
   });
+  console.log(fs.readdirSync(app.getAppPath()));
 });

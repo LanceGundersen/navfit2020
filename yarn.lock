@@ -4417,6 +4417,11 @@ electron-devtools-installer@^3.1.1:
     semver "^7.2.1"
     unzip-crx-3 "^0.2.0"
 
+electron-download-manager@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/electron-download-manager/-/electron-download-manager-2.1.2.tgz#6507aa73364bb0e53ba6c93d8e9f323cd3ea25b3"
+  integrity sha512-9v8aeMVZTX69NjEveKlKfTlJY74twpKktTXrmDI+UcQHZg7FtwuqxWw0ZNrjtVAOBcVNKzwG4ekn44B+xhz1tg==
+
 electron-publish@22.8.1:
   version "22.8.1"
   resolved "https://registry.yarnpkg.com/electron-publish/-/electron-publish-22.8.1.tgz#747e0d7f921cd1808f999713d29f599dbb390c4f"
