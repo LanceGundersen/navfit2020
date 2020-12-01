@@ -193,7 +193,5 @@ export default function buildEval(sailor, selectedRecord) {
 
 export function exportEval(sailor, recordId) {
   const selectedRecord = sailor.records.find(record => record.id === recordId);
-  const record = buildEval(sailor, selectedRecord);
-
-  return record;
+  return buildEval(sailor, selectedRecord);
 }
