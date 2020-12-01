@@ -11,7 +11,7 @@ const pdfFiller = require("pdffiller");
 const DownloadManager = require("electron-download-manager");
 
 const navpersURL = "https://github.com/LanceGundersen/navfit2020/raw/dev/pdfTemplates/NAVPERS_1616-26_Rev11-11.pdf";
-const sourcePDF = `${app.getAppPath()}src/pdfTemplates/NAVPERS_1616-26_Rev11-11.pdf`;
+const sourcePDF = `${app.getPath("documents")}/navfit2020/NAVPERS_1616-26_Rev11-11.pdf`;
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
