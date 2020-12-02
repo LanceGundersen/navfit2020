@@ -13,21 +13,20 @@ init:
 install:
   - ps: Install-Product node 10 x64
   - yarn
+  - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
+  - ps: Update-AppveyorBuild -Version "$(package_version)-$env:APPVEYOR_BUILD_NUMBER"
 
 build_script:
   - yarn electron:build
 
-before_deploy:
-  - sh: export VERSION="$(node -p "require('./package.json').version")"
-
 deploy:
-  - tag: ${VERSION}
+  - tag: $(appveyor_build_number)
     provider: GitHub
     description: 'AppVeyor Release'
     auth_token:
       secure: fEkXGI1MwwnXikl6PyKr9q8U1Dcgw+yZuPznmh/YqHS4QtwLBkqxl0C4cDwB1vVf
     draft: true
-    artifact: /.*\.nupkg/
+    artifact: /.*\.exe/
     force_update: true
     on:
       branch: prod
