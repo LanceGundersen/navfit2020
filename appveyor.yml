@@ -20,17 +20,13 @@ install:
 build_script:
   - yarn electron:build
 
-artifacts:
-  - path: dist_electron
-    name: dist
-
 deploy:
   - provider: GitHub
     description: 'AppVeyor Release'
     auth_token:
       secure: fEkXGI1MwwnXikl6PyKr9q8U1Dcgw+yZuPznmh/YqHS4QtwLBkqxl0C4cDwB1vVf
     draft: true
-    artifact: dist
+    artifact: dist_electron/navfit2020*.exe
     force_update: true
     on:
       branch: prod
