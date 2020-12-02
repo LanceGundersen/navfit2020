@@ -15,10 +15,14 @@ install:
   - yarn
   - install:
   - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
-  - ps: Update-AppveyorBuild -Version "$env:package_version-$env:APPVEYOR_BUILD_NUMBER"
+  - ps: Update-AppveyorBuild -Version "$env:package_version"
 
 build_script:
   - yarn electron:build
+
+artifacts:
+  - path: dist_electron
+    name: dist
 
 deploy:
   - provider: GitHub
@@ -26,7 +30,7 @@ deploy:
     auth_token:
       secure: fEkXGI1MwwnXikl6PyKr9q8U1Dcgw+yZuPznmh/YqHS4QtwLBkqxl0C4cDwB1vVf
     draft: true
-    artifact: '**\*.exe'
+    artifact: dist
     force_update: true
     on:
       branch: prod
