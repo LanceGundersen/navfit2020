@@ -52,9 +52,9 @@ script:
         -v ~/.cache/electron:/root/.cache/electron \
         -v ~/.cache/electron-builder:/root/.cache/electron-builder \
         electronuserland/builder:wine \
-        /bin/bash -c "yarn --link-duplicates --pure-lockfile && yarn electron:build"
+        /bin/bash -c "yarn --link-duplicates --pure-lockfile && yarn electron:build -wl"
     else
-      yarn electron:build
+      yarn electron:build -wl
     fi
 # only deploy to github on a merge to the prod branch
 before_deploy:
