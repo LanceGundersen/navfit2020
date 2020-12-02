@@ -52,11 +52,15 @@ script:
         -v ~/.cache/electron:/root/.cache/electron \
         -v ~/.cache/electron-builder:/root/.cache/electron-builder \
         electronuserland/builder:wine \
-        /bin/bash -c "yarn --link-duplicates --pure-lockfile && yarn test:deploy"
+        /bin/bash -c "yarn --link-duplicates --pure-lockfile && yarn electron:build"
     else
-      yarn test:deploy
+      yarn electron:build
     fi
 # only deploy to github on a merge to the prod branch
+  before_deploy:
+  # Set up git user name and tag this commit
+  - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
+  - git tag $TRAVIS_TAG
 deploy:
   provider: script
   script: bash scripts/deploy.travis.sh
