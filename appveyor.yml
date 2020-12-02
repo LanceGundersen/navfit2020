@@ -21,7 +21,7 @@ before_deploy:
   - sh: export VERSION="$(node -p "require('./package.json').version")"
 
 deploy:
-  - tag: %VERSION%
+  - tag: ${VERSION}
     provider: GitHub
     description: 'AppVeyor Release'
     auth_token:
