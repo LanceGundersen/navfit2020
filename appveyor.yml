@@ -1,0 +1,32 @@
+image: Visual Studio 2017
+
+platform:
+  - x64
+
+cache:
+  - node_modules
+  - '%USERPROFILE%\.electron'
+
+init:
+  - git config --global core.autocrlf input
+
+install:
+  - ps: Install-Product node 10 x64
+  - yarn
+
+build_script:
+  - yarn electron:build
+
+deploy:
+  proivder: GitHub
+  description: 'AppVeyor Release'
+  auth_token:
+    secure: fEkXGI1MwwnXikl6PyKr9q8U1Dcgw+yZuPznmh/YqHS4QtwLBkqxl0C4cDwB1vVf
+  draft: true
+  force_update: true
+  on:
+    branch:
+      - prod
+      - master
+
+test: off

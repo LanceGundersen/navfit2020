@@ -1,6 +1,6 @@
 {
   "name": "navfit2020",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "private": true,
   "description": "Navy Evaluation/Fitrep Writer Modernized.",
   "author": "Lance Gundersen",
@@ -64,5 +64,8 @@
     "vue-cli-plugin-vuetify": "^2.0.7",
     "vue-template-compiler": "^2.6.12",
     "vuetify-loader": "^1.6.0"
+  },
+  "resolutions": {
+    "vue-cli-plugin-electron-builder/electron-builder": "^22.2.0"
   }
 }

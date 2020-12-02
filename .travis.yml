@@ -58,7 +58,7 @@ script:
     fi
 # only deploy to github on a merge to the prod branch
 before_deploy:
-  # Set up git user name and tag this commit
+  # Tag this commit
   - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
   - git tag $TRAVIS_TAG
 deploy:
