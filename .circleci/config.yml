@@ -26,7 +26,7 @@ jobs:
       - checkout
       - run: yarn && yarn electron:build --mac
       - store_artifacts:
-          path: /tmp/artifacts/navfit2020-$TAG.dmg
+          path: ./dist_electron
   publish-github-release:
     description: CircleCi release `v$TAG`.
     executor: github-release/default
