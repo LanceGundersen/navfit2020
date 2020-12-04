@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  github-release: h-matsuo/github-release@0.1.3
+
 jobs:
   test:
     docker:
@@ -13,9 +16,9 @@ jobs:
       - image: electronuserland/builder:wine
     steps:
       - checkout
-      - run: yarn && yarn electron:build --win
+      - run: yarn && yarn electron:build -wl
       - store_artifacts:
-          path: /dist_electron
+          path: /tmp/artifacts
   build_macos:
     macos:
       xcode: "10.0.0"
@@ -23,32 +26,32 @@ jobs:
       - checkout
       - run: yarn && yarn electron:build --mac
       - store_artifacts:
-          path: /dist_electron
-  build_linux:
-    docker:
-      - image: circleci/node:10
+          path: /tmp/artifacts
+  publish-github-release:
+    description: Create dummy file and publish a new release tagged `vX.Y.Z`.
+    executor: github-release/default
     steps:
-      - checkout
-      - run: yarn && yarn electron:build --win
-      - store_artifacts:
-          path: /dist_electron
+      - run:
+          command: |
+            mkdir artifacts
+            echo dummy > ./artifacts/file
+      - github-release/create:
+          tag: vX.Y.Z
+          title: Version vX.Y.Z
+          description: This release is version vX.Y.Z .
+          file-path: ./artifacts/file
+            
       
 workflows:
-  #windows:
-    #jobs:
-      #- test
-      #- build_windows:
-          #requires:
-            #- test
+  windows:
+    jobs:
+      - test
+      - build_windows:
+          requires:
+            - test
   #macos:
     #jobs:
       #- test
       #- build_macos:
           #requires:
             #- test
-  linux:
-    jobs:
-      - test
-      - build_linux:
-          requires:
-            - test
