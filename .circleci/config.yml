@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   github-release: h-matsuo/github-release@0.1.3
-  cypress: cypress-io/cypress@1
+#  cypress: cypress-io/cypress@1
 
 jobs:
   test:
@@ -66,30 +66,30 @@ workflows:
   windows_linux:
     jobs:
       - test
-      - cypress/run:
-          yarn: true
-          record: true
+#      - cypress/run:
+#          yarn: true
+#          record: true
       - build_windows_linux:
           requires:
             - test
-            - cypress/run
+            #- cypress/run
       - publish-github-release:
           requires:
             - test
-            - cypress/run
+            #- cypress/run
             - build_windows_linux
-#  macos:
-#    jobs:
-#       - test
+  macos:
+    jobs:
+       - test
 #       - cypress/run:
 #           yarn: true
 #           record: true
-#       - build_macos:
-#           requires:
-#             - test
+       - build_macos:
+           requires:
+             - test
 #             - cypress/run
-#       - publish-github-release:
-#           requires:
-#             - test
+       - publish-github-release:
+           requires:
+             - test
 #             - cypress/run
-#             - build_macos
+             - build_macos
