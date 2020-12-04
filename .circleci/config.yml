@@ -1,0 +1,48 @@
+version: 2.1
+jobs:
+  test:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run: yarn && yarn lint
+      - run: yarn test
+      - run: yarn test:e2e
+  build_windows:
+    docker:
+      - image: electronuserland/builder:wine
+    steps:
+      - checkout
+      - run: yarn && yarn electron:build --win
+  build_macos:
+    macos:
+      xcode: "10.0.0"
+    steps:
+      - checkout
+      - run: yarn && yarn electron:build --mac
+  build_linux:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run: yarn && yarn electron:build --win
+      
+workflows:
+  windows:
+    jobs:
+      - test
+      - build_windows:
+          requires:
+            - test
+  macos:
+    jobs:
+      - test
+      - build_macos:
+          requires:
+            - test
+  linux:
+    jobs:
+      - test
+      - build_linux:
+          requires:
+            - test
