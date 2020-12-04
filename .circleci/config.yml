@@ -78,18 +78,18 @@ workflows:
             - test
             - cypress/run
             - build_windows_linux
-  macos:
-    jobs:
-       - test
-       - cypress/run:
-           yarn: true
-           record: true
-       - build_macos:
-           requires:
-             - test
-             - cypress/run
-       - publish-github-release:
-           requires:
-             - test
-             - cypress/run
-             - build_macos
+#  macos:
+#    jobs:
+#       - test
+#       - cypress/run:
+#           yarn: true
+#           record: true
+#       - build_macos:
+#           requires:
+#             - test
+#             - cypress/run
+#       - publish-github-release:
+#           requires:
+#             - test
+#             - cypress/run
+#             - build_macos
