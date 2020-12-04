@@ -39,7 +39,7 @@ jobs:
             echo Removing non-executable files
             cd /root/project/dist_electron
             ls
-            rm -rf bundled linux-unpacked win-unpacked
+            rm -rf bundled linux-unpacked win-unpacked .icon-ico
             rm *.yml *.blockmap
             ls
       - store_artifacts:
@@ -69,7 +69,8 @@ jobs:
           tag: v$TAG
           title: Version v$TAG
           description: This release is version v$TAG .
-          file-path: /root/project/dist_electron
+          file-path: $CIRCLE_ARTIFACTS
+          draft: true
 
 workflows:
   build:
