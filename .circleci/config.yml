@@ -12,6 +12,9 @@ jobs:
       - checkout
       - run: yarn && yarn lint
       - run: yarn test
+      - cypress/run
+          yarn: true
+          record: true
   build_windows:
     docker:
       - image: electronuserland/builder:wine
@@ -62,6 +65,3 @@ workflows:
       - build_linux:
           requires:
             - test
-            - cypress/run
-                yarn: true
-                record: true
