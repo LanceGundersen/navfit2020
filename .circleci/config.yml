@@ -60,10 +60,10 @@ jobs:
           tag: v$TAG
           title: Version v$TAG
           description: This release is version v$TAG .
-          file-path: ./dist_electron
+          file-path: /root/project/dist_electron
 
 workflows:
-  windows_linux:
+  build:
     jobs:
       - test
 #      - cypress/run:
@@ -73,23 +73,13 @@ workflows:
           requires:
             - test
             #- cypress/run
+      - build_macos:
+          requires:
+            - test
+            #- cypress/run
       - publish-github-release:
           requires:
             - test
             #- cypress/run
             - build_windows_linux
-  macos:
-    jobs:
-       - test
-#       - cypress/run:
-#           yarn: true
-#           record: true
-       - build_macos:
-           requires:
-             - test
-#             - cypress/run
-       - publish-github-release:
-           requires:
-             - test
-#             - cypress/run
-             - build_macos
+            - build_macos
