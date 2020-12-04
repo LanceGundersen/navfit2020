@@ -8,6 +8,7 @@ jobs:
   test:
     docker:
       - image: circleci/node:10
+    parallelism: 4
     steps:
       - checkout
       - restore_cache:
@@ -23,6 +24,7 @@ jobs:
   build_windows_linux:
     docker:
       - image: electronuserland/builder:wine
+    parallelism: 4
     steps:
       - checkout
       - restore_cache:
@@ -34,11 +36,12 @@ jobs:
             - ./node_modules
       - run: yarn electron:build -wl
       - store_artifacts:
-          path: ./dist_electron
+          path: /root/project/dist_electron
 
   build_macos:
     macos:
       xcode: 12.2.0
+    parallelism: 4
     steps:
       - checkout
       - restore_cache:
@@ -50,7 +53,7 @@ jobs:
             - ./node_modules
       - run: yarn electron:build --mac
       - store_artifacts:
-          path: ./dist_electron
+          path: /root/project/dist_electron
 
   publish-github-release:
     description: CircleCi release `v$TAG`.
