@@ -1,4 +1,8 @@
 version: 2.1
+
+orbs:
+  cypress: cypress-io/cypress@1.0.0
+  
 jobs:
   test:
     docker:
@@ -7,25 +11,30 @@ jobs:
       - checkout
       - run: yarn && yarn lint
       - run: yarn test
-      - run: yarn test:e2e
   build_windows:
     docker:
       - image: electronuserland/builder:wine
     steps:
       - checkout
       - run: yarn && yarn electron:build --win
+      - store_artifacts:
+          path: /dist_electron
   build_macos:
     macos:
       xcode: "10.0.0"
     steps:
       - checkout
       - run: yarn && yarn electron:build --mac
+      - store_artifacts:
+          path: /dist_electron
   build_linux:
     docker:
       - image: circleci/node:10
     steps:
       - checkout
       - run: yarn && yarn electron:build --win
+      - store_artifacts:
+          path: /dist_electron
       
 workflows:
   windows:
@@ -34,15 +43,18 @@ workflows:
       - build_windows:
           requires:
             - test
+            - cypress/run
   macos:
     jobs:
       - test
       - build_macos:
           requires:
             - test
+            - cypress/run
   linux:
     jobs:
       - test
       - build_linux:
           requires:
             - test
+            - cypress/run
