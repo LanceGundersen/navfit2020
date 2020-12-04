@@ -34,11 +34,7 @@ jobs:
             - ./node_modules
       - run: yarn electron:build -wl
       - store_artifacts:
-          path: /root/project/dist_electron/*.exe
-      - store_artifacts:
-          path: /root/project/dist_electron/*.snap
-      - store_artifacts:
-          path: /root/project/dist_electron/*.AppImage
+          path: /root/project/dist_electron
 
   build_macos:
     macos:
@@ -77,13 +73,13 @@ workflows:
           requires:
             - test
             #- cypress/run
-      - build_macos:
-          requires:
-            - test
-            #- cypress/run
+#      - build_macos:
+#          requires:
+#            - test
+#            #- cypress/run
       - publish-github-release:
           requires:
             - test
             #- cypress/run
             - build_windows_linux
-            - build_macos
+#            - build_macos
