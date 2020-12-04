@@ -39,7 +39,7 @@ jobs:
             echo Removing non-executable files
             cd /root/project/dist_electron
             ls
-            rm -rf bundled linux-unpacked
+            rm -rf bundled linux-unpacked win-unpacked
             rm *.yml *.blockmap
             ls
       - store_artifacts:
