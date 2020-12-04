@@ -18,34 +18,34 @@ jobs:
       - checkout
       - run: yarn && yarn electron:build -wl
       - store_artifacts:
-          path: ./dist_electron
+          path: ./dist_electron/*.exe
+      - store_artifacts:
+          path: ./dist_electron/*.snap
+      - store_artifacts:
+          path: ./dist_electron/*.appImage
   build_macos:
     macos:
-      xcode: "10.0.0"
+      xcode: "12"
     steps:
       - checkout
       - run: yarn && yarn electron:build --mac
       - store_artifacts:
-          path: ./dist_electron
+          path: ./dist_electron/*.dmg
   publish-github-release:
     description: Create dummy file and publish a new release tagged `vX.Y.Z`.
     executor: github-release/default
     steps:
-      - run:
-          command: |
-            mkdir artifacts
-            echo dummy > ./artifacts/file
       - github-release/create:
           tag: vX.Y.Z
           title: Version vX.Y.Z
           description: This release is version vX.Y.Z .
           file-path: ./dist_electron
 
-
 workflows:
   windows:
     jobs:
       - test
+      - publish-github-release
       - build_windows:
           requires:
             - test
