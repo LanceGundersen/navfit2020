@@ -11,7 +11,7 @@ jobs:
       - checkout
       - run: yarn && yarn lint
       - run: yarn test
-  build_windows:
+  build_windows_linux:
     docker:
       - image: electronuserland/builder:wine
     steps:
@@ -32,29 +32,33 @@ jobs:
       - store_artifacts:
           path: ./dist_electron/*.dmg
   publish-github-release:
-    description: Create dummy file and publish a new release tagged `vX.Y.Z`.
+    description: CircleCi release `v$TAG`.
     executor: github-release/default
     steps:
       - github-release/create:
-          tag: vX.Y.Z
-          title: Version vX.Y.Z
-          description: This release is version vX.Y.Z .
-          file-path: ./dist_electron
+          tag: v$TAG
+          title: Version v$TAG
+          description: This release is version v$TAG .
+          file-path: /tmp/artifacts
 
 workflows:
-  windows:
+  windows_linux:
     jobs:
       - test
-      - build_windows:
+      - build_windows_linux:
           requires:
             - test
       - publish-github-release:
           requires:
             - test
             - build_windows
-  #macos:
-    #jobs:
-      #- test
-      #- build_macos:
-          #requires:
-            #- test
+#  macos:
+#    jobs:
+#      - test
+#      - build_macos:
+#          requires:
+#            - test
+#      - publish-github-release:
+#          requires:
+#            - test
+#            - build_macos
