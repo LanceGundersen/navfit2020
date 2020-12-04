@@ -45,7 +45,6 @@ workflows:
   windows:
     jobs:
       - test
-      - publish-github-release
       - build_windows:
           requires:
             - test
