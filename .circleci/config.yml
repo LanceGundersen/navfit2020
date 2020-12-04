@@ -4,6 +4,7 @@ orbs:
   cypress: cypress-io/cypress@1.0.0
   
 jobs:
+
   test:
     docker:
       - image: circleci/node:10
@@ -37,20 +38,24 @@ jobs:
           path: /dist_electron
       
 workflows:
-  windows:
-    jobs:
-      - test
-      - build_windows:
-          requires:
-            - test
-            - cypress/run
-  macos:
-    jobs:
-      - test
-      - build_macos:
-          requires:
-            - test
-            - cypress/run
+  #windows:
+    #jobs:
+      #- test
+      #- build_windows:
+          #requires:
+            #- test
+            #- cypress/run
+                #yarn: true
+                #record: true
+  #macos:
+    #jobs:
+      #- test
+      #- build_macos:
+          #requires:
+            #- test
+            #- cypress/run
+                #yarn: true
+                #record: true
   linux:
     jobs:
       - test
@@ -58,3 +63,5 @@ workflows:
           requires:
             - test
             - cypress/run
+                yarn: true
+                record: true
