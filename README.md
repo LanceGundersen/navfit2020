@@ -1,4 +1,4 @@
-# NavFit 2020
+# NavFit 2020 [![LanceGundersen](https://circleci.com/gh/LanceGundersen/navfit2020.svg?style=svg)](https://circleci.com/gh/LanceGundersen/navfit2020)
 Navy Evaluation/Fitrep Writer Modernized
 
 ## Features
