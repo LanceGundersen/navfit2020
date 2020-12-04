@@ -66,6 +66,9 @@ jobs:
     executor: github-release/default
     steps:
       - github-release/create:
+          tag: vX.Y.Z
+          title: Version vX.Y.Z
+          description: This release is version vX.Y.Z.
           file-path: ./artifacts
           draft: true
 
