@@ -66,10 +66,7 @@ jobs:
     executor: github-release/default
     steps:
       - github-release/create:
-          tag: v$TAG
-          title: Version v$TAG
-          description: This release is version v$TAG .
-          file-path: $CIRCLE_ARTIFACTS
+          file-path: ./artifacts
           draft: true
 
 workflows:
