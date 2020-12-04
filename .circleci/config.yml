@@ -9,24 +9,48 @@ jobs:
       - image: circleci/node:10
     steps:
       - checkout
-      - run: yarn && yarn lint
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run: yarn
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run: yarn lint
       - run: yarn test
+      
   build_windows_linux:
     docker:
       - image: electronuserland/builder:wine
     steps:
       - checkout
-      - run: yarn && yarn electron:build -wl
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run: yarn
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run: yarn electron:build -wl
       - store_artifacts:
           path: ./dist_electron
+
   build_macos:
     macos:
       xcode: "12"
     steps:
       - checkout
-      - run: yarn && yarn electron:build --mac
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run: yarn
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run: yarn electron:build --mac
       - store_artifacts:
           path: ./dist_electron
+
   publish-github-release:
     description: CircleCi release `v$TAG`.
     executor: github-release/default
@@ -48,13 +72,13 @@ workflows:
           requires:
             - test
             - build_windows_linux
-#  macos:
-#    jobs:
-#      - test
-#      - build_macos:
-#          requires:
-#            - test
-#      - publish-github-release:
-#          requires:
-#            - test
-#            - build_macos
+   macos:
+     jobs:
+       - test
+       - build_macos:
+           requires:
+             - test
+       - publish-github-release:
+           requires:
+             - test
+             - build_macos
