@@ -33,6 +33,14 @@ jobs:
           paths:
             - ./node_modules
       - run: yarn electron:build -wl
+      - run:
+          shell: /bin/sh
+          command: |
+            echo Removing non-executable files
+            cd /root/project/dist_electron
+            ls
+            rm -rf bundled linux-unpacked
+            rm *.yml *.yaml *.zip *.blockmap
       - store_artifacts:
           path: /root/project/dist_electron
 
