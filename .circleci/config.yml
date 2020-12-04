@@ -40,7 +40,8 @@ jobs:
             cd /root/project/dist_electron
             ls
             rm -rf bundled linux-unpacked
-            rm *.yml *.yaml *.zip *.blockmap
+            rm *.yml *.blockmap
+            ls
       - store_artifacts:
           path: /root/project/dist_electron
 
