@@ -1,4 +1,4 @@
-# navfit2020
+# NavFit 2020
 Navy Evaluation/Fitrep Writer Modernized
 
 ## Project setup
