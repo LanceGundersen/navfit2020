@@ -1,17 +1,15 @@
 import { app, protocol, BrowserWindow, shell, ipcMain, dialog } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
-import { exportEval } from "@/services/evalExport";
+import exportEval from "@/services/evalExport";
 import api from "@/store/api";
+import { writeToLogFile } from "@/services/writeToLogFile";
 
-const fs = require("fs");
 const path = require("path");
 
-const pdfFiller = require("pdffiller");
 const DownloadManager = require("electron-download-manager");
 
 const navpersURL = "https://github.com/LanceGundersen/navfit2020/raw/dev/pdfTemplates/NAVPERS_1616-26_Rev11-11.pdf";
-const sourcePDF = `${app.getPath("documents")}/navfit2020/NAVPERS_1616-26_Rev11-11.pdf`;
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -161,7 +159,6 @@ ipcMain.on("open:feedback", event => {
 });
 
 ipcMain.on("pdf:export", async (event, args) => {
-  const shouldFlatten = false;
   const options = {
     title: "Save new file as...",
     defaultPath: `${app.getPath("documents")}/navfit2020/new_file.pdf`,
@@ -173,17 +170,11 @@ ipcMain.on("pdf:export", async (event, args) => {
   const saveDialog = dialog.showSaveDialog(win, options);
 
   saveDialog.then(saveTo => {
-    const record = exportEval(args.sailor, args.id);
-    try {
-      pdfFiller.fillFormWithFlatten(sourcePDF, saveTo.filePath, record, shouldFlatten, err => {
-        if (err) {
-          console.error(err);
-          throw err;
-        }
-      });
-    } catch (e) {
-      console.error(e);
-    }
+    exportEval(args.sailor, args.id, saveTo.filePath);
   });
-  console.log(fs.readdirSync(app.getAppPath()));
+});
+
+ipcMain.on("eval:export:error", (event, args) => {
+  event.preventDefault();
+  writeToLogFile(`ERROR: evalExport: ${args}`);
 });
