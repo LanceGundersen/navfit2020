@@ -51,7 +51,7 @@ workflows:
       - publish-github-release:
           requires:
             - test
-            - build_windows
+            - build_windows_linux
 #  macos:
 #    jobs:
 #      - test
