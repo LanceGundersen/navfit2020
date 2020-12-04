@@ -18,11 +18,7 @@ jobs:
       - checkout
       - run: yarn && yarn electron:build -wl
       - store_artifacts:
-          path: /tmp/artifacts/navfit2020-$TAG.exe
-      - store_artifacts:
-          path: /tmp/artifacts/navfit2020_$TAG_amd64.snap
-      - store_artifacts:
-          path: /tmp/artifacts/navfit2020-$TAG.AppImage
+          path: ./dist_electron
   build_macos:
     macos:
       xcode: "12"
@@ -39,7 +35,7 @@ jobs:
           tag: v$TAG
           title: Version v$TAG
           description: This release is version v$TAG .
-          file-path: /tmp/artifacts/
+          file-path: ./dist_electron
 
 workflows:
   windows_linux:
