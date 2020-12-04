@@ -1,10 +1,6 @@
 version: 2.1
 
-orbs:
-  cypress: cypress-io/cypress@1.0.0
-  
 jobs:
-
   test:
     docker:
       - image: circleci/node:10
@@ -12,9 +8,6 @@ jobs:
       - checkout
       - run: yarn && yarn lint
       - run: yarn test
-      - cypress/run
-          yarn: true
-          record: true
   build_windows:
     docker:
       - image: electronuserland/builder:wine
@@ -47,18 +40,12 @@ workflows:
       #- build_windows:
           #requires:
             #- test
-            #- cypress/run
-                #yarn: true
-                #record: true
   #macos:
     #jobs:
       #- test
       #- build_macos:
           #requires:
             #- test
-            #- cypress/run
-                #yarn: true
-                #record: true
   linux:
     jobs:
       - test
