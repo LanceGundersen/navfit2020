@@ -18,7 +18,7 @@ jobs:
       - checkout
       - run: yarn && yarn electron:build -wl
       - store_artifacts:
-          path: /tmp/artifacts
+          path: ./dist_electron
   build_macos:
     macos:
       xcode: "10.0.0"
@@ -26,7 +26,7 @@ jobs:
       - checkout
       - run: yarn && yarn electron:build --mac
       - store_artifacts:
-          path: /tmp/artifacts
+          path: ./dist_electron
   publish-github-release:
     description: Create dummy file and publish a new release tagged `vX.Y.Z`.
     executor: github-release/default
@@ -39,9 +39,9 @@ jobs:
           tag: vX.Y.Z
           title: Version vX.Y.Z
           description: This release is version vX.Y.Z .
-          file-path: ./artifacts/file
-            
-      
+          file-path: ./dist_electron
+
+
 workflows:
   windows:
     jobs:
