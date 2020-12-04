@@ -1,6 +1,8 @@
 # NavFit 2020
 Navy Evaluation/Fitrep Writer Modernized
 
+## Features
+
 ## Project setup
 ```
 yarn install
