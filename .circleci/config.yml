@@ -43,7 +43,7 @@ jobs:
             rm *.yml *.blockmap
             ls
       - store_artifacts:
-          path: /root/project/dist_electron
+          path: /tmp/dist_electron
 
   build_macos:
     macos:
@@ -59,8 +59,7 @@ jobs:
             - ./node_modules
       - run: yarn electron:build --mac
       - store_artifacts:
-          path: /root/project/dist_electron
-          destination: dist_electron
+          path: /tmp/dist_electron
 
   publish-github-release:
     description: CircleCi release `v$TAG`.
@@ -70,7 +69,7 @@ jobs:
           tag: vX.Y.Z
           title: Version vX.Y.Z
           description: This release is version vX.Y.Z.
-          file-path: ./dist_electron
+          file-path: /tmp/dist_electron
           draft: true
 
 workflows:
