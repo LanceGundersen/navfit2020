@@ -58,7 +58,7 @@ jobs:
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
-            - /root/project/dist_electron
+            - dist_electron
 
   build_macos:
     executor: mac
@@ -77,7 +77,7 @@ jobs:
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
-            - /root/project/dist_electron
+            - dist_electron
 
   publish-github-release:
     description: CircleCi release `v$TAG`.
@@ -94,7 +94,7 @@ jobs:
           tag: vX.Y.Z
           title: Version vX.Y.Z
           description: This release is version vX.Y.Z.
-          file-path: ./tmp/workspace/dist_electron
+          file-path: tmp/workspace/dist_electron
           draft: true
 
 workflows:
