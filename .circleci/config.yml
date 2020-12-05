@@ -63,6 +63,11 @@ jobs:
           root: /tmp/workspace
           paths:
             - dist_electron
+      - run:
+          name: View files
+          shell: /bin/sh
+          command: |
+            ls
 
   build_macos:
     executor: mac
@@ -82,6 +87,11 @@ jobs:
           root: /tmp/workspace
           paths:
             - dist_electron
+      - run:
+          name: View files
+          shell: /bin/sh
+          command: |
+            ls
 
   publish-github-release:
     executor: github
