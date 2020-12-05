@@ -4,6 +4,12 @@ orbs:
   github-release: h-matsuo/github-release@0.1.3
 #  cypress: cypress-io/cypress@1
 
+executors:
+  windows:
+    docker:
+      - image: electronuserland/builder:wine
+    working_directory: /tmp
+
 jobs:
   test:
     docker:
@@ -21,8 +27,7 @@ jobs:
       - run: yarn test
 
   build_windows_linux:
-    docker:
-      - image: electronuserland/builder:wine
+    executor: windows
     steps:
       - checkout
       - restore_cache:
@@ -45,12 +50,11 @@ jobs:
             chown -R $USER:$USER /root/project/dist_electron
       - store_artifacts:
           path: /root/project/dist_electron
-          destination: /home/circleci/project/artifacts
-      - run:
-          name: Change ownership of directory and files
-          shell: /bin/sh
-          command: |
-            chown -R $USER:$USER /root/project/dist_electron
+          destination: /tmp/artifacts
+      - persist_to_workspace:
+          root: artifacts
+          paths:
+            - echo-output
 
   build_macos:
     macos:
@@ -67,17 +71,23 @@ jobs:
       - run: yarn electron:build --mac
       - store_artifacts:
           path: /root/project/dist_electron
-          destination: /home/circleci/project/artifacts
+          destination: /tmp/artifacts
+      - persist_to_workspace:
+          root: artifacts
+          paths:
+            - echo-output
 
   publish-github-release:
     description: CircleCi release `v$TAG`.
     executor: github-release/default
     steps:
+      - attach_workspace:
+          at: /tmp/artifacts
       - github-release/create:
           tag: vX.Y.Z
           title: Version vX.Y.Z
           description: This release is version vX.Y.Z.
-          file-path: ./artifacts
+          file-path: /tmp/artifacts
           draft: true
 
 workflows:
