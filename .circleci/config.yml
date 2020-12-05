@@ -13,6 +13,10 @@ executors:
     macos:
       xcode: 12.2.0
     working_directory: /tmp/workspace
+  github:
+    docker:
+      - image: cibuilds/github:0.10
+    working_directory: /tmp/workspace
 
 jobs:
   test:
@@ -80,11 +84,13 @@ jobs:
             - dist_electron
 
   publish-github-release:
-    docker:
-      - image: cibuilds/github:0.10
+    executor: github
     steps:
-      - attach_workspace:
-          at: /tmp/workspace
+      - run:
+          name: View files
+          shell: /bin/sh
+          command: |
+            ls
       - run:
           name: "Publish Release on GitHub"
           command: |
