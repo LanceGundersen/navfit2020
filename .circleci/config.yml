@@ -45,6 +45,7 @@ jobs:
             chown -R $USER:$USER /root/project/dist_electron
       - store_artifacts:
           path: /root/project/dist_electron
+          destination: /home/circleci/project/artifacts
       - run:
           name: Change ownership of directory and files
           shell: /bin/sh
@@ -66,6 +67,7 @@ jobs:
       - run: yarn electron:build --mac
       - store_artifacts:
           path: /root/project/dist_electron
+          destination: /home/circleci/project/artifacts
 
   publish-github-release:
     description: CircleCi release `v$TAG`.
