@@ -79,25 +79,37 @@ jobs:
           paths:
             - dist_electron
 
-  publish-github-release:
-    description: CircleCi release `v$TAG`.
-    executor: github-release/default
-    steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - run:
-          name: View files
-          shell: /bin/sh
-          command: |
-            ls
-            cd ..
-            ls
-      - github-release/create:
-          tag: vX.Y.Z
-          title: Version vX.Y.Z
-          description: This release is version vX.Y.Z.
-          file-path: ./dist_electron
-          draft: true
+publish-github-release:
+  docker:
+    - image: cibuilds/github:0.10
+  steps:
+    - attach_workspace:
+        at: /tmp/workspace
+    - run:
+        name: "Publish Release on GitHub"
+        command: |
+          VERSION=$(my-binary --version)
+          ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./dist_electron/
+
+#  publish-github-release:
+#    description: CircleCi release `v$TAG`.
+#    executor: github-release/default
+#    steps:
+#      - attach_workspace:
+#          at: /tmp/workspace
+#      - run:
+#          name: View files
+#          shell: /bin/sh
+#          command: |
+#            ls
+#            cd ..
+#            ls
+#      - github-release/create:
+#          tag: vX.Y.Z
+#          title: Version vX.Y.Z
+#          description: This release is version vX.Y.Z.
+#          file-path: ./dist_electron
+#          draft: true
 
 workflows:
   build:
