@@ -52,7 +52,7 @@ jobs:
             rm *.yml *.blockmap
             ls
       - persist_to_workspace:
-          root: workspace
+          root: ./
           paths:
             - artifacts
 
@@ -69,7 +69,7 @@ jobs:
             - ./node_modules
       - run: yarn electron:build --mac
       - persist_to_workspace:
-          root: workspace
+          root: ./
           paths:
             - artifacts
 
