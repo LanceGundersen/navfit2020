@@ -54,7 +54,7 @@ jobs:
       - persist_to_workspace:
           root: ./
           paths:
-            - artifacts
+            - dist_electron
 
   build_macos:
     executor: mac
@@ -71,7 +71,7 @@ jobs:
       - persist_to_workspace:
           root: ./
           paths:
-            - artifacts
+            - dist_electron
 
   publish-github-release:
     description: CircleCi release `v$TAG`.
