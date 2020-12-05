@@ -75,7 +75,7 @@ jobs:
           tag: vX.Y.Z
           title: Version vX.Y.Z
           description: This release is version vX.Y.Z.
-          file-path: /root/project/dist_electron
+          file-path: ./artifacts
           draft: true
 
 workflows:
