@@ -79,11 +79,16 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
+      - run:
+          name: View files
+          shell: /bin/sh
+          command: |
+            ls
       - github-release/create:
           tag: vX.Y.Z
           title: Version vX.Y.Z
           description: This release is version vX.Y.Z.
-          file-path: ./dist_electron
+          file-path: ./tmp/workspace/dist_electron
           draft: true
 
 workflows:
