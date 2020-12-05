@@ -82,8 +82,9 @@ jobs:
   publish-github-release:
     description: CircleCi release `v$TAG`.
     executor: github-release/default
-    working_directory: /tmp/workspace
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
           name: View files
           shell: /bin/sh
