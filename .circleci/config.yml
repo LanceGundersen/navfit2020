@@ -29,6 +29,8 @@ jobs:
   build_windows_linux:
     executor: windows
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
@@ -50,9 +52,9 @@ jobs:
             chown -R $USER:$USER /root/project/dist_electron
       - store_artifacts:
           path: /root/project/dist_electron
-          destination: /tmp/artifacts
+          destination: /tmp/workspace
       - persist_to_workspace:
-          root: artifacts
+          root: workspace
           paths:
             - echo-output
 
@@ -71,9 +73,9 @@ jobs:
       - run: yarn electron:build --mac
       - store_artifacts:
           path: /root/project/dist_electron
-          destination: /tmp/artifacts
+          destination: /tmp/workspace
       - persist_to_workspace:
-          root: artifacts
+          root: workspace
           paths:
             - echo-output
 
@@ -82,12 +84,12 @@ jobs:
     executor: github-release/default
     steps:
       - attach_workspace:
-          at: /tmp/artifacts
+          at: /tmp/workspace
       - github-release/create:
           tag: vX.Y.Z
           title: Version vX.Y.Z
           description: This release is version vX.Y.Z.
-          file-path: /tmp/artifacts
+          file-path: /tmp/workspace
           draft: true
 
 workflows:
