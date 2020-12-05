@@ -9,6 +9,10 @@ executors:
     docker:
       - image: electronuserland/builder:wine
     working_directory: /tmp/workspace
+  mac:
+    macos:
+      xcode: 12.2.0
+    working_directory: /tmp/workspace
 
 jobs:
   test:
@@ -29,8 +33,6 @@ jobs:
   build_windows_linux:
     executor: windows
     steps:
-      - attach_workspace:
-          at: /tmp/workspace
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
@@ -44,21 +46,18 @@ jobs:
           name: Remove non-binary files
           shell: /bin/sh
           command: |
-            cd /dist_electron
+            cd ./dist_electron
             ls
             rm -rf bundled linux-unpacked win-unpacked .icon-ico
             rm *.yml *.blockmap
             ls
-      - store_artifacts:
-          path: /dist_electron
       - persist_to_workspace:
           root: workspace
           paths:
             - artifacts
 
   build_macos:
-    macos:
-      xcode: 12.2.0
+    executor: mac
     steps:
       - checkout
       - restore_cache:
@@ -69,8 +68,6 @@ jobs:
           paths:
             - ./node_modules
       - run: yarn electron:build --mac
-      - store_artifacts:
-          path: /dist_electron
       - persist_to_workspace:
           root: workspace
           paths:
@@ -86,7 +83,7 @@ jobs:
           tag: vX.Y.Z
           title: Version vX.Y.Z
           description: This release is version vX.Y.Z.
-          file-path: /tmp/workspace/artifacts
+          file-path: ./artifacts
           draft: true
 
 workflows:
