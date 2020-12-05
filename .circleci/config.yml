@@ -90,11 +90,13 @@ jobs:
           shell: /bin/sh
           command: |
             ls
+            cd ..
+            ls
       - github-release/create:
           tag: vX.Y.Z
           title: Version vX.Y.Z
           description: This release is version vX.Y.Z.
-          file-path: dist_electron
+          file-path: ./dist_electron
           draft: true
 
 workflows:
