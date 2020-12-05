@@ -56,7 +56,7 @@ jobs:
       - store_artifacts:
           path: /root/project/dist_electron
       - persist_to_workspace:
-          root: ./
+          root: /tmp/workspace
           paths:
             - /root/project/dist_electron
 
@@ -75,7 +75,7 @@ jobs:
       - store_artifacts:
           path: /root/project/dist_electron
       - persist_to_workspace:
-          root: ./
+          root: /tmp/workspace
           paths:
             - /root/project/dist_electron
 
