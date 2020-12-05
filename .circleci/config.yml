@@ -44,14 +44,13 @@ jobs:
           name: Remove non-binary files
           shell: /bin/sh
           command: |
-            cd /root/project/dist_electron
+            cd /dist_electron
             ls
             rm -rf bundled linux-unpacked win-unpacked .icon-ico
             rm *.yml *.blockmap
             ls
-            chown -R $USER:$USER /root/project/dist_electron
       - store_artifacts:
-          path: /root/project/dist_electron
+          path: /dist_electron
       - persist_to_workspace:
           root: workspace
           paths:
@@ -71,7 +70,7 @@ jobs:
             - ./node_modules
       - run: yarn electron:build --mac
       - store_artifacts:
-          path: /root/project/dist_electron
+          path: /dist_electron
       - persist_to_workspace:
           root: workspace
           paths:
