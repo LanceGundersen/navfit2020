@@ -54,7 +54,7 @@ jobs:
             cd ..
             ls
       - store_artifacts:
-          path: /root/project/dist_electron
+          path: dist_electron
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
@@ -73,7 +73,7 @@ jobs:
             - ./node_modules
       - run: yarn electron:build --mac
       - store_artifacts:
-          path: /root/project/dist_electron
+          path: dist_electron
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
@@ -82,9 +82,8 @@ jobs:
   publish-github-release:
     description: CircleCi release `v$TAG`.
     executor: github-release/default
+    working_directory: /tmp/workspace
     steps:
-      - attach_workspace:
-          at: /tmp/workspace
       - run:
           name: View files
           shell: /bin/sh
@@ -94,7 +93,7 @@ jobs:
           tag: vX.Y.Z
           title: Version vX.Y.Z
           description: This release is version vX.Y.Z.
-          file-path: tmp/workspace/dist_electron
+          file-path: dist_electron
           draft: true
 
 workflows:
