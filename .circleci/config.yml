@@ -143,22 +143,11 @@ workflows:
       - deploy:
           requires:
             - build
+          branches:
+            only:
+              - dev
+              - prod
           jobs:
             - deploy_win
-                filters:
-                  branches:
-                    only:
-                      - dev
-                      - prod
             - deploy_linux
-                filters:
-                  branches:
-                    only:
-                      - dev
-                      - prod
             - deploy_mac
-                filters:
-                  branches:
-                    only:
-                      - dev
-                      - prod
