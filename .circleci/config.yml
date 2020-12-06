@@ -125,7 +125,7 @@ jobs:
           command: |
             cd ./dist_electron
             ls
-            rm -rf mac bundled contents .icon-ico
+            rm -rf mac bundled contents .icon-icns
             rm *.yml *.blockmap *.zip
             ls
       - store_artifacts:
@@ -143,6 +143,8 @@ workflows:
 
   deploy:
     jobs:
+      - deploy_win
+      - deploy_linux
       - deploy_mac
 #      - deploy_win:
 #          filters:
