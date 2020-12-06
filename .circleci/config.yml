@@ -8,15 +8,15 @@ executors:
   windows:
     docker:
       - image: electronuserland/builder:wine
-    working_directory: .
+    working_directory: /tmp/workspace
   mac:
     macos:
       xcode: 12.2.0
-    working_directory: .
+    working_directory: /tmp/workspace
   github:
     docker:
       - image: cibuilds/github:0.10
-    working_directory: .
+    working_directory: /tmp/workspace
 
 jobs:
   test:
@@ -58,7 +58,7 @@ jobs:
       - store_artifacts:
           path: dist_electron
       - persist_to_workspace:
-          root: .
+          root: /tmp/workspace
           paths:
             - .
 
@@ -77,7 +77,7 @@ jobs:
       - store_artifacts:
           path: dist_electron
       - persist_to_workspace:
-          root: .
+          root: /tmp/workspace
           paths:
             - .
 
