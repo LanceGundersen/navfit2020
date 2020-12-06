@@ -139,32 +139,24 @@ workflows:
       - test:
           requires:
             - build
-      - hold:
-          type: approval
-          requires:
-            - test
-          filters:
-            branches:
-              only:
-                - prod
       - deploy_win:
           filters:
             branches:
               only:
                 - prod
           requires:
-            - hold
+            - test
       - deploy_linux:
           filters:
             branches:
               only:
                 - prod
           requires:
-            - hold
+            - test
       - deploy_mac:
           filters:
             branches:
               only:
                 - prod
           requires:
-            - hold
+            - test
