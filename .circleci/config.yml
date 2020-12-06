@@ -71,8 +71,8 @@ jobs:
           command: |
             cd ./dist_electron
             ls
-            rm -rf bundled win-unpacked .icon-ico
-            rm *.
+            rm -rf bundled win-unpacked
+            rm *.yml *.blockmap
       - store_artifacts:
           path: dist_electron
           destination: build
@@ -98,7 +98,7 @@ jobs:
             cd ./dist_electron
             ls
             rm -rf bundled linux-unpacked .icon-ico
-            rm *.yml *.blockmap
+            rm *.yml
             ls
       - checkout
       - restore_cache:
