@@ -57,14 +57,19 @@ jobs:
             ls
             cd ..
             ls
-      - store_artifacts:
-          path: dist_electron
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
-            - dist_electron
+            - ./dist_electron
       - run:
-          name: View files
+          name: View files aftet workspace mv
+          shell: /bin/sh
+          command: |
+            ls
+      - store_artifacts:
+          path: dist_electron
+      - run:
+          name: View files after store artifacts
           shell: /bin/sh
           command: |
             ls
