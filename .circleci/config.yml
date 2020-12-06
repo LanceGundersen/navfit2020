@@ -146,13 +146,11 @@ workflows:
           filters:
             branches:
               only:
-                - dev
                 - prod
       - deploy_win:
           filters:
             branches:
               only:
-                - dev
                 - prod
           requires:
             - hold
@@ -160,7 +158,6 @@ workflows:
           filters:
             branches:
               only:
-                - dev
                 - prod
           requires:
             - hold
@@ -168,7 +165,6 @@ workflows:
           filters:
             branches:
               only:
-                - dev
                 - prod
           requires:
             - hold
