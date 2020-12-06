@@ -127,11 +127,18 @@ export default {
   clearEvalEditForm({ commit }) {
     commit("CLEAR_EVAL_EDIT_FORM");
   },
-  exportEval(_, payload) {
+  exportEval({ commit }, payload) {
     const sailor = this.getters.getSelectedSailor;
     window.ipcRenderer.send("pdf:export", { sailor, id: payload });
+    window.ipcRenderer.on("dialog:show", (event, args) => {
+      commit("SET_DIALOG_INFO", args);
+      commit("SHOW_DIALOG");
+    });
+  },
+  dismissDialog({ commit }) {
+    commit("DISMISS_DIALOG");
   },
   openFeedbackForm() {
     window.ipcRenderer.send("open:feedback");
-  }
+  },
 };

@@ -170,11 +170,11 @@ ipcMain.on("pdf:export", async (event, args) => {
   const saveDialog = dialog.showSaveDialog(win, options);
 
   saveDialog.then(saveTo => {
-    exportEval(args.sailor, args.id, saveTo.filePath);
+    if (!saveTo.canceled) exportEval(args.sailor, args.id, saveTo.filePath);
   });
 });
 
-ipcMain.on("eval:export:error", (event, args) => {
-  event.preventDefault();
-  writeToLogFile(`ERROR: evalExport: ${args}`);
-});
+export function showDialog(type, title, msg, filePath, error) {
+  writeToLogFile(`EVAL EXPORT: ${type} ${title} ${msg} ${filePath} ${error}`);
+  win.webContents.send("dialog:show", { type, title, msg, filePath, error, });
+}

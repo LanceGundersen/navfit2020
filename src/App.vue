@@ -4,11 +4,9 @@
     <v-main>
       <v-container fluid>
         <router-view />
+        <SharedAlertComponent />
       </v-container>
     </v-main>
-    <div class="d-flex justify-center">
-      <SharedAlertComponent />
-    </div>
   </v-app>
 </template>
 

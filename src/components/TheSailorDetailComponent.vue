@@ -48,7 +48,7 @@
               icon
               small
               color="primary"
-              @click.native.stop="pdfFillerTestCall(record.id)">
+              @click.native.stop="exportEval(record.id)">
               <v-icon small>
                 mdi-file-export-outline
               </v-icon>
@@ -182,7 +182,7 @@ export default Vue.extend({
       this.uuid = givenUuid;
       this.showDeleteSailorDialog = true;
     },
-    pdfFillerTestCall(recordId) {
+    exportEval(recordId) {
       this.$store.dispatch("exportEval", recordId);
     }
   },

@@ -13,9 +13,15 @@ export default new Vuex.Store({
   strict: process.env.NODE_ENV !== "production",
   state: INITIAL_STATE,
   mutations: {
-    setError: state => { state.app.isError = !state.app.isError; },
-    setErrorMsg: (state, payload) => { state.app.errorMsg = payload; },
-    setErrorObj: (state, payload) => { state.app.errorObj = { ...payload }; },
+    SHOW_DIALOG: state => { state.app.dialog.show = true; },
+    SET_DIALOG_INFO: (state, payload) => {
+      state.app.dialog.title = payload.title;
+      state.app.dialog.msg = payload.msg;
+      state.app.dialog.error = payload.error;
+      state.app.dialog.filePath = payload.filePath;
+      state.app.dialog.type = payload.type;
+    },
+    DISMISS_DIALOG: state => { state.app.dialog = { show: false, title: "", msg: "", path: "", type: "info" }; },
   },
   actions,
   getters: {
