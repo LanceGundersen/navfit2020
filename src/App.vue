@@ -6,6 +6,16 @@
         <router-view />
         <SharedAlertComponent />
       </v-container>
+      <v-footer
+        fixed
+        padless
+        class="grey lighten-2">
+        <v-col
+          class="caption text-center pa-0"
+          cols="12">
+          Crafted by Lance Gundersen
+        </v-col>
+      </v-footer>
     </v-main>
   </v-app>
 </template>
