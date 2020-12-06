@@ -139,24 +139,18 @@ workflows:
       - test:
           requires:
             - build
+  deploy:
+    jobs:
+      - branches:
+          only:
+            - dev
+            - prod
       - deploy_win:
           requires:
-            - test
-          branches:
-            only:
-              - dev
-              - prod
+            - build_test
       - deploy_linux:
           requires:
-            - test
-          branches:
-            only:
-              - dev
-              - prod
+            - build_test
       - deploy_mac:
           requires:
-            - test
-          branches:
-            only:
-              - dev
-              - prod
+            - build_test
