@@ -47,9 +47,9 @@ jobs:
             - v1-dependencies-
       - run: yarn test
       - run: yarn codecov
-    store_artifacts:
-      - path: artifacts
-      - destination: yarnpkg
+      - store_artifacts:
+          path: artifacts
+          destination: yarnpkg
 
   deploy_win:
     <<: *win_config
