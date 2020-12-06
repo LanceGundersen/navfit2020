@@ -54,7 +54,6 @@ jobs:
       - store_artifacts:
           path: artifacts
           destination: yarnpkg
-
   deploy_win:
     <<: *win_config
     steps:
@@ -140,22 +139,24 @@ workflows:
       - test:
           requires:
             - build
-      - deploy:
+      - deploy_win:
           requires:
-            - build
-          jobs:
-            - deploy_win:
-                branches:
-                  only:
-                    - dev
-                    - prod
-            - deploy_linux:
-                branches:
-                  only:
-                    - dev
-                    - prod
-            - deploy_mac:
-                branches:
-                  only:
-                    - dev
-                    - prod
+            - test
+          branches:
+            only:
+              - dev
+              - prod
+      - deploy_linux:
+          requires:
+            - test
+          branches:
+            only:
+              - dev
+              - prod
+      - deploy_mac:
+          requires:
+            - test
+          branches:
+            only:
+              - dev
+              - prod
