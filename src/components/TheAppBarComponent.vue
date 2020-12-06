@@ -11,10 +11,8 @@
         <img :src="require('../static/logo.png')">
       </v-avatar>
       <v-toolbar-title>
-        nav-fit
-        2020
-        <span
-          class="subtitle-2 orange--text text--lighten-2">
+        NavFit 2020
+        <span class="subtitle-2 orange--text text--lighten-2">
           ALPHA PRE-RELEASE</span>
       </v-toolbar-title>
       <v-spacer />

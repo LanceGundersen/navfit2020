@@ -158,6 +158,11 @@ ipcMain.on("open:feedback", event => {
   shell.openExternal("https://forms.gle/LqxFFZGTpViLxyF58");
 });
 
+ipcMain.on("open:githubRepo", event => {
+  event.preventDefault();
+  shell.openExternal("https://github.com/LanceGundersen/navfit2020/releases");
+});
+
 ipcMain.on("pdf:export", async (event, args) => {
   const options = {
     title: "Save new file as...",

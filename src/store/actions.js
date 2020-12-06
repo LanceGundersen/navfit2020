@@ -141,4 +141,7 @@ export default {
   openFeedbackForm() {
     window.ipcRenderer.send("open:feedback");
   },
+  openGithubRepo() {
+    window.ipcRenderer.send("open:githubRepo");
+  }
 };
