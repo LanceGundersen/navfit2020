@@ -57,6 +57,10 @@ jobs:
             ls
       - store_artifacts:
           path: dist_electron
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - $CIRCLE_ARTIFACTS/
 
   build_macos:
     executor: mac
@@ -72,12 +76,14 @@ jobs:
       - run: yarn electron:build --mac
       - store_artifacts:
           path: dist_electron
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - $CIRCLE_ARTIFACTS/
 
   publish-github-release:
     executor: github
     steps:
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: View files
           shell: /bin/sh
@@ -86,7 +92,7 @@ jobs:
       - run:
           name: "Publish Release on GitHub"
           command: |
-            ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c ${CIRCLE_SHA1} -delete v$CIRCLE_BUILD_NUM $CIRCLE_ARTIFACTS/ || true
+            ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c ${CIRCLE_SHA1} -delete v$CIRCLE_BUILD_NUM dist_electron || true
 
 workflows:
   build:
