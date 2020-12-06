@@ -13,10 +13,6 @@ executors:
     macos:
       xcode: 12.2.0
     working_directory: /tmp/workspace
-  github:
-    docker:
-      - image: cibuilds/github:0.10
-    working_directory: /tmp/workspace
 
 jobs:
   test:
@@ -65,6 +61,8 @@ jobs:
   build_macos:
     executor: mac
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
@@ -82,8 +80,11 @@ jobs:
             - .
 
   publish-github-release:
-    executor: github
+    docker:
+      - image: cibuilds/github:0.10
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
           name: View files
           shell: /bin/sh
