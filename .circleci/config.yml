@@ -140,149 +140,25 @@ workflows:
       - test:
           requires:
             - build
-
-  deploy:
-    jobs:
-      - deploy_win
-      - deploy_linux
-      - deploy_mac
-#      - deploy_win:
-#          filters:
-#            branches:
-#              ignore: /.*/
-#            tags:
-#              only: /[v][0-9]+(\.[0-9]+)+.*/
-#      - deploy_linux:
-#          filters:
-#            branches:
-#              ignore: /.*/
-#            tags:
-#              only: /[v][0-9]+(\.[0-9]+)+.*/
-      # - deploy_mac:
-      #     filters:
-      #       branches:
-      #         ignore: /.*/
-      #       tags:
-      #         only: /[0-9]+(\.[0-9]+)+.*/
-
-
-#version: 2.1
-#
-#orbs:
-#  github-release: h-matsuo/github-release@0.1.3
-##  cypress: cypress-io/cypress@1
-#
-#executors:
-#  windows:
-#    docker:
-#      - image: electronuserland/builder:wine
-#    working_directory: /tmp/workspace
-#  mac:
-#    macos:
-#      xcode: 12.2.0
-#    working_directory: /tmp/workspace
-#
-#jobs:
-#  test:
-#    docker:
-#      - image: circleci/node:10
-#    steps:
-#      - checkout
-#      - restore_cache:
-#          key: dependency-cache-{{ checksum "package.json" }}
-#      - run: yarn
-#      - save_cache:
-#          key: dependency-cache-{{ checksum "package.json" }}
-#          paths:
-#            - ./node_modules
-#      - run: yarn lint
-#      - run: yarn test
-#
-#  build_windows_linux:
-#    executor: windows
-#    steps:
-#      - attach_workspace:
-#          at: /tmp/workspace
-#      - checkout
-#      - restore_cache:
-#          key: dependency-cache-{{ checksum "package.json" }}
-#      - run: yarn
-#      - save_cache:
-#          key: dependency-cache-{{ checksum "package.json" }}
-#          paths:
-#            - ./node_modules
-#      - run: yarn electron:build -wl
-#      - run:
-#          name: Remove non-binary files
-#          shell: /bin/sh
-#          command: |
-#            cd ./dist_electron
-#            ls
-#            rm -rf bundled linux-unpacked win-unpacked .icon-ico
-#            rm *.yml *.blockmap
-#            ls
-#      - store_artifacts:
-#          path: dist_electron
-#      - persist_to_workspace:
-#          root: /tmp/workspace
-#          paths:
-#            - dist_electron
-#
-#  build_macos:
-#    executor: mac
-#    steps:
-#      - attach_workspace:
-#          at: /tmp/workspace
-#      - checkout
-#      - restore_cache:
-#          key: dependency-cache-{{ checksum "package.json" }}
-#      - run: yarn
-#      - save_cache:
-#          key: dependency-cache-{{ checksum "package.json" }}
-#          paths:
-#            - ./node_modules
-#      - run: yarn electron:build --mac
-#      - store_artifacts:
-#          path: dist_electron
-#      - persist_to_workspace:
-#          root: /tmp/workspace
-#          paths:
-#            - dist_electron
-#
-#  publish-github-release:
-#    docker:
-#      - image: cibuilds/github:0.10
-#    steps:
-#      - attach_workspace:
-#          at: /tmp/workspace
-#      - run:
-#          name: View files
-#          shell: /bin/sh
-#          command: |
-#            ls
-#      - run:
-#          name: "Publish Release on GitHub"
-#          command: |
-#            ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c ${CIRCLE_SHA1} -delete v$CIRCLE_BUILD_NUM dist_electron
-#
-#workflows:
-#  build:
-#    jobs:
-#      - test
-##      - cypress/run:
-##          yarn: true
-##          record: true
-#      - build_windows_linux:
-#          requires:
-#            - test
-#            #- cypress/run
-#      - build_macos:
-#          requires:
-#            - test
-#            #- cypress/run
-#      - publish-github-release:
-#          requires:
-#            - test
-#            #- cypress/run
-#            - build_windows_linux
-#            - build_macos
+      - deploy:
+          requires:
+            - build
+          jobs:
+            - deploy_win
+                filters:
+                  branches:
+                    only:
+                      - dev
+                      - prod
+            - deploy_linux
+                filters:
+                  branches:
+                    only:
+                      - dev
+                      - prod
+            - deploy_mac
+                filters:
+                  branches:
+                    only:
+                      - dev
+                      - prod
