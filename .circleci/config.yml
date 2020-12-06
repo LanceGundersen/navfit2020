@@ -55,24 +55,8 @@ jobs:
             rm -rf bundled linux-unpacked win-unpacked .icon-ico
             rm *.yml *.blockmap
             ls
-            cd ..
-            ls
-      - persist_to_workspace:
-          root: /tmp/workspace
-          paths:
-            - ./dist_electron
-      - run:
-          name: View files aftet workspace mv
-          shell: /bin/sh
-          command: |
-            ls
       - store_artifacts:
           path: dist_electron
-      - run:
-          name: View files after store artifacts
-          shell: /bin/sh
-          command: |
-            ls
 
   build_macos:
     executor: mac
@@ -88,19 +72,12 @@ jobs:
       - run: yarn electron:build --mac
       - store_artifacts:
           path: dist_electron
-      - persist_to_workspace:
-          root: /tmp/workspace
-          paths:
-            - dist_electron
-      - run:
-          name: View files
-          shell: /bin/sh
-          command: |
-            ls
 
   publish-github-release:
     executor: github
     steps:
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: View files
           shell: /bin/sh
@@ -109,28 +86,9 @@ jobs:
       - run:
           name: "Publish Release on GitHub"
           command: |
-            VERSION=$(./dist_electron/package.json --version)
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./dist_electron/
-
-#  publish-github-release:
-#    description: CircleCi release `v$TAG`.
-#    executor: github-release/default
-#    steps:
-#      - attach_workspace:
-#          at: /tmp/workspace
-#      - run:
-#          name: View files
-#          shell: /bin/sh
-#          command: |
-#            ls
-#            cd ..
-#            ls
-#      - github-release/create:
-#          tag: vX.Y.Z
-#          title: Version vX.Y.Z
-#          description: This release is version vX.Y.Z.
-#          file-path: ./dist_electron
-#          draft: true
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_BUILD_NUM} ${CIRCLE_ARTIFACTS}
+            VERSION=$(package.json --version)
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ${CIRCLE_ARTIFACTS}
 
 workflows:
   build:
