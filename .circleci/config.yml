@@ -50,7 +50,7 @@ jobs:
             - v1-dependencies-
       - run: yarn test
       - codecov/upload:
-          file: coverage/Icov-report/index.html
+          file: coverage/clover.xml
       - store_artifacts:
           path: artifacts
           destination: yarnpkg
@@ -65,6 +65,14 @@ jobs:
             - v1-dependencies-
       - run: yarn
       - run: yarn electron:build --win
+      - run:
+          name: Remove non-binary files
+          shell: /bin/sh
+          command: |
+            cd ./dist_electron
+            ls
+            rm -rf bundled win-unpacked .icon-ico
+            rm *.
       - store_artifacts:
           path: dist_electron
           destination: build
@@ -89,7 +97,7 @@ jobs:
           command: |
             cd ./dist_electron
             ls
-            rm -rf bundled linux-unpacked win-unpacked .icon-ico
+            rm -rf bundled linux-unpacked .icon-ico
             rm *.yml *.blockmap
             ls
       - checkout
@@ -117,7 +125,7 @@ jobs:
           command: |
             cd ./dist_electron
             ls
-            rm -rf bundled contents bundled .icon-ico
+            rm -rf mac bundled contents .icon-ico
             rm *.yml *.blockmap *.zip
             ls
       - store_artifacts:
@@ -136,18 +144,18 @@ workflows:
   deploy:
     jobs:
       - deploy_mac
-      - deploy_win:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /[v][0-9]+(\.[0-9]+)+.*/
-      - deploy_linux:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /[v][0-9]+(\.[0-9]+)+.*/
+#      - deploy_win:
+#          filters:
+#            branches:
+#              ignore: /.*/
+#            tags:
+#              only: /[v][0-9]+(\.[0-9]+)+.*/
+#      - deploy_linux:
+#          filters:
+#            branches:
+#              ignore: /.*/
+#            tags:
+#              only: /[v][0-9]+(\.[0-9]+)+.*/
       # - deploy_mac:
       #     filters:
       #       branches:

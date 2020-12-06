@@ -17,7 +17,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test": "vue-cli-service test:unit",
+    "test": "vue-cli-service test:unit && codecov",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
     "electron:build": "vue-cli-service electron:build",
@@ -27,6 +27,7 @@
   },
   "main": "background.js",
   "dependencies": {
+    "codecov": "^3.8.1",
     "core-js": "^3.6.5",
     "electron": "^10.1.2",
     "electron-devtools-installer": "^3.1.1",
@@ -67,5 +68,9 @@
   },
   "resolutions": {
     "vue-cli-plugin-electron-builder/electron-builder": "^22.2.0"
+  },
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   }
 }
