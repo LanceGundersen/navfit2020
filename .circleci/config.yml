@@ -8,9 +8,11 @@ executors:
   windows:
     docker:
       - image: electronuserland/builder:wine
+    working_directory: /tmp/workspace
   mac:
     macos:
       xcode: 12.2.0
+    working_directory: /tmp/workspace
 
 jobs:
   test:
@@ -31,6 +33,8 @@ jobs:
   build_windows_linux:
     executor: windows
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
