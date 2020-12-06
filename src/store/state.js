@@ -1,8 +1,13 @@
 const INITIAL_STATE = {
   app: {
-    isError: false,
-    errorObj: "",
-    errorMsg: "",
+    dialog: {
+      show: false,
+      title: "",
+      msg: "",
+      error: "",
+      path: "",
+      type: "info"
+    },
   },
   defaults: {
     ranks: {

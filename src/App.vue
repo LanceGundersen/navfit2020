@@ -4,11 +4,19 @@
     <v-main>
       <v-container fluid>
         <router-view />
+        <SharedAlertComponent />
       </v-container>
+      <v-footer
+        fixed
+        padless
+        class="grey lighten-2">
+        <v-col
+          class="caption text-center pa-0"
+          cols="12">
+          Crafted by Lance Gundersen
+        </v-col>
+      </v-footer>
     </v-main>
-    <div class="d-flex justify-center">
-      <SharedAlertComponent />
-    </div>
   </v-app>
 </template>
 

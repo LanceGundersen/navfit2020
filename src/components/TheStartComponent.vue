@@ -2,7 +2,9 @@
   <v-layout>
     <v-col>
       <v-card class="mb-1">
-        <v-card-title>Welcome to NavFit2020 - Pre-Alpha</v-card-title>
+        <v-card-title class="headline grey lighten-2 mb-3">
+          Welcome to NavFit2020 - Pre-Alpha Testing
+        </v-card-title>
         <v-card-text>
           <p>
             This is really early so <strong>DO NOT </strong> use this application for real world work yet.
@@ -15,12 +17,15 @@
         </v-card-text>
       </v-card>
       <v-card class="mb-1">
-        <v-card-title>Feedback & Bug Reporting</v-card-title>
+        <v-card-title class="headline error lighten-3 mb-3">
+          Feedback & Bug Reporting
+        </v-card-title>
         <v-card-text>
           <p>
             Please provide feedback and bug reports via the Google form. Any and all feedback is desired.
             If sending a bug report please include as much detail as possible.
           </p>
+          <p>To view the changelog, go to the <a @click="openGithubRepo()">Github Repo</a></p>
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary"
@@ -32,7 +37,9 @@
     </v-col>
     <v-col>
       <v-card class="mb-1">
-        <v-card-title>Getting Started</v-card-title>
+        <v-card-title class="headline info lighten-2 mb-3">
+          Getting Started
+        </v-card-title>
         <v-card-text>
           <ol>
             <li>
@@ -46,7 +53,6 @@
               Fill out the eval details. <strong>NOTE:</strong> the command details override (accessed via the eval
               dialog) isn't setup yet.
             </li>
-            <li />
           </ol>
         </v-card-text>
       </v-card>
@@ -63,6 +69,9 @@ export default Vue.extend({
   methods: {
     openFeedbackForm() {
       this.$store.dispatch("openFeedbackForm");
+    },
+    openGithubRepo() {
+      this.$store.dispatch("openGithubRepo");
     }
   }
 });

@@ -1,10 +1,47 @@
 <template>
-  <v-alert v-model="alert"
-           dismissible
-           dense
-           type="error">
-    {{ errorMsg ? errorMsg : "Error, please restart application." }}
-  </v-alert>
+  <v-dialog v-model="dialog.show"
+            persistent
+            width="500">
+    <v-card>
+      <v-card-title :class="['headline', (dialog.type === 'error') ? 'error' : '', (dialog.type === 'success') ? 'success' : '']">
+        {{ dialog.title }}
+      </v-card-title>
+
+      <v-card-text>
+        <v-layout class="my-2">
+          {{ dialog.msg }}
+        </v-layout>
+        <v-layout class="my-2">
+          <span class="subtitle-2">
+            {{ dialog.filePath }}
+          </span>
+        </v-layout>
+        <v-layout>
+          <code>
+            {{ dialog.error }}
+          </code>
+        </v-layout>
+      </v-card-text>
+
+      <v-divider />
+
+      <v-card-actions>
+        <v-spacer />
+        <v-btn
+          v-if="dialog.type === 'error'"
+          text
+          @click="openFeedbackForm()">
+          Submit Bug
+        </v-btn>
+        <v-btn
+          color="primary"
+          text
+          @click="dismissDialog()">
+          Dismiss
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -13,20 +50,17 @@ import Vue from "vue";
 export default Vue.extend({
   name: "SharedAlertComponent",
   computed: {
-    alert() {
-      return this.$store.state.app.isError;
+    dialog() {
+      return this.$store.state.app.dialog;
     },
-    errorMsg() {
-      return this.$store.state.app.errorMsg;
+  },
+  methods: {
+    dismissDialog() {
+      this.$store.dispatch("dismissDialog");
     },
+    openFeedbackForm() {
+      this.$store.dispatch("openFeedbackForm");
+    }
   }
 });
 </script>
-
-<style lang="sass">
-  .v-alert
-    z-index: 2000
-    position: fixed
-    bottom: 0
-    left: 0
-</style>

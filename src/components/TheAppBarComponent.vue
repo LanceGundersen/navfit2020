@@ -5,12 +5,15 @@
                color="indigo white--text">
       <v-app-bar-nav-icon color="white"
                           @click.stop="showNavigationDrawer = !showNavigationDrawer" />
-      <v-avatar class="mr-2">
+      <v-avatar class="mr-2"
+                style="cursor: pointer"
+                @click="goHome()">
         <img :src="require('../static/logo.png')">
       </v-avatar>
       <v-toolbar-title>
         NavFit 2020
-        <span class="subtitle-2 orange--text text--lighten-2">ALPHA PRE-RELEASE</span>
+        <span class="subtitle-2 orange--text text--lighten-2">
+          ALPHA PRE-RELEASE</span>
       </v-toolbar-title>
       <v-spacer />
       <v-btn text
@@ -73,6 +76,9 @@ export default Vue.extend({
     },
     showCommandDefaultsDialog() {
       this.showDefaultsDialog = !this.showDefaultsDialog;
+    },
+    goHome() {
+      this.$router.push({ name: "home" }).catch(() => {});
     }
   }
 });

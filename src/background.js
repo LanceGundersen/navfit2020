@@ -158,6 +158,11 @@ ipcMain.on("open:feedback", event => {
   shell.openExternal("https://forms.gle/LqxFFZGTpViLxyF58");
 });
 
+ipcMain.on("open:githubRepo", event => {
+  event.preventDefault();
+  shell.openExternal("https://github.com/LanceGundersen/navfit2020/releases");
+});
+
 ipcMain.on("pdf:export", async (event, args) => {
   const options = {
     title: "Save new file as...",
@@ -170,11 +175,11 @@ ipcMain.on("pdf:export", async (event, args) => {
   const saveDialog = dialog.showSaveDialog(win, options);
 
   saveDialog.then(saveTo => {
-    exportEval(args.sailor, args.id, saveTo.filePath);
+    if (!saveTo.canceled) exportEval(args.sailor, args.id, saveTo.filePath);
   });
 });
 
-ipcMain.on("eval:export:error", (event, args) => {
-  event.preventDefault();
-  writeToLogFile(`ERROR: evalExport: ${args}`);
-});
+export function showDialog(type, title, msg, filePath, error) {
+  writeToLogFile(`EVAL EXPORT: ${type} ${title} ${msg} ${filePath} ${error}`);
+  win.webContents.send("dialog:show", { type, title, msg, filePath, error, });
+}

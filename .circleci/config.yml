@@ -1,0 +1,174 @@
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@1.0.2
+
+references:
+  workspace: &workspace ~/repo
+
+  container_config: &container_config
+    docker:
+      - image: circleci/node:10
+    working_directory: *workspace
+
+  win_config: &win_config
+    docker:
+      - image: electronuserland/builder:wine
+        environment:
+          TARGET_ARCH: x64
+    working_directory: *workspace
+
+  mac_config: &mac_config
+    macos:
+      xcode: "12.2.0"
+    working_directory: *workspace
+
+jobs:
+  build:
+    <<: *container_config
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn
+      - run: chmod -R 777 ~/repo
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+  test:
+    <<: *container_config
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: yarn test
+      - codecov/upload:
+          file: coverage/clover.xml
+      - store_artifacts:
+          path: artifacts
+          destination: yarnpkg
+  deploy_win:
+    <<: *win_config
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn
+      - run: yarn electron:build --win
+      - run:
+          name: Remove non-binary files
+          shell: /bin/sh
+          command: |
+            cd ./dist_electron
+            ls
+            rm -rf bundled win-unpacked
+            rm *.yml *.blockmap
+      - store_artifacts:
+          path: dist_electron
+          destination: build
+
+  deploy_linux:
+    <<: *container_config
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run: yarn electron:build -l
+      - run:
+          name: Remove non-binary files
+          shell: /bin/sh
+          command: |
+            cd ./dist_electron
+            ls
+            rm -rf bundled linux-unpacked .icon-ico
+            rm *.yml
+            ls
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - store_artifacts:
+          path: dist_electron
+          destination: build
+
+  deploy_mac:
+    <<: *mac_config
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v3-dependencies-{{ checksum "package.json" }}
+            - v3-dependencies-
+      - run: yarn install
+      - run: yarn electron:build --mac
+      - run:
+          name: Remove non-binary files
+          shell: /bin/sh
+          command: |
+            cd ./dist_electron
+            ls
+            rm -rf mac bundled contents .icon-icns
+            rm *.yml *.blockmap *.zip
+            ls
+      - store_artifacts:
+          path: dist_electron/
+          destination: build/
+
+workflows:
+  version: 2
+  build_test_deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - hold:
+          type: approval
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - dev
+                - prod
+      - deploy_win:
+          filters:
+            branches:
+              only:
+                - dev
+                - prod
+          requires:
+            - hold
+      - deploy_linux:
+          filters:
+            branches:
+              only:
+                - dev
+                - prod
+          requires:
+            - hold
+      - deploy_mac:
+          filters:
+            branches:
+              only:
+                - dev
+                - prod
+          requires:
+            - hold
