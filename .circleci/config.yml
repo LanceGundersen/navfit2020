@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  codecov: codecov/codecov@1.0.2
+
 references:
   workspace: &workspace ~/repo
 
@@ -46,7 +49,8 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
       - run: yarn test
-      - run: yarn codecov
+      - codecov/upload:
+          file: coverage/Icov-report/index.html
       - store_artifacts:
           path: artifacts
           destination: yarnpkg
@@ -107,6 +111,15 @@ jobs:
             - v3-dependencies-
       - run: yarn install
       - run: yarn electron:build --mac
+      - run:
+          name: Remove non-binary files
+          shell: /bin/sh
+          command: |
+            cd ./dist_electron
+            ls
+            rm -rf bundled contents bundled .icon-ico
+            rm *.yml *.blockmap *.zip
+            ls
       - store_artifacts:
           path: dist_electron/
           destination: build/
