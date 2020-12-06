@@ -1,49 +1,84 @@
 version: 2.1
 
-orbs:
-  github-release: h-matsuo/github-release@0.1.3
-#  cypress: cypress-io/cypress@1
+references:
+  workspace: &workspace ~/repo
 
-executors:
-  windows:
-    docker:
-      - image: electronuserland/builder:wine
-    working_directory: /tmp/workspace
-  mac:
-    macos:
-      xcode: 12.2.0
-    working_directory: /tmp/workspace
-
-jobs:
-  test:
+  container_config: &container_config
     docker:
       - image: circleci/node:10
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run: yarn
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
-      - run: yarn lint
-      - run: yarn test
+    working_directory: *workspace
 
-  build_windows_linux:
-    executor: windows
+  win_config: &win_config
+    docker:
+      - image: electronuserland/builder:wine
+        environment:
+          TARGET_ARCH: x64
+    working_directory: *workspace
+
+  mac_config: &mac_config
+    macos:
+      xcode: "12.2.0"
+    working_directory: *workspace
+
+jobs:
+  build:
+    <<: *container_config
     steps:
-      - attach_workspace:
-          at: /tmp/workspace
       - checkout
       - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn
+      - run: chmod -R 777 ~/repo
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+  test:
+    <<: *container_config
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: yarn test
+      - run: yarn codecov
+    store_artifacts:
+      - path: artifacts
+      - destination: yarnpkg
+
+  deploy_win:
+    <<: *win_config
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn
+      - run: yarn electron:build --win
+      - store_artifacts:
+          path: dist_electron
+          destination: build
+
+  deploy_linux:
+    <<: *container_config
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
       - run: yarn
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      - run: yarn electron:build -wl
+      - run: yarn electron:build -l
       - run:
           name: Remove non-binary files
           shell: /bin/sh
@@ -53,68 +88,178 @@ jobs:
             rm -rf bundled linux-unpacked win-unpacked .icon-ico
             rm *.yml *.blockmap
             ls
-      - store_artifacts:
-          path: dist_electron
-      - persist_to_workspace:
-          root: /tmp/workspace
-          paths:
-            - dist_electron
-
-  build_macos:
-    executor: mac
-    steps:
-      - attach_workspace:
-          at: /tmp/workspace
       - checkout
       - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run: yarn
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
-      - run: yarn electron:build --mac
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
       - store_artifacts:
           path: dist_electron
-      - persist_to_workspace:
-          root: /tmp/workspace
-          paths:
-            - dist_electron
+          destination: build
 
-  publish-github-release:
-    docker:
-      - image: cibuilds/github:0.10
+  deploy_mac:
+    <<: *mac_config
     steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - run:
-          name: View files
-          shell: /bin/sh
-          command: |
-            ls
-      - run:
-          name: "Publish Release on GitHub"
-          command: |
-            ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c ${CIRCLE_SHA1} -delete v$CIRCLE_BUILD_NUM dist_electron || true
+      - checkout
+      - restore_cache:
+          keys:
+            - v3-dependencies-{{ checksum "package.json" }}
+            - v3-dependencies-
+      - run: yarn install
+      - run: yarn electron:build --mac
+      - store_artifacts:
+          path: dist_electron/
+          destination: build/
 
 workflows:
-  build:
+  version: 2
+  build_test:
     jobs:
-      - test
-#      - cypress/run:
-#          yarn: true
-#          record: true
-      - build_windows_linux:
+      - build
+      - test:
           requires:
-            - test
-            #- cypress/run
+            - build
+
+  deploy:
+    jobs:
+      - deploy_mac
+      - deploy_win:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /[v][0-9]+(\.[0-9]+)+.*/
+      - deploy_linux:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /[v][0-9]+(\.[0-9]+)+.*/
+      # - deploy_mac:
+      #     filters:
+      #       branches:
+      #         ignore: /.*/
+      #       tags:
+      #         only: /[0-9]+(\.[0-9]+)+.*/
+
+
+#version: 2.1
+#
+#orbs:
+#  github-release: h-matsuo/github-release@0.1.3
+##  cypress: cypress-io/cypress@1
+#
+#executors:
+#  windows:
+#    docker:
+#      - image: electronuserland/builder:wine
+#    working_directory: /tmp/workspace
+#  mac:
+#    macos:
+#      xcode: 12.2.0
+#    working_directory: /tmp/workspace
+#
+#jobs:
+#  test:
+#    docker:
+#      - image: circleci/node:10
+#    steps:
+#      - checkout
+#      - restore_cache:
+#          key: dependency-cache-{{ checksum "package.json" }}
+#      - run: yarn
+#      - save_cache:
+#          key: dependency-cache-{{ checksum "package.json" }}
+#          paths:
+#            - ./node_modules
+#      - run: yarn lint
+#      - run: yarn test
+#
+#  build_windows_linux:
+#    executor: windows
+#    steps:
+#      - attach_workspace:
+#          at: /tmp/workspace
+#      - checkout
+#      - restore_cache:
+#          key: dependency-cache-{{ checksum "package.json" }}
+#      - run: yarn
+#      - save_cache:
+#          key: dependency-cache-{{ checksum "package.json" }}
+#          paths:
+#            - ./node_modules
+#      - run: yarn electron:build -wl
+#      - run:
+#          name: Remove non-binary files
+#          shell: /bin/sh
+#          command: |
+#            cd ./dist_electron
+#            ls
+#            rm -rf bundled linux-unpacked win-unpacked .icon-ico
+#            rm *.yml *.blockmap
+#            ls
+#      - store_artifacts:
+#          path: dist_electron
+#      - persist_to_workspace:
+#          root: /tmp/workspace
+#          paths:
+#            - dist_electron
+#
+#  build_macos:
+#    executor: mac
+#    steps:
+#      - attach_workspace:
+#          at: /tmp/workspace
+#      - checkout
+#      - restore_cache:
+#          key: dependency-cache-{{ checksum "package.json" }}
+#      - run: yarn
+#      - save_cache:
+#          key: dependency-cache-{{ checksum "package.json" }}
+#          paths:
+#            - ./node_modules
+#      - run: yarn electron:build --mac
+#      - store_artifacts:
+#          path: dist_electron
+#      - persist_to_workspace:
+#          root: /tmp/workspace
+#          paths:
+#            - dist_electron
+#
+#  publish-github-release:
+#    docker:
+#      - image: cibuilds/github:0.10
+#    steps:
+#      - attach_workspace:
+#          at: /tmp/workspace
+#      - run:
+#          name: View files
+#          shell: /bin/sh
+#          command: |
+#            ls
+#      - run:
+#          name: "Publish Release on GitHub"
+#          command: |
+#            ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c ${CIRCLE_SHA1} -delete v$CIRCLE_BUILD_NUM dist_electron
+#
+#workflows:
+#  build:
+#    jobs:
+#      - test
+##      - cypress/run:
+##          yarn: true
+##          record: true
+#      - build_windows_linux:
+#          requires:
+#            - test
+#            #- cypress/run
 #      - build_macos:
 #          requires:
 #            - test
 #            #- cypress/run
-      - publish-github-release:
-          requires:
-            - test
-            #- cypress/run
-            - build_windows_linux
+#      - publish-github-release:
+#          requires:
+#            - test
+#            #- cypress/run
+#            - build_windows_linux
 #            - build_macos
