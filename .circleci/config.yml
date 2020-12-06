@@ -60,7 +60,7 @@ jobs:
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
-            - $CIRCLE_ARTIFACTS/
+            - dist_electron
 
   build_macos:
     executor: mac
@@ -79,7 +79,7 @@ jobs:
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
-            - $CIRCLE_ARTIFACTS/
+            - dist_electron
 
   publish-github-release:
     executor: github
