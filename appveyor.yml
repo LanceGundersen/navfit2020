@@ -20,9 +20,9 @@ build_script:
   - yarn electron:build
 
 artifacts:
-  - path: dist_electron/navfit2020*.exe
-    name: navfit2020
-  - path: dist_electron/navfit2020*.appx
+#  - path: dist_electron/navfit2020*.exe
+#    name: navfit2020
+  - path: dist_electron/
     name: navfit2020
 
 test: off
