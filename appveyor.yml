@@ -23,15 +23,4 @@ artifacts:
   - path: dist_electron/navfit2020*.exe
     name: navfit2020
 
-deploy:
-  - provider: GitHub
-    description: 'AppVeyor Release'
-    auth_token:
-      secure: fEkXGI1MwwnXikl6PyKr9q8U1Dcgw+yZuPznmh/YqHS4QtwLBkqxl0C4cDwB1vVf
-    draft: true
-    artifact: navfit2020
-    force_update: true
-    on:
-      branch: prod
-
 test: off
