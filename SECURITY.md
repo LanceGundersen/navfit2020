@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-The application is currently in active pre-release development therefor security updates are provided for the latest major release only.
+The application is currently in active pre-release development therefor security updates are provided for the latest major release only. This project leverages two automation services for keeping packages up to date, Dependabot and CodeQL Analysis.
 
 | Version | Supported          |
 | ------- | ------------------ |
