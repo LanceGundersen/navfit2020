@@ -11,4 +11,4 @@ Navy Evaluation/Fitrep Writer Modernized
 - Text based database: One of the downfalls to the legacy version of NavFit is that it required another piece of software that was critical to the software architecture. To solve this, NavFit leverages the tried and true JSON document standard. This means it can be extended upon and leveraged by other tools and it's simply just text. You can leverage existing U.S. Navy tooling to store, share, and encrypt this database through official channels.
 
 ## Developers
-[https://github.com/LanceGundersen/navfit2020/wiki/Developers](Developers)
+[Developers](https://github.com/LanceGundersen/navfit2020/wiki/Developers)
