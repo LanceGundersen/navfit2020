@@ -21,8 +21,8 @@ build_script:
 
 artifacts:
   - path: dist_electron/*.exe
-    name: navfit2020
+    name: navfit
   - path: dist_electron/*.appx
-    name: navfit2020
+    name: navfit
 
 test: off
