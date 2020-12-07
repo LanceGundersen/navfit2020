@@ -11,6 +11,8 @@ module.exports = {
           target: "appx",
         },
         appx: {
+          identityName: "23182LanceGundersen.NavFit",
+          publisher: "CN=A2D9DB40-6AB5-4D32-AA2E-C095DDE633A0",
           publisherDisplayName: "Lance Gundersen",
           displayName: "NavFit",
         }
