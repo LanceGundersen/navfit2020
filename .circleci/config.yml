@@ -11,13 +11,6 @@ references:
       - image: circleci/node:10
     working_directory: *workspace
 
-  win_config: &win_config
-    docker:
-      - image: electronuserland/builder:wine
-        environment:
-          TARGET_ARCH: x64
-    working_directory: *workspace
-
   mac_config: &mac_config
     macos:
       xcode: "12.2.0"
@@ -54,27 +47,6 @@ jobs:
       - store_artifacts:
           path: artifacts
           destination: yarnpkg
-  deploy_win:
-    <<: *win_config
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-      - run: yarn
-      - run: yarn electron:build --win appx
-      - run:
-          name: Remove non-binary files
-          shell: /bin/sh
-          command: |
-            cd ./dist_electron
-            ls
-            rm -rf bundled win-unpacked
-            rm *.yml *.blockmap
-      - store_artifacts:
-          path: dist_electron
-          destination: build
 
   deploy_linux:
     <<: *container_config
@@ -139,13 +111,6 @@ workflows:
       - test:
           requires:
             - build
-      - deploy_win:
-          filters:
-            branches:
-              only:
-                - prod
-          requires:
-            - test
       - deploy_linux:
           filters:
             branches:
