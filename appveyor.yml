@@ -17,7 +17,7 @@ install:
   - ps: Update-AppveyorBuild -Version "$env:package_version-$env:APPVEYOR_BUILD_NUMBER"
 
 build_script:
-  - yarn electron:build
+  - yarn electron:build -win appx
 
 artifacts:
 #  - path: dist_electron/navfit2020*.exe
