@@ -1,13 +1,8 @@
  name: navfit
-  version: '0.5.2'
-  summary: Navy Evaluation/Fitrep Writer Modernized
-  description: |
-    Navy evaluation and FITREP creation application to replace NavFit98. Allows for
-    adding, editing, deleting, and exporting to offical US Navy NAVPERS PDF's.
-  grade: devel
-  confinement: devmode
-
-  parts:
-    my-part:
-      # See 'snapcraft plugins'
-      plugin: nil
+ version: '0.5.2'
+ summary: Navy Evaluation/Fitrep Writer Modernized
+ description: |
+   Navy evaluation and FITREP creation application to replace NavFit98. Allows for
+   adding, editing, deleting, and exporting to offical US Navy NAVPERS PDF's.
+ grade: devel
+ confinement: devmode
