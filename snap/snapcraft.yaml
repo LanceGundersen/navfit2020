@@ -6,3 +6,7 @@
    adding, editing, deleting, and exporting to offical US Navy NAVPERS PDF's.
  grade: devel
  confinement: devmode
+ 
+ parts:
+  electron-navfit:
+    plugin: nil
