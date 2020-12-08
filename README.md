@@ -1,6 +1,12 @@
 # NavFit 2020 
 [![LanceGundersen](https://circleci.com/gh/LanceGundersen/navfit2020/tree/prod.svg?style=svg)](https://circleci.com/gh/LanceGundersen/navfit2020) [![Build status](https://ci.appveyor.com/api/projects/status/k5n4xuovwrhuivev/branch/prod?svg=true)](https://ci.appveyor.com/project/LanceGundersen/navfit2020/branch/prod)
- [![codecov](https://codecov.io/gh/LanceGundersen/navfit2020/branch/prod/graph/badge.svg?token=VVJK9VORZ6)](https://codecov.io/gh/LanceGundersen/navfit2020) 
+ [![codecov](https://codecov.io/gh/LanceGundersen/navfit2020/branch/prod/graph/badge.svg?token=VVJK9VORZ6)](https://codecov.io/gh/LanceGundersen/navfit2020)
+[![navfit](https://snapcraft.io/navfit/badge.svg)](https://snapcraft.io/navfit)
+[![navfit](https://snapcraft.io/navfit/trending.svg?name=0)](https://snapcraft.io/navfit)
+
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/navfit)
+
+## Summary
 
 Navy Evaluation/Fitrep Writer Modernized
 
