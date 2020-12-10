@@ -65,15 +65,13 @@ export default {
     };
 
     window.ipcRenderer.send("db:add:record", { uuid, form });
-    window.ipcRenderer.once("db:add:record:result", (_, args) => {
-      if (args.error) {
-        commit("setError");
-        commit("setErrorMsg", args.error.toString());
-        commit("setErrorObj", args);
-      } else {
-        dispatch("clearEvalEditForm");
-        dispatch("loadDb");
-      }
+    window.ipcRenderer.once("db:add:record:result", (event, args) => {
+      dispatch("loadDb");
+      commit("ADD_SELECTED_SAILOR_RECORD", args);
+    });
+    window.ipcRenderer.once("dialog:show", (event, args) => {
+      commit("SET_DIALOG_INFO", args);
+      commit("SHOW_DIALOG");
     });
   },
   updateEval({ commit, dispatch }) {

@@ -5,10 +5,14 @@
 [![navfit](https://snapcraft.io/navfit/trending.svg?name=0)](https://snapcraft.io/navfit)
 
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/navfit)
+<a href='//www.microsoft.com/store/apps/9NZLS2X62FNF?cid=storebadge&ocid=badge'><img src='https://developer.microsoft.com/store/badges/images/English_get_L.png' alt='English badge' style='width: 127px; height: 52px;'/></a>
 
 ## Summary
 
 Navy Evaluation/Fitrep Writer Modernized
+
+### Feature Requests & Bug Submittal
+[Hellonext](https://navfit.hellonext.co/)
 
 ## Features
 

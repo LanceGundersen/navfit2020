@@ -71,15 +71,23 @@ export default {
   },
   async addRecord(payload) {
     try {
+      const uuid = shortid.generate();
       db.get("sailors")
         .find({ uuid: payload.uuid })
         .get("records")
-        .push({ id: shortid.generate(), ...payload.form })
+        .push({ id: uuid, ...payload.form })
         .write();
-      return true;
+      return { uuid: payload.uuid, id: uuid };
     } catch (error) {
       return { error };
     }
+  },
+  async getRecord(payload) {
+    return db.get("sailors")
+      .find({ uuid: payload.uuid })
+      .get("records")
+      .find({ id: payload.id })
+      .value();
   },
   async updateRecord({ uuid, form }) {
     try {
