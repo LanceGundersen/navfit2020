@@ -34,6 +34,7 @@ export default Vue.extend({
   data: () => ({}),
   created() {
     this.$store.dispatch("loadDb");
+    this.$router.push({ name: "home" }).catch(() => {});
   }
 });
 </script>
