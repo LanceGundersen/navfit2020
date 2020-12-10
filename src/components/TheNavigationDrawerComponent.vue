@@ -69,7 +69,6 @@ export default Vue.extend({
         .catch(() => {
           this.drawer = !this.drawer;
         });
-      // this.$router.push({ name: "detail", params: { uuid: givenUuid } }).catch(() => {});
     },
     deleteSailor(givenUuid) {
       this.uuid = givenUuid;

@@ -155,11 +155,11 @@ export default Vue.extend({
       return this.$store.getters.getSelectedSailor;
     },
   },
-  beforeCreate() {
-    if (!this.$store.getters.getSelectedSailor.uuid) {
-      this.$router.push({ name: "home" });
-    }
-  },
+  // beforeCreate() {
+  //   if (!this.$store.getters.getSelectedSailor.uuid) {
+  //     this.$router.push({ name: "home" });
+  //   }
+  // },
   methods: {
     showAddEditEvalDialog(recordId) {
       this.$store.dispatch("clearEvalEditForm");

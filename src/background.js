@@ -119,13 +119,23 @@ if (isDevelopment) {
   }
 }
 
+export function showDialog(type, title, msg, filePath, error) {
+  writeToLogFile(`EVAL EXPORT: ${type} ${title} ${msg} ${filePath} ${error}`);
+  win.webContents.send("dialog:show", { type, title, msg, filePath, error, });
+}
+
 ipcMain.on("db:load", async () => {
   win.webContents.send("db:loaded", JSON.parse(JSON.stringify(await api.readDatabase())));
 });
 
 ipcMain.on("db:add:sailor", async (event, args) => {
   const result = await api.addSailor(args);
-  win.webContents.send("db:add:sailor:result", result);
+  const sailor = await api.getSailor(result);
+  if (sailor.uuid) {
+    win.webContents.send("db:add:sailor:result", sailor);
+  } else {
+    showDialog("error", "Add Sailor Error", "Error adding Sailor", null, result.error);
+  }
 });
 
 ipcMain.on("db:update:sailor", async (event, args) => {
@@ -178,8 +188,3 @@ ipcMain.on("pdf:export", async (event, args) => {
     if (!saveTo.canceled) exportEval(args.sailor, args.id, saveTo.filePath);
   });
 });
-
-export function showDialog(type, title, msg, filePath, error) {
-  writeToLogFile(`EVAL EXPORT: ${type} ${title} ${msg} ${filePath} ${error}`);
-  win.webContents.send("dialog:show", { type, title, msg, filePath, error, });
-}
