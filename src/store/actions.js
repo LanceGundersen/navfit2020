@@ -1,10 +1,19 @@
+import router from "@/router";
+
 export default {
+  routeToSelectedSailor() {
+    const uuid = this.getters.getSelectedSailorId;
+    router.push({
+      name: "detail",
+      params: { uuid }
+    });
+  },
   loadApp() {
     window.ipcRenderer.send("app:load");
   },
   loadDb({ commit }) {
     window.ipcRenderer.send("db:load");
-    window.ipcRenderer.on("db:loaded", (event, args) => {
+    window.ipcRenderer.once("db:loaded", (event, args) => {
       if (args.commandInfo) {
         commit("SET_COMMAND", args.commandInfo);
       }
@@ -14,21 +23,21 @@ export default {
   addSailor({ commit, dispatch }) {
     const form = this.getters.getSailorEditForm;
     window.ipcRenderer.send("db:add:sailor", form);
-    window.ipcRenderer.on("db:add:sailor:result", (_, args) => {
-      if (args.error) {
-        commit("setError");
-        commit("setErrorMsg", args.error.toString());
-        commit("setErrorObj", args);
-      }
-      dispatch("loadDb").then(() => {
-        dispatch("setSelectedSailor", args.uuid);
-      });
+    window.ipcRenderer.once("db:add:sailor:result", (event, args) => {
+      dispatch("loadDb");
+      commit("SET_SELECTED_SAILOR", { ...args });
+      commit("SET_SAILOR_EDIT_FORM", { ...args });
+      dispatch("routeToSelectedSailor");
+    });
+    window.ipcRenderer.once("dialog:show", (event, args) => {
+      commit("SET_DIALOG_INFO", args);
+      commit("SHOW_DIALOG");
     });
   },
   updateSailor({ commit, dispatch }) {
     const form = this.getters.getSailorEditForm;
     window.ipcRenderer.send("db:update:sailor", form);
-    window.ipcRenderer.on("db:update:sailor:result", (_, args) => {
+    window.ipcRenderer.once("db:update:sailor:result", (_, args) => {
       if (args.error) {
         commit("setError");
         commit("setErrorMsg", args.error.toString());
@@ -39,7 +48,7 @@ export default {
   },
   deleteSailor({ commit, dispatch }, payload) {
     window.ipcRenderer.send("db:delete:sailor", payload);
-    window.ipcRenderer.on("db:delete:sailor:result", (_, args) => {
+    window.ipcRenderer.once("db:delete:sailor:result", (_, args) => {
       if (args.error) {
         commit("setError");
         commit("setErrorMsg", args.error.toString());
@@ -56,7 +65,7 @@ export default {
     };
 
     window.ipcRenderer.send("db:add:record", { uuid, form });
-    window.ipcRenderer.on("db:add:record:result", (_, args) => {
+    window.ipcRenderer.once("db:add:record:result", (_, args) => {
       if (args.error) {
         commit("setError");
         commit("setErrorMsg", args.error.toString());
@@ -72,7 +81,7 @@ export default {
     const { uuid } = this.getters.getSelectedSailor;
 
     window.ipcRenderer.send("db:update:record", { uuid, form });
-    window.ipcRenderer.on("db:update:record:result", (_, args) => {
+    window.ipcRenderer.once("db:update:record:result", (_, args) => {
       if (args.error) {
         commit("setError");
         commit("setErrorMsg", args.error.toString());
@@ -86,7 +95,7 @@ export default {
   saveCommandDefaults({ commit, dispatch }) {
     const form = this.getters.getCommandEditForm;
     window.ipcRenderer.send("db:add:commandDefaults", form);
-    window.ipcRenderer.on("db:add:commandDefaults:result", (_, args) => {
+    window.ipcRenderer.once("db:add:commandDefaults:result", (_, args) => {
       if (args.error) {
         commit("setError");
         commit("setErrorMsg", args.error.toString());
@@ -104,10 +113,13 @@ export default {
   clearCommandEditForm({ commit }) {
     commit("CLEAR_COMMAND_EDIT_FORM");
   },
-  setSelectedSailor({ commit }, uuid) {
+  async setSelectedSailor({ commit }, uuid) {
     const sailorData = this.getters.getSailorById(uuid);
     commit("SET_SELECTED_SAILOR", sailorData);
     commit("SET_SAILOR_EDIT_FORM", sailorData);
+  },
+  async clearSelectedSailor({ commit }) {
+    commit("CLEAR_SELECTED_SAILOR");
   },
   setSailorEditForm({ commit }, payload) {
     commit("SET_SAILOR_EDIT_FORM", payload);
@@ -130,7 +142,7 @@ export default {
   exportEval({ commit }, payload) {
     const sailor = this.getters.getSelectedSailor;
     window.ipcRenderer.send("pdf:export", { sailor, id: payload });
-    window.ipcRenderer.on("dialog:show", (event, args) => {
+    window.ipcRenderer.once("dialog:show", (event, args) => {
       commit("SET_DIALOG_INFO", args);
       commit("SHOW_DIALOG");
     });

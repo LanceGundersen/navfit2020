@@ -44,6 +44,11 @@ export default {
       return { error };
     }
   },
+  async getSailor(payload) {
+    return db.get("sailors")
+      .find({ uuid: payload.uuid })
+      .value();
+  },
   async updateSailor(payload) {
     try {
       await db.get("sailors")

@@ -127,9 +127,6 @@ export default Vue.extend({
     getCommandInfo() {
       return this.$store.getters.getCommandInfo;
     },
-    getSelectedSailor() {
-      return this.$store.getters.getSelectedSailor;
-    },
     getSailorEditForm() {
       return this.$store.getters.getSailorEditForm;
     },
@@ -153,13 +150,8 @@ export default Vue.extend({
             }
           });
       } else {
-        this.$store.dispatch("addSailor")
-          .then(() => {
-            if (!this.$store.getters.isError) {
-              this.$router.push({ name: "detail", params: { uuid: this.getSelectedSailor.uuid } }).catch(() => {});
-              this.closeDialog();
-            }
-          });
+        this.$store.dispatch("addSailor");
+        this.closeDialog();
       }
     },
   },
