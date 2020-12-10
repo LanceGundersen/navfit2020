@@ -120,7 +120,7 @@ if (isDevelopment) {
 }
 
 export function showDialog(type, title, msg, filePath, error) {
-  writeToLogFile(`EVAL EXPORT: ${type} ${title} ${msg} ${filePath} ${error}`);
+  writeToLogFile(`${type}: ${title}, ${msg} | File Path:  ${filePath} | Stacktrace: ${error}`);
   win.webContents.send("dialog:show", { type, title, msg, filePath, error, });
 }
 
@@ -140,7 +140,11 @@ ipcMain.on("db:add:sailor", async (event, args) => {
 
 ipcMain.on("db:update:sailor", async (event, args) => {
   const result = await api.updateSailor(args);
-  win.webContents.send("db:update:sailor:result", result);
+  if (result) {
+    win.webContents.send("db:update:sailor:result", result);
+  } else {
+    showDialog("error", "Add Sailor Record Error", "Error adding Sailor record", null, result.error);
+  }
 });
 
 ipcMain.on("db:delete:sailor", async (event, args) => {
@@ -150,7 +154,12 @@ ipcMain.on("db:delete:sailor", async (event, args) => {
 
 ipcMain.on("db:add:record", async (event, args) => {
   const result = await api.addRecord(args);
-  win.webContents.send("db:add:record:result", result);
+  const record = await api.getRecord(result);
+  if (record) {
+    win.webContents.send("db:add:record:result", record);
+  } else {
+    showDialog("error", "Add Record Error", "Error adding record", null, result.error);
+  }
 });
 
 ipcMain.on("db:update:record", async (event, args) => {
@@ -165,7 +174,7 @@ ipcMain.on("db:add:commandDefaults", async (event, args) => {
 
 ipcMain.on("open:feedback", event => {
   event.preventDefault();
-  shell.openExternal("https://forms.gle/LqxFFZGTpViLxyF58");
+  shell.openExternal("https://navfit.hellonext.co/");
 });
 
 ipcMain.on("open:githubRepo", event => {
