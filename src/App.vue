@@ -31,10 +31,8 @@ export default Vue.extend({
     TheAppBarComponent,
     SharedAlertComponent,
   },
-  data: () => ({}),
   created() {
     this.$store.dispatch("loadDb");
-    this.$router.push({ name: "home" }).catch(() => {});
   }
 });
 </script>
