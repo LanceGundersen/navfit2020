@@ -8,6 +8,9 @@ export default {
       params: { uuid }
     });
   },
+  routeToHome() {
+    router.push({ name: "home" });
+  },
   loadApp() {
     window.ipcRenderer.send("app:load");
   },
@@ -48,13 +51,10 @@ export default {
   },
   deleteSailor({ commit, dispatch }, payload) {
     window.ipcRenderer.send("db:delete:sailor", payload);
-    window.ipcRenderer.once("db:delete:sailor:result", (_, args) => {
-      if (args.error) {
-        commit("setError");
-        commit("setErrorMsg", args.error.toString());
-        commit("setErrorObj", args);
-      }
+    window.ipcRenderer.once("db:update:sailor:result", (event, args) => {
       dispatch("loadDb");
+      commit("SET_SAILORS", args);
+      if (router.history.current.path !== "/") dispatch("routeToHome");
     });
   },
   addEval({ commit, dispatch }) {
@@ -65,15 +65,13 @@ export default {
     };
 
     window.ipcRenderer.send("db:add:record", { uuid, form });
-    window.ipcRenderer.once("db:add:record:result", (_, args) => {
-      if (args.error) {
-        commit("setError");
-        commit("setErrorMsg", args.error.toString());
-        commit("setErrorObj", args);
-      } else {
-        dispatch("clearEvalEditForm");
-        dispatch("loadDb");
-      }
+    window.ipcRenderer.once("db:add:record:result", (event, args) => {
+      dispatch("loadDb");
+      commit("ADD_SELECTED_SAILOR_RECORD", args);
+    });
+    window.ipcRenderer.once("dialog:show", (event, args) => {
+      commit("SET_DIALOG_INFO", args);
+      commit("SHOW_DIALOG");
     });
   },
   updateEval({ commit, dispatch }) {

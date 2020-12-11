@@ -52,7 +52,6 @@ export default Vue.extend({
   methods: {
     deleteSailor() {
       this.$store.dispatch("deleteSailor", this.uuid);
-      this.$router.push({ name: "home" }).catch(() => {});
       this.dialog = false;
     },
   },
