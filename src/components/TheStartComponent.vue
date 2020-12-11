@@ -25,11 +25,15 @@
             Please provide feedback and bug reports via the Google form. Any and all feedback is desired.
             If sending a bug report please include as much detail as possible.
           </p>
-          <p>To view the changelog, go to the <a @click="openGithubRepo()">Github Repo</a></p>
+          <p>
+            To view the changelog, go to the <a class="github"
+                                                @click="openExternalGithubRepo">Github Repo</a>
+          </p>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary"
-                 @click="openFeedbackForm">
+          <v-btn class="feedback"
+                 color="primary"
+                 @click="openExternalFeedbackForm">
             Feedback & Bug Reporting Form
           </v-btn>
         </v-card-actions>
@@ -65,12 +69,11 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "TheStartComponent",
-  data: () => ({ }),
   methods: {
-    openFeedbackForm() {
+    openExternalFeedbackForm() {
       this.$store.dispatch("openFeedbackForm");
     },
-    openGithubRepo() {
+    openExternalGithubRepo() {
       this.$store.dispatch("openGithubRepo");
     }
   }
