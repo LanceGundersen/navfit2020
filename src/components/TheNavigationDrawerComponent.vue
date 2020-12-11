@@ -23,19 +23,19 @@
         </v-list-item-action>
       </v-list-item>
     </v-list>
-    <TheDeleteSailorDialogComponent v-model="showDeleteSailorDialog"
-                                    :uuid="uuid" />
+    <TheDeleteConfirmationDialogComponent v-model="showDeleteConfirmationDialog"
+                                          :uuid="uuid" />
   </v-navigation-drawer>
 </template>
 
 <script>
 import Vue from "vue";
-import TheDeleteSailorDialogComponent from "./TheDeleteSailorDialogComponent";
+import TheDeleteConfirmationDialogComponent from "./shared/TheDeleteConfirmationDialogComponent";
 
 export default Vue.extend({
   name: "TheNavigationDrawerComponent",
   components: {
-    TheDeleteSailorDialogComponent,
+    TheDeleteConfirmationDialogComponent,
   },
   props: {
     value: {
@@ -45,7 +45,7 @@ export default Vue.extend({
     },
   },
   data: () => ({
-    showDeleteSailorDialog: false,
+    showDeleteConfirmationDialog: false,
     uuid: null,
     search: null,
   }),
@@ -72,7 +72,7 @@ export default Vue.extend({
     },
     deleteSailor(givenUuid) {
       this.uuid = givenUuid;
-      this.showDeleteSailorDialog = !this.showDeleteSailorDialog;
+      this.showDeleteConfirmationDialog = !this.showDeleteConfirmationDialog;
     },
   },
 });

@@ -171,6 +171,15 @@ ipcMain.on("db:update:record", async (event, args) => {
   win.webContents.send("db:update:record:result", result);
 });
 
+ipcMain.on("db:delete:record", async (event, args) => {
+  const result = await api.deleteRecord(args);
+  if (result) {
+    win.webContents.send("db:delete:record:result", args.recordid);
+  } else {
+    showDialog("error", "Delete Record Error", "Error deleting record", null, result.error);
+  }
+});
+
 ipcMain.on("db:add:commandDefaults", async (event, args) => {
   const result = await api.saveCommandDefaults(args);
   win.webContents.send("db:add:commandDefaults:result", result);

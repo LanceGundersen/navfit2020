@@ -104,6 +104,17 @@ export default {
       return { error };
     }
   },
+  async deleteRecord(payload) {
+    try {
+      return db.get("sailors")
+        .find({ uuid: payload.uuid })
+        .get("records")
+        .remove({ id: payload.recordid })
+        .write();
+    } catch (error) {
+      return { error };
+    }
+  },
   async saveCommandDefaults(form) {
     if (!db.has("commandInfo").value()) {
       db.set("commandInfo", {})

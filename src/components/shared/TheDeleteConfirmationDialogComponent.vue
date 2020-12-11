@@ -3,7 +3,7 @@
             persistent
             width="30%">
     <v-card>
-      <v-card-title>Delete Sailor</v-card-title>
+      <v-card-title>Delete {{ recordid ? 'Sailor' : 'Record' }}</v-card-title>
       <v-card-text>
         <v-icon>{{ 'mdi-alert' }}</v-icon> WARNING: This action cannot be undone.
       </v-card-text>
@@ -14,7 +14,7 @@
           Cancel
         </v-btn>
         <v-btn color="warning"
-               @click="deleteSailor">
+               @click="submitDelete">
           Delete
         </v-btn>
       </v-card-actions>
@@ -26,7 +26,7 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "TheDeleteSailorDialogComponent",
+  name: "TheDeleteConfirmationDialogComponent",
   props: {
     value: {
       type: Boolean,
@@ -36,7 +36,12 @@ export default Vue.extend({
     uuid: {
       type: String,
       required: false,
-      default: null,
+      default: "",
+    },
+    recordid: {
+      type: String,
+      required: false,
+      default: "",
     },
   },
   computed: {
@@ -50,8 +55,12 @@ export default Vue.extend({
     },
   },
   methods: {
-    deleteSailor() {
-      this.$store.dispatch("deleteSailor", this.uuid);
+    submitDelete() {
+      if (this.recordid) {
+        this.$store.dispatch("deleteRecord", { uuid: this.uuid, recordid: this.recordid });
+      } else {
+        this.$store.dispatch("deleteSailor", this.uuid);
+      }
       this.dialog = false;
     },
   },
