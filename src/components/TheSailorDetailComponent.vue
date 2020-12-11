@@ -25,7 +25,8 @@
       <v-expansion-panel v-for="record in sailor.records"
                          :key="record.id">
         <v-expansion-panel-header color="grey lighten-5">
-          <v-row no-gutters>
+          <v-row no-gutters
+                 class="align-center">
             <v-col cols="3">
               {{ record.fromDate }} - {{ record.toDate }}
             </v-col>
@@ -44,15 +45,40 @@
                 mdi-pencil
               </v-icon>
             </v-btn>
-            <v-btn
-              icon
-              small
-              color="primary"
-              @click.native.stop="exportEval(record.id)">
-              <v-icon small>
-                mdi-file-export-outline
-              </v-icon>
-            </v-btn>
+            <v-menu
+              bottom
+              left
+              transition="slide-y-transition">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  v-bind="attrs"
+                  v-on="on">
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+
+              <v-list>
+                <v-list-item @click="exportEval(record.id)">
+                  <v-list-item-title>
+                    <v-icon small
+                            color="primary">
+                      mdi-file-export-outline
+                    </v-icon>
+                    Export PDF
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="deleteEval(record.id)">
+                  <v-list-item-title>
+                    <v-icon small
+                            color="error">
+                      mdi-delete
+                    </v-icon>
+                    Delete Record
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </v-row>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -123,6 +149,9 @@
     <TheAddEditEvalDialogComponent v-model="showEvalDialog" />
     <TheAddEditSailorDialogComponent v-model="showAddSailorDialog"
                                      :sailor="sailor" />
+    <TheDeleteConfirmationDialogComponent v-model="showDeleteConfirmationDialog"
+                                          :uuid="sailor.uuid"
+                                          :recordid="recordId" />
   </v-card>
 </template>
 
@@ -131,6 +160,7 @@ import Vue from "vue";
 import TheAddEditSailorDialogComponent from "./TheAddEditSailorDialogComponent";
 import TheAddEditEvalDialogComponent from "./TheAddEditEvalDialogComponent";
 import SharedRatingComponent from "./shared/SharedRatingComponent";
+import TheDeleteConfirmationDialogComponent from "./shared/TheDeleteConfirmationDialogComponent";
 
 export default Vue.extend({
   name: "TheSailorDetailComponent",
@@ -138,6 +168,7 @@ export default Vue.extend({
     TheAddEditEvalDialogComponent,
     TheAddEditSailorDialogComponent,
     SharedRatingComponent,
+    TheDeleteConfirmationDialogComponent,
   },
   props: {
     value: {
@@ -149,6 +180,8 @@ export default Vue.extend({
   data: () => ({
     showEvalDialog: false,
     showAddSailorDialog: false,
+    showDeleteConfirmationDialog: false,
+    recordId: null,
   }),
   computed: {
     sailor() {
@@ -173,9 +206,9 @@ export default Vue.extend({
         this.showAddSailorDialog = !this.showAddSailorDialog;
       });
     },
-    deleteEval(givenUuid) {
-      this.uuid = givenUuid;
-      this.showDeleteSailorDialog = true;
+    deleteEval(recordId) {
+      this.recordId = recordId;
+      this.showDeleteConfirmationDialog = !this.showDeleteConfirmationDialog;
     },
     exportEval(recordId) {
       this.$store.dispatch("exportEval", recordId);

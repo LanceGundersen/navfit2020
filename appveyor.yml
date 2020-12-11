@@ -25,6 +25,10 @@ artifacts:
   - path: dist_electron/*.appx
     name: navfit
 
+branches:
+  only:
+    - prod
+
 deploy:
   - provider: GitHub
     description: 'AppVeyor Release'

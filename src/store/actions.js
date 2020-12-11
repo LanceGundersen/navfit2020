@@ -90,6 +90,13 @@ export default {
       }
     });
   },
+  deleteRecord({ commit, dispatch }, payload) {
+    window.ipcRenderer.send("db:delete:record", payload);
+    window.ipcRenderer.once("db:delete:record:result", (event, args) => {
+      dispatch("loadDb");
+      commit("REMOVE_SELECTED_SAILOR_RECORD", args);
+    });
+  },
   saveCommandDefaults({ commit, dispatch }) {
     const form = this.getters.getCommandEditForm;
     window.ipcRenderer.send("db:add:commandDefaults", form);
