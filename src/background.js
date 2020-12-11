@@ -149,7 +149,11 @@ ipcMain.on("db:update:sailor", async (event, args) => {
 
 ipcMain.on("db:delete:sailor", async (event, args) => {
   const result = await api.deleteSailor(args);
-  win.webContents.send("db:update:sailor:result", result);
+  if (result) {
+    win.webContents.send("db:update:sailor:result", result);
+  } else {
+    showDialog("error", "Delete Sailor Error", "Error deleting Sailor", null, result.error);
+  }
 });
 
 ipcMain.on("db:add:record", async (event, args) => {

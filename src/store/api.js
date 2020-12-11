@@ -62,9 +62,11 @@ export default {
   },
   async deleteSailor(payload) {
     try {
-      return db.get("sailors")
+      await db.get("sailors")
         .remove({ uuid: payload })
         .write();
+      return db.get("sailors")
+        .value();
     } catch (error) {
       return { error };
     }
