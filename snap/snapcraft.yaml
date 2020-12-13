@@ -7,15 +7,8 @@ description: |
 type: app
 grade: devel
 confinement: strict
-apps:
-  navfit:
-    command: bin/os-release.sh
-
 
 parts:
   navfit:
     plugin: nodejs
-    source: .
-    organize:
-      os-release.sh: bin/
     source-branch: prod
