@@ -1,5 +1,5 @@
  name: navfit
- version: '0.5.5'
+ version: '0.5.6'
  summary: Navy Evaluation/Fitrep Writer Modernized
  description: |
    Navy evaluation and FITREP creation application to replace NavFit98. Allows for
