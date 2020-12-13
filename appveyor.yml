@@ -14,7 +14,7 @@ install:
   - ps: Install-Product node 10 x64
   - yarn
   - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
-  - ps: Update-AppveyorBuild -Version "$env:package_version"
+  - ps: Update-AppveyorBuild -Version "$env:package_version-$env:APPVEYOR_BUILD_NUMBER"
 
 build_script:
   - yarn electron:build --win appx nsis
