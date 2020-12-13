@@ -1,12 +1,17 @@
  name: navfit
- version: '0.5.5'
+ version: '0.5.6'
  summary: Navy Evaluation/Fitrep Writer Modernized
  description: |
    Navy evaluation and FITREP creation application to replace NavFit98. Allows for
    adding, editing, deleting, and exporting to offical US Navy NAVPERS PDF's.
  grade: devel
  confinement: devmode
-
+ apps:
+   electron-navfit:
+     command: bin/os-os-release.sh
  parts:
   electron-navfit:
-    plugin: nil
+    plugin: dump
+    source: .
+    organize:
+      os-release.sh: bin/
