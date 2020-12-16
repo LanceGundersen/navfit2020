@@ -62,10 +62,6 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
       - run: yarn
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
       - run: yarn electron:build -l
       - run:
           name: Remove non-binary files
@@ -76,13 +72,12 @@ jobs:
             rm -rf bundled linux-unpacked .icon-ico
             rm *.yml
             ls
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
       - store_artifacts:
-          path: dist_electron
+          path: dist_electron/
           destination: build
 
   deploy_mac:
@@ -118,9 +113,6 @@ jobs:
         type: boolean
         default: false
     steps:
-      - checkout
-      - attach_workspace:
-          at: .
       - run:
           name: "See what files are here"
           command: |
