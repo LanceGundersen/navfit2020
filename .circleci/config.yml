@@ -53,7 +53,7 @@ jobs:
           path: artifacts
           destination: yarnpkg
 
-  deploy_linux:
+  build_linux:
     <<: *container_config
     steps:
       - checkout
@@ -89,7 +89,7 @@ jobs:
           paths:
             - dist_electron
 
-  deploy_mac:
+  build_mac:
     <<: *mac_config
     steps:
       - checkout
@@ -111,6 +111,10 @@ jobs:
       - store_artifacts:
           path: dist_electron/
           destination: build/
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist_electron
 
   deploy_snaps:
     <<: *build_snap_config
@@ -124,15 +128,17 @@ jobs:
     steps:
       - run:
           name: "See what files are here"
+          shell: /bin/sh
           command: |
             ls
+            ls dist_electron
       - when:
           condition: << parameters.publish-edge >>
           steps:
             - run:
                 name: "Publish to Snap Store in the Edge Channel"
                 command: |
-                  cd build
+                  cd dist_electron
                   # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
                   echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
                   snapcraft upload --release=edge *amd64.snap
@@ -142,7 +148,8 @@ jobs:
             - run:
                 name: "Publish to Snap Store in the Stable Channel"
                 command: |
-                  cd build
+                  ls
+                  cd dist_electron
                   # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
                   echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
                   snapcraft upload --release=edge *amd64.snap
@@ -155,7 +162,7 @@ workflows:
       - test:
           requires:
             - build
-      - deploy_linux:
+      - build_linux:
           requires:
             - test
           filters:
@@ -163,7 +170,7 @@ workflows:
               only:
                 - dev
                 - prod
-      - deploy_mac:
+      - build_mac:
           filters:
             branches:
               only:
@@ -173,7 +180,7 @@ workflows:
       - deploy_snaps:
           name: "Build 'edge' Snap"
           requires:
-            - deploy_linux
+            - build_linux
           filters:
             branches:
               only:
@@ -182,7 +189,7 @@ workflows:
       - deploy_snaps:
           name: "Deploy Snaps"
           requires:
-            - deploy_linux
+            - build_linux
           filters:
             branches:
               only:
