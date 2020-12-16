@@ -78,21 +78,13 @@ jobs:
             rm -rf bundled linux-unpacked .icon-ico
             rm *.yml
             ls
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-      - store_artifacts:
-          path: dist_electron
-          destination: build
       - when:
           condition: << parameters.publish-edge >>
           steps:
             - run:
                 name: "Publish to Snap Store in the Edge Channel"
                 command: |
-                  # Snapcraft Tokens are valid for 1 year. This one expires August 1st, 2021
+                  # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
                   echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
                   snapcraft upload --release=edge *amd64.snap
       - when:
@@ -101,9 +93,17 @@ jobs:
             - run:
                 name: "Publish to Snap Store in the Stable Channel"
                 command: |
-                  # Snapcraft Tokens are valid for 1 year. This one expires August 1st, 2021
+                  # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
                   echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
                   snapcraft upload --release=stable *amd64.snap
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - store_artifacts:
+          path: dist_electron
+          destination: build
 
   deploy_mac:
     <<: *mac_config
