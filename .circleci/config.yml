@@ -76,9 +76,13 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - dist_electron
       - store_artifacts:
-          path: dist_electron/
-          destination: build
+          path: dist_electron
+          destination: dist_electron
 
   deploy_mac:
     <<: *mac_config
