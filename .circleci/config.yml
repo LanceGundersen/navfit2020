@@ -84,8 +84,8 @@ jobs:
             - run:
                 name: "Publish to Snap Store in the Edge Channel"
                 command: |
-                  apt install snapd
-                  snap install snapcraft --classic
+                  sudo apt update
+                  sudo apt install -y snapd
                   # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
                   echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
                   snapcraft upload --release=edge *amd64.snap
@@ -95,7 +95,8 @@ jobs:
             - run:
                 name: "Publish to Snap Store in the Stable Channel"
                 command: |
-                  apt install snapd
+                  sudo apt update
+                  sudo apt install -y snapd
                   snap install snapcraft --classic
                   # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
                   echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
