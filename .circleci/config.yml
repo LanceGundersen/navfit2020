@@ -145,7 +145,6 @@ workflows:
               only:
                 - dev
           publish-edge: true
-          context: main
       - deploy_linux:
           name: "Build Snap"
           requires:
