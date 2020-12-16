@@ -120,7 +120,7 @@ jobs:
       - run:
           name: "See what files are here"
           command: |
-            ls build
+            ls
       - when:
           condition: << parameters.publish-edge >>
           steps:
