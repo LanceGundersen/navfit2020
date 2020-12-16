@@ -79,12 +79,13 @@ jobs:
       - run:
           name: "See what files are here"
           command: |
+            cd /home/circleci/repo
             ls
       - store_artifacts:
           path: dist_electron
           destination: dist_electron
       - persist_to_workspace:
-          root: dist_electron
+          root: .
           paths:
             - dist_electron
 
