@@ -50,6 +50,13 @@ jobs:
 
   deploy_linux:
     <<: *container_config
+    parameters:
+      publish-edge:
+        type: boolean
+        default: false
+      publish-stable:
+        type: boolean
+        default: false
     steps:
       - checkout
       - restore_cache:
@@ -79,6 +86,24 @@ jobs:
       - store_artifacts:
           path: dist_electron
           destination: build
+      - when:
+          condition: << parameters.publish-edge >>
+          steps:
+            - run:
+                name: "Publish to Snap Store in the Edge Channel"
+                command: |
+                  # Snapcraft Tokens are valid for 1 year. This one expires August 1st, 2021
+                  echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
+                  snapcraft upload --release=edge *amd64.snap
+      - when:
+          condition: << parameters.publish-stable >>
+          steps:
+            - run:
+                name: "Publish to Snap Store in the Stable Channel"
+                command: |
+                  # Snapcraft Tokens are valid for 1 year. This one expires August 1st, 2021
+                  echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
+                  snapcraft upload --release=stable *amd64.snap
 
   deploy_mac:
     <<: *mac_config
@@ -112,12 +137,23 @@ workflows:
           requires:
             - build
       - deploy_linux:
+          name: "Build 'edge' Snap"
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - dev
+          publish-edge: true
+          context: main
+      - deploy_linux:
+          name: "Build Snap"
+          requires:
+            - test
           filters:
             branches:
               only:
                 - prod
-          requires:
-            - test
       - deploy_mac:
           filters:
             branches:
