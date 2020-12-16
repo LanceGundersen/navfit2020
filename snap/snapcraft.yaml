@@ -10,11 +10,12 @@ grade: stable
 
 apps:
   navfit:
-    command: desktop-launch $SNAP/usr/bin/navfit
+    command: bin/desktop-launch
+    desktop: usr/share/applications/rpcs3.desktop
 
 parts:
   navfit:
     plugin: nodejs
-    nodejs-version: 10
+    nodejs-version: 10.23.0
     source: .
     source-branch: prod
