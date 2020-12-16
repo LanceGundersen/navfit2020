@@ -179,16 +179,16 @@ workflows:
           name: "Build 'edge' Snap"
           requires:
             - deploy_linux
-            filters:
-              branches:
-                only:
-                  - dev
+          filters:
+            branches:
+              only:
+                - dev
           publish-edge: true
       - deploy_snaps:
           name: "Deploy Snaps"
           requires:
             - deploy_linux
-            filters:
-              branches:
-                only:
-                  - prod
+          filters:
+            branches:
+              only:
+                - prod
