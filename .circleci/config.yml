@@ -81,7 +81,7 @@ jobs:
           command: |
             ls
       - persist_to_workspace:
-          root: ~/
+          root: dist_electron
           paths:
             - dist_electron
       - store_artifacts:
