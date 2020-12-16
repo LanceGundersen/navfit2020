@@ -16,6 +16,11 @@ references:
       xcode: "12.2.0"
     working_directory: *workspace
 
+  build_snap_config: &build_snap_config
+    docker:
+      - image: cibuilds/snapcraft:core18
+    working_directory: *workspace
+
 jobs:
   build:
     <<: *container_config
@@ -50,13 +55,6 @@ jobs:
 
   deploy_linux:
     <<: *container_config
-    parameters:
-      publish-edge:
-        type: boolean
-        default: false
-      publish-stable:
-        type: boolean
-        default: false
     steps:
       - checkout
       - restore_cache:
@@ -78,30 +76,6 @@ jobs:
             rm -rf bundled linux-unpacked .icon-ico
             rm *.yml
             ls
-      - when:
-          condition: << parameters.publish-edge >>
-          steps:
-            - run:
-                name: "Publish to Snap Store in the Edge Channel"
-                command: |
-                  sudo apt update
-                  sudo apt install -y snapd
-                  sudo apt install -y snapcraft
-                  # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
-                  echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
-                  snapcraft upload --release=edge *amd64.snap
-      - when:
-          condition: << parameters.publish-stable >>
-          steps:
-            - run:
-                name: "Publish to Snap Store in the Stable Channel"
-                command: |
-                  sudo apt update
-                  sudo apt install -y snapd
-                  sudo apt install -y snapcraft
-                  # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
-                  echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
-                  snapcraft upload --release=stable *amd64.snap
       - checkout
       - restore_cache:
           keys:
@@ -134,6 +108,50 @@ jobs:
           path: dist_electron/
           destination: build/
 
+  deploy_snaps:
+    <<: *build_snap_config
+    parameters:
+      publish-edge:
+        type: boolean
+        default: false
+      publish-stable:
+        type: boolean
+        default: false
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: "See what files are here"
+          command: |
+            ls
+#      - run:
+#          name: "Build Snaps for Each Architecture"
+#          command: |
+#            # Generate a version file that Snapcraft can use
+#            dist/sonar_linux_amd64/sonar version --short > VERSION
+#            snapcraft --target-arch=amd64 --destructive-mode
+#            snapcraft --target-arch=armhf --destructive-mode
+#            snapcraft --target-arch=arm64 --destructive-mode
+#      - when:
+#          condition: << parameters.publish-edge >>
+#          steps:
+#            - run:
+#                name: "Publish to Snap Store in the Edge Channel"
+#                command: |
+#                  # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
+#                  echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
+#                  snapcraft upload --release=edge *amd64.snap
+#      - when:
+#          condition: << parameters.publish-stable >>
+#          steps:
+#            - run:
+#                name: "Publish to Snap Store in the Stable Channel"
+#                command: |
+#                  # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
+#                  echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
+#                  snapcraft upload --release=edge *amd64.snap
+
 workflows:
   version: 2
   build_test_deploy:
@@ -143,21 +161,12 @@ workflows:
           requires:
             - build
       - deploy_linux:
-          name: "Build 'edge' Snap"
           requires:
             - test
           filters:
             branches:
               only:
                 - dev
-          publish-edge: true
-      - deploy_linux:
-          name: "Build Snap"
-          requires:
-            - test
-          filters:
-            branches:
-              only:
                 - prod
       - deploy_mac:
           filters:
@@ -166,3 +175,20 @@ workflows:
                 - prod
           requires:
             - test
+      - deploy_snaps:
+          name: "Build 'edge' Snap"
+          requires:
+            - deploy_linux
+            filters:
+              branches:
+                only:
+                  - dev
+          publish-edge: true
+      - deploy_snaps:
+          name: "Deploy Snaps"
+          requires:
+            - deploy_linux
+            filters:
+              branches:
+                only:
+                  - prod
