@@ -15,5 +15,6 @@ apps:
 parts:
   navfit:
     plugin: nodejs
+    node-engine: 10
     source: .
-    source-branch: prod
+    source-branch: dev
