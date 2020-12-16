@@ -140,12 +140,9 @@ jobs:
                 command: |
                   ls
                   cd dist_electron
-                  ls
-                  cd dist_electron
-                  ls
                   # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
                   echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
-                  snapcraft upload --release=edge *.snap
+                  snapcraft upload --release=edge *amd64.snap
       - when:
           condition: << parameters.publish-stable >>
           steps:
@@ -154,12 +151,9 @@ jobs:
                 command: |
                   ls
                   cd dist_electron
-                  ls
-                  cd dist_electron
-                  ls
                   # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
                   echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
-                  snapcraft upload --release=edge *.snap
+                  snapcraft upload --release=stable *amd64.snap
 
 workflows:
   version: 2
