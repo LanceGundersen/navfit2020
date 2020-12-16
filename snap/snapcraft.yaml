@@ -4,11 +4,18 @@ summary: Navy Evaluation/Fitrep Writer Modernized
 description: |
  Navy evaluation and FITREP creation application to replace NavFit98. Allows for
  adding, editing, deleting, and exporting to offical US Navy NAVPERS PDF's.
-type: app
-grade: devel
+base: core18
 confinement: strict
+grade: stable
+
+apps:
+  navfit:
+    # Correct the TMPDIR path for Chromium Framework/Electron to ensure
+    # libappindicator has readable resources.
+    command: env TMPDIR=$XDG_RUNTIME_DIR PATH=/usr/local/bin:${PATH} ${SNAP}/bin/desktop-launch $SNAP/navfit/desktop
+    desktop: usr/share/applications/desktop.desktop
 
 parts:
   navfit:
-    plugin: nodejs
+    plugin: nil
     source-branch: prod
