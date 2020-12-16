@@ -17,4 +17,4 @@ parts:
     plugin: nodejs
     node-engine: 10
     source: .
-    source-branch: dev
+    source-branch: prod
