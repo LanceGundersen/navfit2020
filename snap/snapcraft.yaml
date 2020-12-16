@@ -10,9 +10,10 @@ grade: stable
 
 apps:
   navfit:
-    command: bin/desktop-launch $SNAP/app/navfit
+    command: desktop-launch $SNAP/usr/bin/navfit
 
 parts:
   navfit:
     plugin: nodejs
+    source: .
     source-branch: prod
