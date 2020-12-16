@@ -72,10 +72,6 @@ jobs:
             rm -rf bundled linux-unpacked .icon-ico
             rm *.yml
             ls
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
       - run:
           name: "See what files are here"
           command: |
@@ -95,9 +91,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v3-dependencies-{{ checksum "package.json" }}
-            - v3-dependencies-
-      - run: yarn electron:build --mac
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn electron:build -m
       - run:
           name: Remove non-binary files
           shell: /bin/sh
@@ -179,7 +175,7 @@ workflows:
           requires:
             - test
       - deploy_snaps:
-          name: "Build 'edge' Snap"
+          name: "Deploy 'edge' Snap"
           requires:
             - build_linux
           filters:
@@ -188,7 +184,7 @@ workflows:
                 - dev
           publish-edge: true
       - deploy_snaps:
-          name: "Deploy Snaps"
+          name: "Deploy Snap"
           requires:
             - build_linux
           filters:
