@@ -76,6 +76,10 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
+      - run:
+          name: "See what files are here"
+          command: |
+            ls
       - persist_to_workspace:
           root: ~/
           paths:
