@@ -28,14 +28,14 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
+            - v1-dependencies-{{ checksum "package.json" }}-{{ arch }}
+            - v1-dependencies-{{ arch }}
       - run: yarn
       - run: chmod -R 777 ~/repo
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v1-dependencies-{{ checksum "package.json" }}-{{ arch }}
   test:
     <<: *container_config
     steps:
@@ -43,8 +43,8 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
+            - v1-dependencies-{{ checksum "package.json" }}-{{ arch }}
+            - v1-dependencies-{{ arch }}
       - run: yarn test
       - codecov/upload:
           file: coverage/clover.xml
@@ -58,8 +58,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
+            - v1-dependencies-{{ checksum "package.json" }}-{{ arch }}
+            - v1-dependencies-{{ arch }}
       - run: yarn electron:build -l
       - run:
           name: Remove non-binary files
@@ -89,8 +89,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
+            - v2-dependencies-{{ checksum "package.json" }}-{{ arch }}
+            - v2-dependencies-{{ arch }}
+      - run: yarn
       - run: yarn electron:build -m
       - run:
           name: Remove non-binary files
@@ -101,6 +102,10 @@ jobs:
             rm -rf mac bundled contents .icon-icns
             rm *.yml *.blockmap *.zip
             ls
+      - save_cache:
+          paths:
+            - node_modules
+          key: v2-dependencies-{{ checksum "package.json" }}-{{ arch }}
       - store_artifacts:
           path: dist_electron/
           destination: build/
