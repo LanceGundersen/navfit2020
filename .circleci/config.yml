@@ -126,7 +126,7 @@ jobs:
         default: false
     steps:
       - attach_workspace:
-          at: dist_electron/dist_electron
+          at: .
       - run:
           name: "See what files are here"
           shell: /bin/sh
@@ -141,6 +141,8 @@ jobs:
                   ls
                   cd dist_electron
                   ls
+                  cd dist_electron
+                  ls
                   # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
                   echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
                   snapcraft upload --release=edge *.snap
@@ -150,6 +152,8 @@ jobs:
             - run:
                 name: "Publish to Snap Store in the Stable Channel"
                 command: |
+                  ls
+                  cd dist_electron
                   ls
                   cd dist_electron
                   ls
