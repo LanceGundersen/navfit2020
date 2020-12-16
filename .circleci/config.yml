@@ -16,6 +16,11 @@ references:
       xcode: "12.2.0"
     working_directory: *workspace
 
+  build_snap_config: &build_snap_config
+    docker:
+      - image: cibuilds/snapcraft:core18
+    working_directory: *workspace
+
 jobs:
   build:
     <<: *container_config
@@ -30,6 +35,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
+            - ./node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
   test:
     <<: *container_config
@@ -48,7 +54,7 @@ jobs:
           path: artifacts
           destination: yarnpkg
 
-  deploy_linux:
+  build_linux:
     <<: *container_config
     steps:
       - checkout
@@ -56,11 +62,6 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
-      - run: yarn
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
       - run: yarn electron:build -l
       - run:
           name: Remove non-binary files
@@ -71,16 +72,24 @@ jobs:
             rm -rf bundled linux-unpacked .icon-ico
             rm *.yml
             ls
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: "See what files are here"
+          command: |
+            cd /home/circleci/repo
+            ls
       - store_artifacts:
           path: dist_electron
-          destination: build
+          destination: dist_electron
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist_electron
 
-  deploy_mac:
+  build_mac:
     <<: *mac_config
     steps:
       - checkout
@@ -88,7 +97,6 @@ jobs:
           keys:
             - v3-dependencies-{{ checksum "package.json" }}
             - v3-dependencies-
-      - run: yarn install
       - run: yarn electron:build --mac
       - run:
           name: Remove non-binary files
@@ -102,6 +110,50 @@ jobs:
       - store_artifacts:
           path: dist_electron/
           destination: build/
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist_electron
+
+  deploy_snaps:
+    <<: *build_snap_config
+    parameters:
+      publish-edge:
+        type: boolean
+        default: false
+      publish-stable:
+        type: boolean
+        default: false
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "See what files are here"
+          shell: /bin/sh
+          command: |
+            ls
+      - when:
+          condition: << parameters.publish-edge >>
+          steps:
+            - run:
+                name: "Publish to Snap Store in the Edge Channel"
+                command: |
+                  ls
+                  cd dist_electron
+                  # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
+                  echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
+                  snapcraft upload --release=edge *amd64.snap
+      - when:
+          condition: << parameters.publish-stable >>
+          steps:
+            - run:
+                name: "Publish to Snap Store in the Stable Channel"
+                command: |
+                  ls
+                  cd dist_electron
+                  # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
+                  echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
+                  snapcraft upload --release=stable *amd64.snap
 
 workflows:
   version: 2
@@ -111,17 +163,35 @@ workflows:
       - test:
           requires:
             - build
-      - deploy_linux:
+      - build_linux:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - dev
+                - prod
+      - build_mac:
           filters:
             branches:
               only:
                 - prod
           requires:
             - test
-      - deploy_mac:
+      - deploy_snaps:
+          name: "Build 'edge' Snap"
+          requires:
+            - build_linux
+          filters:
+            branches:
+              only:
+                - dev
+          publish-edge: true
+      - deploy_snaps:
+          name: "Deploy Snaps"
+          requires:
+            - build_linux
           filters:
             branches:
               only:
                 - prod
-          requires:
-            - test
