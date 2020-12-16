@@ -86,6 +86,7 @@ jobs:
                 command: |
                   sudo apt update
                   sudo apt install -y snapd
+                  sudo apt install -y snapcraft
                   # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
                   echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
                   snapcraft upload --release=edge *amd64.snap
@@ -97,7 +98,7 @@ jobs:
                 command: |
                   sudo apt update
                   sudo apt install -y snapd
-                  snap install snapcraft --classic
+                  sudo apt install -y snapcraft
                   # Snapcraft Tokens are valid for 1 year. This one expires December 16th, 2021
                   echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
                   snapcraft upload --release=stable *amd64.snap
