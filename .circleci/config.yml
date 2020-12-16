@@ -35,6 +35,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
+            - ./node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
   test:
     <<: *container_config
