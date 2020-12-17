@@ -93,13 +93,12 @@ export default {
   },
   async updateRecord({ uuid, form }) {
     try {
-      await db.get("sailors")
+      return db.get("sailors")
         .find({ uuid })
         .get("records")
         .find({ id: form.id })
         .assign(form)
         .write();
-      return true;
     } catch (error) {
       return { error };
     }

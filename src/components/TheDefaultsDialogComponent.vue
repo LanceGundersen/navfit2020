@@ -17,14 +17,10 @@
                 <v-text-field :value="getCommandInfo.uic ? getCommandInfo.uic : ''"
                               class="pa-1"
                               label="UIC"
-                              :rules="requiredRules"
-                              required
                               @input="updateForm('uic', $event)" />
                 <v-text-field :value="getCommandInfo ? getCommandInfo.shipStation : ''"
                               class="pa-1"
                               label="Ship/Station"
-                              :rules="requiredRules"
-                              required
                               @input="updateForm('shipStation', $event)" />
               </v-layout>
               <v-textarea :value="getCommandInfo ? getCommandInfo.commandDescription : ''"
@@ -32,8 +28,6 @@
                           auto-grow
                           rows="1"
                           label="Command Employment and Command Achievements"
-                          :rules="requiredRules"
-                          required
                           @input="updateForm('commandDescription', $event)" />
             </v-card-text>
           </v-card>
@@ -44,14 +38,10 @@
                 <v-text-field :value="getCommandInfo ? getCommandInfo.lastName : ''"
                               class="pa-1"
                               label="Last Name"
-                              :rules="requiredRules"
-                              required
                               @input="updateForm('lastName', $event)" />
                 <v-text-field :value="getCommandInfo ? getCommandInfo.firstName : ''"
                               class="pa-1"
                               label="First Name"
-                              :rules="requiredRules"
-                              required
                               @input="updateForm('firstName', $event)" />
                 <v-text-field :value="getCommandInfo ? getCommandInfo.middleInitial : ''"
                               class="pa-1"
@@ -62,20 +52,14 @@
                 <v-text-field :value="getCommandInfo ? getCommandInfo.grade : ''"
                               class="pa-1"
                               label="Grade"
-                              :rules="requiredRules"
-                              required
                               @input="updateForm('grade', $event)" />
                 <v-text-field :value="getCommandInfo ? getCommandInfo.designation : ''"
                               class="pa-1"
                               label="Designation"
-                              :rules="requiredRules"
-                              required
                               @input="updateForm('designation', $event)" />
                 <v-text-field :value="getCommandInfo ? getCommandInfo.title : ''"
                               class="pa-1"
                               label="Title"
-                              :rules="requiredRules"
-                              required
                               @input="updateForm('title', $event)" />
                 <v-text-field :value="getCommandInfo ? getCommandInfo.reportingSeniorUic : ''"
                               label="UIC (if different)"
@@ -84,19 +68,15 @@
                 <v-text-field :value="getCommandInfo ? getCommandInfo.ssn : ''"
                               class="pa-1"
                               label="SSN"
-                              placeholder="111-11-1111"
-                              :rules="requiredRules"
-                              required
-                              return-masked-value
-                              mask="***-**-****"
+                              counter="9"
+                              :rules="countRequired"
+                              placeholder="111111111"
                               @input="updateForm('ssn', $event)" />
               </v-layout>
               <v-textarea :value="getCommandInfo ? getCommandInfo.address : ''"
                           label="Address"
                           auto-grow
                           rows="1"
-                          :rules="requiredRules"
-                          required
                           @input="updateForm('address', $event)" />
             </v-card-text>
           </v-card>
@@ -135,6 +115,9 @@ export default Vue.extend({
     valid: false,
     requiredRules: [
       v => !!v || "Is required",
+    ],
+    countRequired: [
+      v => v.length <= 9 || "Max of 9 Numbers",
     ],
   }),
   computed: {

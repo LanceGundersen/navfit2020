@@ -40,7 +40,9 @@
               <v-text-field :value="sailor ? sailor.ssn : ''"
                             class="pa-1"
                             label="SSN"
-                            placeholder="###-##-####"
+                            counter="9"
+                            :rules="countRequired"
+                            placeholder="#########"
                             @input="updateForm('ssn', $event)" />
               <v-select :value="sailor ? sailor.memberStatus : ''"
                         :items="memberStatuses"
@@ -107,6 +109,9 @@ export default Vue.extend({
     ],
     ranksRequired: [
       v => !!v || "Rank is required",
+    ],
+    countRequired: [
+      v => v.length <= 9 || "Max of 9 Numbers",
     ],
   }),
   computed: {

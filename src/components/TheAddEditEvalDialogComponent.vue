@@ -187,6 +187,8 @@
       </v-form>
     </v-card>
     <TheDefaultsDrawerComponentVue v-model="defaultsDrawer" />
+    <TheCommandConfirmationDialogComponent v-model="showCommandConfirmationDialog"
+                                           @close-dialog="closeDialog" />
   </v-dialog>
 </template>
 
@@ -195,6 +197,7 @@ import Vue from "vue";
 import TheCommandInfoComponentVue from "@/components/command/TheCommandInfoComponent";
 import TheSeniorInfoComponentVue from "@/components/command/TheSeniorInfoComponent";
 import TheDefaultsDrawerComponentVue from "@/components/command/TheDefaultsDrawerComponent";
+import TheCommandConfirmationDialogComponent from "@/components/shared/TheCommandConfirmationDialogComponent";
 import TheDatePickerComponent from "./shared/SharedDatePickerComponent";
 
 export default Vue.extend({
@@ -204,6 +207,7 @@ export default Vue.extend({
     TheSeniorInfoComponentVue,
     TheCommandInfoComponentVue,
     TheDatePickerComponent,
+    TheCommandConfirmationDialogComponent,
   },
   props: {
     value: {
@@ -216,9 +220,13 @@ export default Vue.extend({
     defaultsDrawer: false,
     showCommandInfo: false,
     showSeniorInfo: false,
+    showCommandConfirmationDialog: false,
     valid: false,
     requiredRules: [
       v => !!v || "Is required",
+    ],
+    social: [
+      v => !!v || "9 Numbers",
     ],
   }),
   computed: {
@@ -283,14 +291,7 @@ export default Vue.extend({
     submit() {
       this.$refs.eval.validate();
       if (this.getEvalEditForm.id) {
-        this.$store.dispatch("updateEval")
-          .then(() => {
-            if (!this.$store.getters.isError) {
-              this.closeDialog();
-            } else {
-              // TODO: Handle error
-            }
-          });
+        this.showCommandConfirmationDialog = true;
       } else {
         this.$store.dispatch("addEval")
           .then(() => {
