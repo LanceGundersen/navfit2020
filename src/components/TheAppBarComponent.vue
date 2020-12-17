@@ -13,7 +13,7 @@
       <v-toolbar-title>
         NavFit 2020
         <span class="subtitle-2 orange--text text--lighten-2">
-          ALPHA PRE-RELEASE</span>
+          v{{ version }} | ALPHA PRE-RELEASE</span>
       </v-toolbar-title>
       <v-spacer />
       <v-btn text
@@ -57,6 +57,7 @@ export default Vue.extend({
     showNavigationDrawer: false,
     showAddSailorDialog: false,
     showDefaultsDialog: false,
+    version: process.env.VUE_APP_VERSION,
   }),
   computed: {
     drawer: {

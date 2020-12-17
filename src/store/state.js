@@ -29,7 +29,7 @@ const INITIAL_STATE = {
         "W-5",
         "O1-E",
         "O2-E",
-        "O-3E",
+        "O3-E",
         "O-1",
         "O-2",
         "O-3",
