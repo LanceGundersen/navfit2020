@@ -168,7 +168,17 @@ ipcMain.on("db:add:record", async (event, args) => {
 
 ipcMain.on("db:update:record", async (event, args) => {
   const result = await api.updateRecord(args);
-  win.webContents.send("db:update:record:result", result);
+  if (result.id) {
+    win.webContents.send("db:update:record:result", result);
+    showDialog(
+      "success",
+      "Eval Updated",
+      "The evaluation was successfully updated.",
+      null
+    );
+  } else {
+    showDialog("error", "Update Record Error", "Error updating record", null, result.error);
+  }
 });
 
 ipcMain.on("db:delete:record", async (event, args) => {

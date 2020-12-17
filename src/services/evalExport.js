@@ -249,6 +249,7 @@ async function buildEval(sailor, selectedRecord, filePath) {
   } catch (error) {
     return error;
   }
+  return null;
 }
 
 export default function exportEval(sailor, recordId, filePath) {
