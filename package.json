@@ -73,5 +73,14 @@
   "jest": {
     "coverageDirectory": "./coverage/",
     "collectCoverage": true
+  },
+  "lint-staged": {
+    "*.js": [ "lint" ],
+    "*.vue": [ "lint" ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && yarn run test:unit"
+    }
   }
 }
