@@ -114,7 +114,6 @@ export default {
     const form = this.getters.getCommandEditForm;
     window.ipcRenderer.send("db:add:commandDefaults", form);
     window.ipcRenderer.once("db:add:commandDefaults:result", (event, args) => {
-      console.log({ args });
       commit("SET_COMMAND_INFO", args);
       dispatch("loadDb");
     });
