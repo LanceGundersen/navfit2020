@@ -79,6 +79,7 @@ export default Vue.extend({
       this.showDefaultsDialog = !this.showDefaultsDialog;
     },
     goHome() {
+      console.log("test");
       this.$router.push({ name: "home" }).catch(() => {});
     }
   }
