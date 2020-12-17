@@ -91,8 +91,9 @@ export default {
     }
 
     window.ipcRenderer.send("db:update:record", { uuid, form });
-    window.ipcRenderer.once("db:update:record:result", () => {
+    window.ipcRenderer.once("db:update:record:result", (event, args) => {
       dispatch("loadDb");
+      commit("UPDATE_SELECTED_SAILOR_RECORD", args);
     });
     window.ipcRenderer.once("dialog:show", (event, args) => {
       commit("SET_DIALOG_INFO", args);
@@ -114,7 +115,6 @@ export default {
     const form = this.getters.getCommandEditForm;
     window.ipcRenderer.send("db:add:commandDefaults", form);
     window.ipcRenderer.once("db:add:commandDefaults:result", (event, args) => {
-      console.log({ args });
       commit("SET_COMMAND_INFO", args);
       dispatch("loadDb");
     });
