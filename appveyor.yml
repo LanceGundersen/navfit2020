@@ -35,7 +35,7 @@ deploy:
     auth_token:
       secure: fEkXGI1MwwnXikl6PyKr9q8U1Dcgw+yZuPznmh/YqHS4QtwLBkqxl0C4cDwB1vVf
     draft: true
-    artifact: navfit2020
+    artifact: navfit
     force_update: true
     on:
       branch: prod
