@@ -220,6 +220,9 @@ export default Vue.extend({
     requiredRules: [
       v => !!v || "Is required",
     ],
+    social: [
+      v => !!v || "9 Numbers",
+    ],
   }),
   computed: {
     dialog: {
