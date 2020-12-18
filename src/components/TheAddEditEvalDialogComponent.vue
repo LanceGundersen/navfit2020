@@ -216,6 +216,7 @@ export default Vue.extend({
       default: true,
     },
   },
+  emits: ["input"],
   data: () => ({
     defaultsDrawer: false,
     showCommandInfo: false,

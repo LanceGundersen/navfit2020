@@ -88,19 +88,15 @@ app.on("ready", async () => {
     // lines
     try {
       await installExtension(VUEJS_DEVTOOLS);
-    } catch (e) {
-      console.error("Vue Devtools failed to install:", e.toString());
+    } catch (error) {
+      if (error) showDialog("error", "Vue Devtools", "Vue Devtools failed to install:", null, error.toString());
     }
   }
   createWindow();
   DownloadManager.download({
     url: navpersURL
-  }, (error, info) => {
-    if (error) {
-      console.log(error);
-      return;
-    }
-    console.log(`DONE: ${info.url}`);
+  }, error => {
+    if (error) showDialog("error", "PDF Template Download Error", "Error downloading NAVPERS, file a bug please!", null, error);
   });
 });
 

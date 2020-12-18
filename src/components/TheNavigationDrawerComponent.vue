@@ -5,8 +5,8 @@
                        width="auto"
                        class="pa-2">
     <v-list>
-      <v-list-item v-for="(sailor, uuid) in sailors"
-                   :key="uuid"
+      <v-list-item v-for="(sailor, id) in sailors"
+                   :key="id"
                    class="pointer"
                    @click="viewSailorDetail(sailor.uuid)">
         <v-list-item-content>
@@ -44,6 +44,7 @@ export default Vue.extend({
       default: true,
     },
   },
+  emits: ["input"],
   data: () => ({
     showDeleteConfirmationDialog: false,
     uuid: null,

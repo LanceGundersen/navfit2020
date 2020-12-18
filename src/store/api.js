@@ -1,5 +1,6 @@
 import shortid from "shortid";
 import { app } from "electron";
+import {showDialog} from "@/background";
 
 const fs = require("fs");
 const lowdb = require("lowdb");
@@ -7,12 +8,8 @@ const FileSync = require("lowdb/adapters/FileSync");
 
 const dir = `${app.getPath("documents")}/navfit2020`;
 
-fs.mkdir(dir, { recursive: true }, err => {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log("New directory successfully created.");
-  }
+fs.mkdir(dir, { recursive: true }, error => {
+  if (error) showDialog("error", "Create Directory Error", "Error creating navfit directory, file a bug please!", null, error);
 });
 
 const databasePath = `${dir}/navfit2020data.json`;

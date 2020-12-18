@@ -40,7 +40,7 @@
             <v-btn icon
                    small
                    color="primary"
-                   @click.native.stop="showAddEditEvalDialog(record.id)">
+                   @click.stop="showAddEditEvalDialog(record.id)">
               <v-icon small>
                 mdi-pencil
               </v-icon>

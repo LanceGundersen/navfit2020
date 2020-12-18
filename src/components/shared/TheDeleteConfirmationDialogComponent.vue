@@ -44,6 +44,7 @@ export default Vue.extend({
       default: "",
     },
   },
+  emits: ["input"],
   computed: {
     dialog: {
       get() {

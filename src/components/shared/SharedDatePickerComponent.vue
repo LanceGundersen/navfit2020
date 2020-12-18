@@ -13,10 +13,10 @@
         v-on="on" />
     </template>
     <v-date-picker
-      v-model="datestr"
+      v-model="datePicked"
       locale="en-in"
       no-title
-      @input="emitDateString(datestr)" />
+      @input="emitDateString(datePicked)" />
   </v-menu>
 </template>
 <script>
@@ -41,8 +41,10 @@ export default Vue.extend({
       default: null,
     }
   },
+  emits: ["date-string"],
   data: () => ({
     dateMenu: false,
+    datePicked: "",
   }),
   computed: {
     fromDateDisp() {

@@ -8,7 +8,8 @@
       <v-avatar class="mr-2"
                 style="cursor: pointer"
                 @click="goHome()">
-        <img :src="require('../static/logo.png')">
+        <img alt="NavFit Logo"
+             :src="require('../static/logo.png')">
       </v-avatar>
       <v-toolbar-title>
         NavFit 2020
@@ -53,6 +54,7 @@ export default Vue.extend({
       default: "",
     },
   },
+  emits: ["input"],
   data: () => ({
     showNavigationDrawer: false,
     showAddSailorDialog: false,
@@ -79,7 +81,6 @@ export default Vue.extend({
       this.showDefaultsDialog = !this.showDefaultsDialog;
     },
     goHome() {
-      console.log("test");
       this.$router.push({ name: "home" }).catch(() => {});
     }
   }

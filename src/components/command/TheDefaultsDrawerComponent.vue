@@ -73,6 +73,7 @@ export default {
       default: true,
     },
   },
+  emits: ["input"],
   data: () => ({
     showCommandInfo: false,
     showSeniorInfo: false,
