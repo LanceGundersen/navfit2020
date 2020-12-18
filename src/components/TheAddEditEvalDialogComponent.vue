@@ -60,7 +60,7 @@
                         :items="promotionStatus"
                         label="Promotion Status"
                         @change="updateForm('promotionStatus', $event)">
-                <template v-slot:selection="{ item }">
+                <template #selection="{ item }">
                   <span>{{ item }}</span>
                 </template>
               </v-select>
@@ -68,7 +68,7 @@
                         :items="billetSubcategory"
                         label="Billet Subcategory"
                         @change="updateForm('billetSubcategory', $event)">
-                <template v-slot:selection="{ item }">
+                <template #selection="{ item }">
                   <span>{{ item }}</span>
                 </template>
               </v-select>
@@ -78,7 +78,7 @@
                         :items="promotionRecommendations"
                         label="Recommendation"
                         @change="updateForm('promotionRecommendation', $event)">
-                <template v-slot:selection="{ item }">
+                <template #selection="{ item }">
                   <span>{{ item }}</span>
                 </template>
               </v-select>
@@ -86,7 +86,7 @@
                         :items="physicalReadiness"
                         label="Physical Readiness"
                         @change="updateForm('physicalReadiness', $event)">
-                <template v-slot:selection="{ item }">
+                <template #selection="{ item }">
                   <span>{{ item }}</span>
                 </template>
               </v-select>

@@ -49,7 +49,7 @@
               bottom
               left
               transition="slide-y-transition">
-              <template v-slot:activator="{ on, attrs }">
+              <template #activator="{ on, attrs }">
                 <v-btn
                   icon
                   v-bind="attrs"
