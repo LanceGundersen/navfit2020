@@ -1,4 +1,4 @@
-import { PDFDocument } from "pdf-lib";
+import {PDFDocument} from "pdf-lib";
 import { app } from "electron";
 import { showDialog } from "@/background";
 
@@ -242,8 +242,7 @@ async function buildEval(sailor, selectedRecord, filePath) {
     reportingSeniorAddressField.setText(selectedRecord.command.address);
     // TODO: Add Group Summary
 
-    const pdfBytes = await pdfDoc.save();
-
+    const pdfBytes = await pdfDoc.save({ updateFieldAppearances: false });
     fs.writeFileSync(filePath, pdfBytes);
     await PDFDocument.load(formPdfBytes);
   } catch (error) {

@@ -4,7 +4,7 @@
     :close-on-content-click="false"
     max-width="290px"
     min-width="290px">
-    <template v-slot:activator="{ on }">
+    <template #activator="{ on }">
       <v-text-field
         :label="label"
         prepend-icon="mdi-calendar"
@@ -13,10 +13,10 @@
         v-on="on" />
     </template>
     <v-date-picker
-      v-model="datestr"
+      v-model="datePicked"
       locale="en-in"
       no-title
-      @input="emitDateString(datestr)" />
+      @input="emitDateString(datePicked)" />
   </v-menu>
 </template>
 <script>
@@ -41,8 +41,10 @@ export default Vue.extend({
       default: null,
     }
   },
+  emits: ["date-string"],
   data: () => ({
     dateMenu: false,
+    datePicked: "",
   }),
   computed: {
     fromDateDisp() {

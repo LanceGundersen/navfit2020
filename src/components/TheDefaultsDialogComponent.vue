@@ -111,6 +111,7 @@ export default Vue.extend({
       default: true,
     },
   },
+  emits: ["input"],
   data: () => ({
     valid: false,
     requiredRules: [

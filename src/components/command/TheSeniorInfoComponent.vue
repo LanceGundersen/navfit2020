@@ -91,6 +91,7 @@ export default {
       default: null,
     }
   },
+  emits: ["input"],
   data: () => ({
     valid: false,
     requiredRules: [

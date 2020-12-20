@@ -1,4 +1,13 @@
+process.env.VUE_APP_VERSION = process.env.npm_package_version;
+
 module.exports = {
+  devServer: {
+    overlay: {
+      warnings: true,
+      errors: true
+    }
+  },
+  lintOnSave: true,
   transpileDependencies: [
     "vuetify"
   ],

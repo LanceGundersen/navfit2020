@@ -40,7 +40,7 @@
             <v-btn icon
                    small
                    color="primary"
-                   @click.native.stop="showAddEditEvalDialog(record.id)">
+                   @click.stop="showAddEditEvalDialog(record.id)">
               <v-icon small>
                 mdi-pencil
               </v-icon>
@@ -49,7 +49,7 @@
               bottom
               left
               transition="slide-y-transition">
-              <template v-slot:activator="{ on, attrs }">
+              <template #activator="{ on, attrs }">
                 <v-btn
                   icon
                   v-bind="attrs"

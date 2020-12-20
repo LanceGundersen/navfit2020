@@ -34,6 +34,7 @@ export default Vue.extend({
       default: true,
     },
   },
+  emits: ["input", "close-dialog"],
   computed: {
     dialog: {
       get() {
