@@ -4,6 +4,11 @@
                        left
                        width="auto"
                        class="pa-2">
+    <v-btn color="primary"
+           class="add-sailor-btn"
+           @click.stop="showAddEditSailorDialog()">
+      Add Sailor
+    </v-btn>
     <v-list>
       <v-list-item v-for="(sailor, id) in sailors"
                    :key="id"
@@ -25,17 +30,20 @@
     </v-list>
     <TheDeleteConfirmationDialogComponent v-model="showDeleteConfirmationDialog"
                                           :uuid="uuid" />
+    <TheAddSailorDialogComponent v-model="showAddSailorDialog" />
   </v-navigation-drawer>
 </template>
 
 <script>
 import Vue from "vue";
 import TheDeleteConfirmationDialogComponent from "./shared/TheDeleteConfirmationDialogComponent";
+import TheAddSailorDialogComponent from "./TheAddEditSailorDialogComponent";
 
 export default Vue.extend({
   name: "TheNavigationDrawerComponent",
   components: {
     TheDeleteConfirmationDialogComponent,
+    TheAddSailorDialogComponent,
   },
   props: {
     value: {
@@ -47,6 +55,7 @@ export default Vue.extend({
   emits: ["input"],
   data: () => ({
     showDeleteConfirmationDialog: false,
+    showAddSailorDialog: false,
     uuid: null,
     search: null,
   }),
@@ -75,6 +84,11 @@ export default Vue.extend({
       this.uuid = givenUuid;
       this.showDeleteConfirmationDialog = !this.showDeleteConfirmationDialog;
     },
+    showAddEditSailorDialog() {
+      this.$store.dispatch("clearSailorEditForm").then(() => {
+        this.showAddSailorDialog = !this.showAddSailorDialog;
+      });
+    },
   },
 });
 </script>
@@ -82,4 +96,6 @@ export default Vue.extend({
 <style lang="sass">
   .pointer
     cursor: pointer
+  .add-sailor-btn
+    width: 100%
 </style>
