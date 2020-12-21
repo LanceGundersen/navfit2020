@@ -28,8 +28,10 @@
                             @input="updateForm('middleInitial', $event)" />
               <v-select :value="sailor ? sailor.rank : ''"
                         :items="ranks"
+                        item-text="display"
                         label="Rank"
                         :rules="ranksRequired"
+                        return-object
                         required
                         @change="updateForm('rank', $event)" />
             </v-col>
@@ -128,7 +130,7 @@ export default Vue.extend({
       return this.$store.getters.memberStatuses;
     },
     ranks() {
-      return this.$store.getters.ranksEnlisted;
+      return this.$store.getters.ranks;
     },
     getCommandInfo() {
       return this.$store.getters.getCommandInfo;

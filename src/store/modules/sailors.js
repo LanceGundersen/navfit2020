@@ -12,7 +12,7 @@ export default {
       if (state.data && state.data.length) {
         return state.data.map(sailor => ({
           uuid: sailor.uuid,
-          name: `${sailor.lastName}, ${sailor.firstName} : ${sailor.rank}`
+          name: `${sailor.lastName}, ${sailor.firstName} : ${sailor.rank.display}`
         }));
       }
       return [];

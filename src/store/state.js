@@ -1,3 +1,5 @@
+import {evalType} from "@/utils/evalBuilder";
+
 const INITIAL_STATE = {
   app: {
     dialog: {
@@ -10,39 +12,44 @@ const INITIAL_STATE = {
     },
   },
   defaults: {
-    ranks: {
-      enlisted: [
-        "E-1",
-        "E-2",
-        "E-3",
-        "E-4",
-        "E-5",
-        "E-6",
-        "E-7",
-        "E-8",
-        "E-9",
-      ],
-      officer: [
-        "W-2",
-        "W-3",
-        "W-4",
-        "W-5",
-        "O1-E",
-        "O2-E",
-        "O3-E",
-        "O-1",
-        "O-2",
-        "O-3",
-        "O-4",
-        "O-5",
-        "O-6",
-        "O-7",
-        "O-8",
-        "O-9",
-        "O-10",
-        "O-11",
-      ],
-    },
+    ranks: [
+      {
+        display: "E-1",
+        type: evalType.ENLISTED,
+      },
+      {
+        display: "E-2",
+        type: evalType.ENLISTED,
+      },
+      {
+        display: "E-3",
+        type: evalType.ENLISTED,
+      },
+      {
+        display: "E-4",
+        type: evalType.ENLISTED,
+      },
+      {
+        display: "E-5",
+        type: evalType.ENLISTED,
+      },
+      {
+        display: "E-6",
+        type: evalType.ENLISTED,
+      },
+      {
+        display: "E-7",
+        type: evalType.CHIEF,
+      },
+      {
+        display: "E-8",
+        type: evalType.CHIEF,
+      },
+      {
+        display: "E-9",
+        type: evalType.CHIEF,
+      },
+    ],
     memberStatuses: [
       "ACT",
       "FTS",
