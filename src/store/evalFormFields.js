@@ -1,4 +1,9 @@
-export const NAVPERS_1616_26_REV11_11 = {
+/**
+ * Enlisted Evaluation Enum
+ * Version: NAVPERS_1616_26_REV11_11
+ */
+
+export const ENLISTED_EVAL_FIELDS = {
   "form1[0].Page1[0]._1_Name_Last__First_MI_Suffix[0]": "",
   "form1[0].Page1[0]._2_GradeRate[0]": "",
   "form1[0].Page1[0]._3_Desig[0]": "",
@@ -64,5 +69,76 @@ export const NAVPERS_1616_26_REV11_11 = {
   "form1[0].Page2[0]._47_No_Submit[0]": "",
   "form1[0].Page2[0]._47_Submit[0]": "",
   "form1[0].Page2[0]._49_SrRater_Sign_Date[0]": "",
-  "form1[0].Page2[0].fontsize[0]": ""
+  "form1[0].Page2[0].fontsize[0]": "",
+};
+
+/**
+ * Chief Evaluation Enum
+ * Version: NAVPERS_1616_27_REV08_10
+ */
+export const CHIEF_EVAL_FIELDS = {
+  PG_1_NAME: "form1[0].Page1[0]._1_Name_Last__First_MI_Suffix[0]",
+  PG_1_GRADE: "form1[0].Page1[0]._2_GradeRate[0]",
+  PG_1_DESIG: "form1[0].Page1[0]._3_Desig[0]",
+  PG_1_SSN: "form1[0].Page1[0]._4_SSN[0]",
+  PG_1_STATUS: "form1[0].Page1[0]._5_Status[0]",
+  PG_1_UIC: "form1[0].Page1[0]._6_UIC[0]",
+  PG_1_SHIP_STATION: "form1[0].Page1[0]._7_ShipStation[0]",
+  PG_1_PROMOTION_STATUS: "form1[0].Page1[0]._8_Promotion_Status[0]",
+  PG_1_DATE_REPORTED: "form1[0].Page1[0]._9_Date_Reported[0]",
+  PG_1_PERIODIC: "form1[0].Page1[0]._10_Periodic[0]",
+  PG_1_DETACH_INDIVIDUAL: "form1[0].Page1[0]._11_Detach_ind[0]",
+  PG_1_DETACH_SENIOR: "form1[0].Page1[0]._12_Detach_Sr[0]",
+  PG_1_SPECIAL: "form1[0].Page1[0]._13_Special[0]",
+  PG_1_DATE_FROM: "form1[0].Page1[0]._14_PeriodDate_From[0]",
+  PG_1_DATE_TO: "form1[0].Page1[0]._15_PeriodDate_To[0]",
+  PG_1_NOB: "form1[0].Page1[0]._16_NOB[0]",
+  PG_1_REGULAR: "form1[0].Page1[0]._17_Report_Regular[0]",
+  PG_1_CONCURRENT: "form1[0].Page1[0]._18_Report_Concurrent[0]",
+  PG_1_OPS_CDR: "form1[0].Page1[0]._19_Report_OpsCDR[0]",
+  PG_1_PHYSICAL_READINESS: "form1[0].Page1[0]._20_Physical_Readiness[0]",
+  PG_1_BILLET: "form1[0].Page1[0]._21_Billet[0]",
+  PG_1_REPORTING_SENIOR_NAME: "form1[0].Page1[0]._22_Reporting_Senior_Last__FI_MI[0]",
+  PG_1_REPORTING_SENIOR_DESIG: "form1[0].Page1[0]._24_Desig_Rpt_Sr[0]",
+  PG_1_REPORTING_SENIOR_TITLE: "form1[0].Page1[0]._25_Title_Rpt_Sr[0]",
+  PG_1_REPORTING_SENIOR_UIC: "form1[0].Page1[0]._26_UIC_Rpt_Sr[0]",
+  PG_1_REPORTING_SENIOR_SSN: "form1[0].Page1[0]._27_SSN_Rpt_Sr[0]",
+  PG_1_COMMAND_ACHIEVEMENTS: "form1[0].Page1[0]._28_Command_achievements[0]",
+  PG_1_COLLATERAL_SHORT: "form1[0].Page1[0].Lines[0]._29_PrimaryCollat_Short[0]",
+  PG_1_COLLATERAL_LONG: "form1[0].Page1[0]._29_PrimaryCollat[0]",
+  PG_1_REPORTING_SENIOR_GRADE: "form1[0].Page1[0]._23_Grade_Rpt_Sr[0]",
+  PG_1_DATE_COUNSELED: "form1[0].Page1[0]._30_Date_Counsel[0]",
+  PG_1_COUNSELOR_NAME: "form1[0].Page1[0]._31_Counselor[0]",
+  PG_1_COUNSELOR_SIG: "form1[0].Page1[0]._32_Ind_Sig_Counseled[0]",
+  PG_1_LEADERSHIP: "form1[0].Page1[0]._33_Leadership[0]",
+  PG_1_EXPERTISE: "form1[0].Page1[0]._34_InstExpertise[0]",
+  PG_1_PROFESSIONALISM: "form1[0].Page1[0]._35_Professionalism[0]",
+  PG_1_LOYALTY: "form1[0].Page1[0]._36_Loyalty[0]",
+  PG_2_NAME: "form1[0].Page2[0]._1_Name_Last__First_MI_Suffix[0]",
+  PG_2_GRADE: "form1[0].Page2[0]._2_GradeRate[0]",
+  PG_2_DESIG: "form1[0].Page2[0]._3_Desig[0]",
+  PG_2_SSN: "form1[0].Page2[0]._4_SSN[0]",
+  PG_2_CHARACTER: "form1[0].Page2[0]._37_Character[0]",
+  PG_2_COMMUNICATION: "form1[0].Page2[0]._38_Communication[0]",
+  PG_2_HERITAGE: "form1[0].Page2[0]._39_Heritage[0]",
+  PG_2_RECOMMEND_1: "form1[0].Page2[0]._40_Recommend1[0]",
+  PG_2_RECOMMEND_2: "form1[0].Page2[0]._40_Recommend2[0]",
+  PG_2_PERFORMANCE_COMMENTS: "form1[0].Page2[0]._41_Comments_on_Perf[0]",
+  PG_2_RECOMMENDATION: "form1[0].Page2[0]._42_Recommendation[0]",
+  PG_2_SUMMARY_SIG_PROBLEMS: "form1[0].Page2[0]._43_Summary_Sig_Problem[0]",
+  PG_2_SUMMARY_PROGRESSING: "form1[0].Page2[0]._43_Summary_Progressing[0]",
+  PG_2_SUMMARY_PROMOTABLE: "form1[0].Page2[0]._43_Summary_Promotable[0]",
+  PG_2_SUMMARY_MUST_PROMOTE: "form1[0].Page2[0]._43_Summary_Must_Promote[0]",
+  PG_2_SUMMARY_EARLY_PROMOTE: "form1[0].Page2[0]._43_Summary_Early_Promote[0]",
+  PG_2_REPORTING_SENIOR_ADDRESS: "form1[0].Page2[0]._44_Rpt_Sr_Address[0]",
+  PG_2_MEMBER_TRAIT_AVG: "form1[0].Page2[0].Member_Trait_Avg[0]",
+  PG_2_REPORTING_SENIOR_SIGNATURE: "form1[0].Page2[0]._45_Rpt_Sr_Signature[0]",
+  PG_2_REPORTING_SENIOR_SIGN_DATE: "form1[0].Page2[0]._45_Rpt_Sr_Sign_Date[0]",
+  PG_2_STATEMENT_DATE: "form1[0].Page2[0]._46_Date[0]",
+  PG_2_STATEMENT_TRUE: "form1[0].Page2[0]._46_Submit[0]",
+  PG_2_STATEMENT_FALSE:"form1[0].Page2[0].Lines[0]._46_No_Submit[0]",
+  PG_2_STATEMENT_SIGNATURE: "form1[0].Page2[0]._46_Signature[0]",
+  PG_2_REPORTING_SENIOR_NAME_GRADE_UIC_SIG: "form1[0].Page2[0]._47_Reg_Rpt_Sr_Sig[0]",
+  PG_2_REPORTING_SENIOR_NAME_GRADE_UIC_SIG_DATE: "form1[0].Page2[0]._47_Date[0]",
+  PG_2_FONT_SIZE: "form1[0].Page2[0].Lines[0].fontsize[0]",
 };
