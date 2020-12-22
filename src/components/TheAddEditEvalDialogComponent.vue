@@ -24,7 +24,8 @@
             O1-O6
           </v-btn>
         </v-btn-toggle>
-        <v-btn small
+        <v-btn v-if="getEvalEditForm.recordType"
+               small
                outlined
                color="primary"
                @click.stop="defaultsDrawer = !defaultsDrawer">
@@ -35,19 +36,16 @@
               v-model="valid">
         <v-card-text v-if="!getEvalEditForm.recordType"
                      class="text-center">
-          <p>Please select a form type.</p>
+          <h3 class="pb-2">Please select a form type.</h3>
           <v-btn-toggle class="mr-2"
                         @change="updateForm('recordType', $event)">
-            <v-btn small
-                   :value="ENLISTED">
+            <v-btn :value="ENLISTED">
               E1-E6
             </v-btn>
-            <v-btn small
-                   :value="CHIEF">
+            <v-btn :value="CHIEF">
               E7-E9
             </v-btn>
-            <v-btn small
-                   disabled
+            <v-btn disabled
                    value="3">
               O1-O6
             </v-btn>
@@ -282,7 +280,8 @@
                  @click="dialog = false">
             Cancel
           </v-btn>
-          <v-btn color="primary"
+          <v-btn v-if="getEvalEditForm.recordType"
+                 color="primary"
                  :disabled="!valid"
                  @click="submit">
             {{ getEvalEditForm.id ? "Edit Eval" : "Add Eval" }}
