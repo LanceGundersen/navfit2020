@@ -1,7 +1,7 @@
 import { app } from "electron";
 import { PDFDocument } from "pdf-lib";
 import { nameBuilder } from "@/utils/evalBuilder";
-import { CHIEF_EVAL_FIELDS } from "@/store/evalFormFields";
+import { CHIEF_EVAL_FIELDS } from "@/services/evalFormFields";
 
 const fs = require("fs");
 const sourcePDF = `${app.getPath("documents")}/navfit2020/NAVPERS_1616-27_Rev08-10-Decrpyt.pdf`;
@@ -15,12 +15,20 @@ export default async function buildChief(sailor, selectedRecord, filePath) {
     // Block 1: Name
     const nameField = form.getField(CHIEF_EVAL_FIELDS.PG_1_NAME);
     // Block 2: Rate
-    const rateField = form.getTextField(CHIEF_EVAL_FIELDS.PG_1_GRADE);
+    const rateField = form.getTextField(CHIEF_EVAL_FIELDS.PG_1_RATE);
     // Block 3: Designation
     const designationField = form.getTextField(CHIEF_EVAL_FIELDS.PG_1_DESIG);
     // Block 4: Members Social Security Number
     const sailorSsnField = form.getTextField(CHIEF_EVAL_FIELDS.PG_1_SSN);
     // Block 5: Status
+    // Page 2: Name
+    const name2Field = form.getField(CHIEF_EVAL_FIELDS.PG_2_NAME);
+    // Page 2: Rate
+    const rate2Field = form.getTextField(CHIEF_EVAL_FIELDS.PG_2_GRADE);
+    // Page 2:  Designation
+    const designation2Field = form.getTextField(CHIEF_EVAL_FIELDS.PG_2_DESIG);
+    // Page 2:  Members Social Security Number
+    const sailorSsn2Field = form.getTextField(CHIEF_EVAL_FIELDS.PG_2_SSN);
     // TODO: Bug. There seems to only be one selection in the options arr >> `[2]`
     // const statusRadioGroup = form.getRadioGroup(CHIEF_EVAL_FIELDS.PG_1_STATUS);
     // Block 6: UIC
@@ -111,6 +119,14 @@ export default async function buildChief(sailor, selectedRecord, filePath) {
     designationField.setText(sailor.designation);
     // Block 4: Members Social Security Number
     sailorSsnField.setText(sailor.ssn);
+    // Page 2: Name
+    name2Field.setText(nameBuilder(sailor));
+    // Page 2: Rate
+    rate2Field.setText(sailor.rate);
+    // Page 2:  Designation
+    designation2Field.setText(sailor.designation);
+    // Page 2:  Members Social Security Number
+    sailorSsn2Field.setText(sailor.ssn);
     // Block 5: Status
     // TODO: Bug. There seems to only be one selection in the options arr >> `[2]`
     // statusRadioGroup.select(getMemberStatus(sailor.memberStatus));

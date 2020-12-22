@@ -1,8 +1,9 @@
-import {PDFDocument} from "pdf-lib";
-import {app} from "electron";
+import { app } from "electron";
+import { PDFDocument } from "pdf-lib";
 
 const fs = require("fs");
-import { getMemberStatus, getPromotionStatus, nameBuilder } from "@/utils/evalBuilder";
+import { getPromotionStatus, nameBuilder } from "@/utils/evalBuilder";
+import { ENLISTED_EVAL_FIELDS } from "@/services/evalFormFields";
 const sourcePDF = `${app.getPath("documents")}/navfit2020/NAVPERS_1616-26_Rev11-11.pdf`;
 
 export default async function buildEnlisted(sailor, selectedRecord, filePath) {
@@ -12,95 +13,104 @@ export default async function buildEnlisted(sailor, selectedRecord, filePath) {
     const form = pdfDoc.getForm();
 
     // Block 1: Name
-    const nameField = form.getField("form1[0].Page1[0]._1_Name_Last__First_MI_Suffix[0]");
+    const nameField = form.getField(ENLISTED_EVAL_FIELDS.PG_1_NAME);
     // Block 2: Rate
-    const rateField = form.getTextField("form1[0].Page1[0]._2_GradeRate[0]");
+    const rateField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_RATE);
     // Block 3: Designation
-    const designationField = form.getTextField("form1[0].Page1[0]._3_Desig[0]");
+    const designationField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_DESIG);
     // Block 4: Members Social Security Number
-    const sailorSsnField = form.getTextField("form1[0].Page1[0]._4_SSN[0]");
+    const sailorSsnField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_SSN);
+    // Page 2: Name
+    const name2Field = form.getField(ENLISTED_EVAL_FIELDS.PG_2_NAME);
+    // Page 2: Rate
+    const rate2Field = form.getTextField(ENLISTED_EVAL_FIELDS.PG_2_GRADE);
+    // Page 2:  Designation
+    const designation2Field = form.getTextField(ENLISTED_EVAL_FIELDS.PG_2_DESIG);
+    // Page 2:  Members Social Security Number
+    const sailorSsn2Field = form.getTextField(ENLISTED_EVAL_FIELDS.PG_2_SSN);
     // Block 5: Status
-    const statusRadioGroup = form.getRadioGroup("form1[0].Page1[0]._5_Status[0]");
+    // TODO: Bug. There seems to be an error with the mapping
+    // const statusRadioGroup = form.getRadioGroup(ENLISTED_EVAL_FIELDS.PG_1_STATUS);
     // Block 6: UIC
-    const uicField = form.getTextField("form1[0].Page1[0]._6_UIC[0]");
+    const uicField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_UIC);
     // Block 7: Ship/Station
-    const shipStationField = form.getTextField("form1[0].Page1[0]._7_ShipStation[0]");
+    const shipStationField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_SHIP_STATION);
     // Block 8: Promotion Status
-    const promotionStatusDropdown = form.getDropdown("form1[0].Page1[0]._8_Promotion_Status[0]");
+    const promotionStatusDropdown = form.getDropdown(ENLISTED_EVAL_FIELDS.PG_1_PROMOTION_STATUS);
     // Block 9: Date Reported
-    const dateReportedField = form.getTextField("form1[0].Page1[0]._9_Date_Reported[0]");
+    const dateReportedField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_DATE_REPORTED);
     // Blocks 10: Occasion for Report Periodic
-    const periodicCheckbox = form.getCheckBox("form1[0].Page1[0]._10_Periodic[0]");
+    const periodicCheckbox = form.getCheckBox(ENLISTED_EVAL_FIELDS.PG_1_PERIODIC);
     // Blocks 11: Occasion for Report Detachment of Individual
-    const detachmentIndividualCheckbox = form.getCheckBox("form1[0].Page1[0]._11_Detach_ind[0]");
+    const detachmentIndividualCheckbox = form.getCheckBox(ENLISTED_EVAL_FIELDS.PG_1_DETACH_INDIVIDUAL);
     // Blocks 12: Occasion for Report Detachment of Senior
-    const detachmentSeniorCheckbox = form.getCheckBox("form1[0].Page1[0]._12_Detach_Sr[0]");
+    const detachmentSeniorCheckbox = form.getCheckBox(ENLISTED_EVAL_FIELDS.PG_1_DETACH_SENIOR);
     // Blocks 13: Occasion for Report Special Occasion
-    const specialCheckbox = form.getCheckBox("form1[0].Page1[0]._13_Special[0]");
+    const specialCheckbox = form.getCheckBox(ENLISTED_EVAL_FIELDS.PG_1_SPECIAL);
     // Block 14: Period of Report From
-    const periodFromField = form.getTextField("form1[0].Page1[0]._14_PeriodDate_From[0]");
+    const periodFromField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_DATE_FROM);
     // Block 15: Period of Report To
-    const periodToField = form.getTextField("form1[0].Page1[0]._15_PeriodDate_To[0]");
+    const periodToField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_DATE_TO);
     // Block 16: Not Observed
-    const notObservedCheckbox = form.getCheckBox("form1[0].Page1[0]._16_NOB[0]");
+    const notObservedCheckbox = form.getCheckBox(ENLISTED_EVAL_FIELDS.PG_1_NOB);
     // Blocks 17: Type of Report Regular
-    const typeOfReportRegularCheckbox = form.getCheckBox("form1[0].Page1[0]._17_Report_Regular[0]");
+    const typeOfReportRegularCheckbox = form.getCheckBox(ENLISTED_EVAL_FIELDS.PG_1_REGULAR);
     // Blocks 17: Type of Report Regular
-    const typeOfReportConcurrentCheckbox = form.getCheckBox("form1[0].Page1[0]._18_Report_Concurrent[0]");
+    const typeOfReportConcurrentCheckbox = form.getCheckBox(ENLISTED_EVAL_FIELDS.PG_1_CONCURRENT);
     // Block 20: Physical Readiness
-    const physicalRedinessField = form.getTextField("form1[0].Page1[0]._20_Physical_Readiness[0]");
+    const physicalRedinessField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_PHYSICAL_READINESS);
     // Block 21: Billet Subcategory
     // TODO: Fix this
-    // const billetDropdown = form.getDropdown("form1[0].Page1[0]._21_Billet[0]");
+    // const billetDropdown = form.getDropdown(ENLISTED_EVAL_FIELDS.PG_1_BILLET);
     // Block 22: Reporting Senior Name
-    const reportingSeniorNameField = form.getTextField("form1[0].Page1[0]._22_Reporting_Senior_Last__FI_MI[0]");
+    const reportingSeniorNameField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_REPORTING_SENIOR_NAME);
     // Block 23: Reporting Senior Grade
-    const reportingSeniorGradeField = form.getTextField("form1[0].Page1[0]._23_Grade_Rpt_Sr[0]");
+    const reportingSeniorGradeField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_REPORTING_SENIOR_GRADE);
     // Block 24: Reporting Senior Designation
-    const reportingSeniorDesignationField = form.getTextField("form1[0].Page1[0]._24_Desig_Rpt_Sr[0]");
+    const reportingSeniorDesignationField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_REPORTING_SENIOR_DESIG);
     // Block 25: Reporting Senior Title
-    const reportingSeniorTitleField = form.getTextField("form1[0].Page1[0]._25_Title_Rpt_Sr[0]");
+    const reportingSeniorTitleField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_REPORTING_SENIOR_TITLE);
     // Block 26: Reporting Senior UIC
-    const reportingSeniorUicField = form.getTextField("form1[0].Page1[0]._26_UIC_Rpt_Sr[0]");
+    const reportingSeniorUicField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_REPORTING_SENIOR_UIC);
     // Block 27: Reporting Senior Social Security Number
-    const reportingSeniorSsnField = form.getTextField("form1[0].Page1[0]._27_SSN_Rpt_Sr[0]");
+    const reportingSeniorSsnField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_REPORTING_SENIOR_SSN);
     // Block 28: Command employment and command achievements
-    const commandDescriptionField = form.getTextField("form1[0].Page1[0]._28_Command_achievements[0]");
+    const commandDescriptionField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_COMMAND_ACHIEVEMENTS);
     // Block 29 Primary Collateral Abbreviation
-    const primaryCollateralAbbrField = form.getTextField("form1[0].Page1[0]._29_PrimaryCollat_Short[0]");
+    const primaryCollateralAbbrField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_COLLATERAL_SHORT);
     // Block 29 Primary Collateral Long
-    const primaryCollateralLongField = form.getTextField("form1[0].Page1[0]._29_PrimaryCollat[0]");
+    const primaryCollateralLongField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_1_COLLATERAL_LONG);
     // TODO: Add Mid Term Couseling Blocks 30-32
     // Block 33: Professional Knowledge
-    const professionalKnowledgeRadioGroup = form.getRadioGroup("form1[0].Page1[0]._33_Leadership[0]");
+    const professionalKnowledgeRadioGroup = form.getRadioGroup(ENLISTED_EVAL_FIELDS.PG_1_LEADERSHIP);
     // Block 34: Quality of Work
-    const qualityOfWorkRadioGroup = form.getRadioGroup("form1[0].Page1[0]._34_InstExpertise[0]");
+    const qualityOfWorkRadioGroup = form.getRadioGroup(ENLISTED_EVAL_FIELDS.PG_1_EXPERTISE);
     // Block 35: Command or Organizational Climate/Equal Opportunity
-    const commandClimateRadioGroup = form.getRadioGroup("form1[0].Page1[0]._35_Professionalism[0]");
+    const commandClimateRadioGroup = form.getRadioGroup(ENLISTED_EVAL_FIELDS.PG_1_PROFESSIONALISM);
     // Block 36: Military Bearing/Character
-    const militaryBearingRadioGroup = form.getRadioGroup("form1[0].Page1[0]._36_Loyalty[0]");
+    const militaryBearingRadioGroup = form.getRadioGroup(ENLISTED_EVAL_FIELDS.PG_1_LOYALTY);
     // Block 37: Personal Job Accomplishment/Initiative
-    const personalInitiativeRadioGroup = form.getRadioGroup("form1[0].Page1[0]._37_Character[0]");
+    const personalInitiativeRadioGroup = form.getRadioGroup(ENLISTED_EVAL_FIELDS.PG_1_CHARACTER);
     // Block 38: Teamwork
-    const teamworkRadioGroup = form.getRadioGroup("form1[0].Page2[0]._38_Communication[0]");
+    const teamworkRadioGroup = form.getRadioGroup(ENLISTED_EVAL_FIELDS.PG_2_COMMUNICATION);
     // Block 39: Leadership
-    const leadershipRadioGroup = form.getRadioGroup("form1[0].Page2[0]._39_Heritage[0]");
+    const leadershipRadioGroup = form.getRadioGroup(ENLISTED_EVAL_FIELDS.PG_2_HERITAGE);
     // TODO: Add Trait average Block 40
     // TODO: Add recommendations Block 41
     // Block for Fonts
-    const fontSizeDropdown = form.getDropdown("form1[0].Page2[0].fontsize[0]");
+    const fontSizeDropdown = form.getDropdown(ENLISTED_EVAL_FIELDS.PG_2_FONT_SIZE);
     // Block 43: Comments on Performance
-    const performanceCommentsField = form.getTextField("form1[0].Page2[0]._41_Comments_on_Perf[0]");
+    const performanceCommentsField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_2_PERFORMANCE_COMMENTS);
     // Block 44: Qualifications/Achievements
-    const qualificationCommentsField = form.getTextField("form1[0].Page2[0]._44Qualifications[0]");
+    const qualificationCommentsField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_2_QUALIFICATIONS);
     // Block 45: Promotion Recommendation
-    const promotionRecommendationRadioGroup = form.getRadioGroup("form1[0].Page2[0]._42_Recommendation[0]");
+    const promotionRecommendationRadioGroup = form.getRadioGroup(ENLISTED_EVAL_FIELDS.PG_2_RECOMMENDATION);
     // TODO: Add summary values Block 46: Summary
     // Block 47: Recommendation
-    const notRecommendedCheckbox = form.getCheckBox("form1[0].Page2[0]._47_No_Submit[0]");
-    const recommendedCheckbox = form.getCheckBox("form1[0].Page2[0]._47_Submit[0]");
+    const notRecommendedCheckbox = form.getCheckBox(ENLISTED_EVAL_FIELDS.PG_2_SUBMIT_FALSE);
+    const recommendedCheckbox = form.getCheckBox(ENLISTED_EVAL_FIELDS.PG_2_SUBMIT_TRUE);
     // Block 48: Reporting Senior Address
-    const reportingSeniorAddressField = form.getTextField("form1[0].Page2[0]._44_Rpt_Sr_Address[0]");
+    const reportingSeniorAddressField = form.getTextField(ENLISTED_EVAL_FIELDS.PG_2_REPORTING_SENIOR_ADDRESS);
     // TODO: Add Group Summary
 
     // Block 1: Name
@@ -111,8 +121,17 @@ export default async function buildEnlisted(sailor, selectedRecord, filePath) {
     designationField.setText(sailor.designation);
     // Block 4: Members Social Security Number
     sailorSsnField.setText(sailor.ssn);
+    // Page 2: Name
+    name2Field.setText(nameBuilder(sailor));
+    // Page 2: Rate
+    rate2Field.setText(sailor.rate);
+    // Page 2:  Designation
+    designation2Field.setText(sailor.designation);
+    // Page 2:  Members Social Security Number
+    sailorSsn2Field.setText(sailor.ssn);
     // Block 5: Status
-    statusRadioGroup.select(getMemberStatus(sailor.memberStatus));
+    // TODO: Bug. There seems to be an error with the mapping
+    // statusRadioGroup.select(getMemberStatus(sailor.memberStatus));
     // Block 6: UIC
     uicField.setText(selectedRecord.command.uic);
     // Block 7: Ship/Station
