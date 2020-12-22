@@ -1,11 +1,32 @@
+/**
+ * Evaluation Types Enum
+ * @type {{CHIEF: number, ENLISTED: number}}
+ */
+
 export const evalType = {
   ENLISTED: 1,
   CHIEF: 2,
 }
 
+/**
+ * Name Builder
+ *
+ * If no middle initial, returns only lastName & firstName
+ *
+ * @param {sailor} sailor object
+ * @returns {string} lastName, FirstName, MiddleInitial
+ */
+
 export function nameBuilder(sailor) {
   return `${sailor.lastName}, ${sailor.firstName}${sailor.middleInitial ? ", " : ""}${sailor.middleInitial}`;
 }
+
+/**
+ * Members Current Status Check
+ *
+ * @param {string} memberStatus (ACT, FTS, INACT, OR AT/ADSW/265)
+ * @returns {string} Number 1-4
+ */
 
 export function getMemberStatus(memberStatus) {
   if (memberStatus === "ACT") {
@@ -19,6 +40,13 @@ export function getMemberStatus(memberStatus) {
   }
   return "";
 }
+
+/**
+ * Promotion Status Check
+ *
+ * @param promotionRecommendation (NOB, Significant Problems, Progressing, Promotable, Must Promote OR Early Promote)
+ * @returns {string} Number 0-5
+ */
 
 export function getPromotionStatus(promotionRecommendation) {
   if (promotionRecommendation === "NOB") {

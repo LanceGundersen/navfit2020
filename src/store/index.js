@@ -30,7 +30,6 @@ export default new Vuex.Store({
     memberStatuses: state => state.defaults.memberStatuses,
     promotionStatuses: state => state.defaults.promotionStatuses,
     ranks: state => state.defaults.ranks,
-    traits: state => state.defaults.traits,
     promotionRecommendations: state => state.defaults.promotionRecommendations,
     fonts: state => state.defaults.fonts,
     physicalReadiness: state => state.defaults.physicalReadiness,

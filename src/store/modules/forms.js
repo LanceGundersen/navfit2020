@@ -1,3 +1,5 @@
+import Vue from "vue";
+
 export default {
   state: {
     sailorEdit: {},
@@ -27,7 +29,7 @@ export default {
       state.evalEdit = payload;
     },
     UPDATE_EVAL_EDIT_FORM(state, payload) {
-      state.evalEdit[payload.input] = payload.value;
+      Vue.set(state.evalEdit, payload.input, payload.value);
     },
     CLEAR_EVAL_EDIT_FORM(state) {
       state.evalEdit = {};
