@@ -110,24 +110,46 @@
                 </v-layout>
                 <v-divider vertical
                            class="mr-4 " />
-                <v-layout column>
-                  <SharedRatingComponent :label="'Professional Knowledge'"
-                                         :rating="record.professionalKnowledge ? record.professionalKnowledge : ''" />
-                  <SharedRatingComponent :label="'Quality of Work'"
-                                         :rating="record.qualityOfWork ? record.qualityOfWork : ''" />
-                  <SharedRatingComponent :label="'Command or Organizational Climate/Equal Opportunity'"
-                                         :rating="record.commandClimate ? record.commandClimate : ''" />
-                  <SharedRatingComponent :label="'Military Bearing/Character'"
-                                         :rating="record.militaryBearing ? record.militaryBearing : ''" />
-                </v-layout>
-                <v-layout column>
-                  <SharedRatingComponent :label="'Personal Job Accomplishment/Initiative'"
-                                         :rating="record.personalInitiative ? record.personalInitiative : ''" />
-                  <SharedRatingComponent :label="'Teamwork'"
-                                         :rating="record.teamwork ? record.teamwork : ''" />
-                  <SharedRatingComponent :label="'Leadership'"
-                                         :rating="record.leadership ? record.leadership : ''" />
-                </v-layout>
+                <template v-if="record.recordType === ENLISTED">
+                  <v-layout column>
+                    <SharedRatingComponent :label="'Professional Knowledge'"
+                                           :rating="record.professionalKnowledge ? record.professionalKnowledge : ''" />
+                    <SharedRatingComponent :label="'Quality of Work'"
+                                           :rating="record.qualityOfWork ? record.qualityOfWork : ''" />
+                    <SharedRatingComponent :label="'Command or Organizational Climate/Equal Opportunity'"
+                                           :rating="record.commandClimate ? record.commandClimate : ''" />
+                    <SharedRatingComponent :label="'Military Bearing/Character'"
+                                           :rating="record.militaryBearing ? record.militaryBearing : ''" />
+                  </v-layout>
+                  <v-layout column>
+                    <SharedRatingComponent :label="'Personal Job Accomplishment/Initiative'"
+                                           :rating="record.personalInitiative ? record.personalInitiative : ''" />
+                    <SharedRatingComponent :label="'Teamwork'"
+                                           :rating="record.teamwork ? record.teamwork : ''" />
+                    <SharedRatingComponent :label="'Leadership'"
+                                           :rating="record.leadership ? record.leadership : ''" />
+                  </v-layout>
+                </template>
+                <template v-if="record.recordType === CHIEF">
+                  <v-layout column>
+                    <SharedRatingComponent :label="'Deckplate Leadership'"
+                                           :rating="record.deckplateLeader ? record.deckplateLeader : ''" />
+                    <SharedRatingComponent :label="'Institutional and Technical Expertise'"
+                                           :rating="record.technicalExpertise ? record.technicalExpertise : ''" />
+                    <SharedRatingComponent :label="'Professionalism'"
+                                           :rating="record.professionalism ? record.professionalism : ''" />
+                    <SharedRatingComponent :label="'Loyalty'"
+                                           :rating="record.loyalty ? record.loyalty : ''" />
+                  </v-layout>
+                  <v-layout column>
+                    <SharedRatingComponent :label="'Character'"
+                                           :rating="record.character ? record.character : ''" />
+                    <SharedRatingComponent :label="'Active Communication'"
+                                           :rating="record.activeCommunication ? record.activeCommunication : ''" />
+                    <SharedRatingComponent :label="'Sense of Heritage'"
+                                           :rating="record.heritage ? record.heritage : ''" />
+                  </v-layout>
+                </template>
               </v-layout>
               <v-layout column
                         class="mb-2">
@@ -161,6 +183,7 @@ import TheAddEditSailorDialogComponent from "./TheAddEditSailorDialogComponent";
 import TheAddEditEvalDialogComponent from "./TheAddEditEvalDialogComponent";
 import SharedRatingComponent from "./shared/SharedRatingComponent";
 import TheDeleteConfirmationDialogComponent from "./shared/TheDeleteConfirmationDialogComponent";
+import {evalType} from "@/utils/evalBuilder";
 
 export default Vue.extend({
   name: "TheSailorDetailComponent",
@@ -182,6 +205,8 @@ export default Vue.extend({
     showAddSailorDialog: false,
     showDeleteConfirmationDialog: false,
     recordId: null,
+    ENLISTED: evalType.ENLISTED,
+    CHIEF: evalType.CHIEF,
   }),
   computed: {
     sailor() {

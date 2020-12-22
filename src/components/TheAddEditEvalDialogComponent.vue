@@ -6,7 +6,26 @@
       <v-card-title>
         {{ getEvalEditForm.id ? "Edit Eval" : "Add Eval" }}
         <v-spacer />
-        <v-btn small
+        <v-btn-toggle v-if="getEvalEditForm.recordType"
+                      :value="getEvalEditForm.recordType ? getEvalEditForm.recordType : null"
+                      class="mr-2"
+                      @change="updateForm('recordType', $event)">
+          <v-btn small
+                 :value="ENLISTED">
+            E1-E6
+          </v-btn>
+          <v-btn small
+                 :value="CHIEF">
+            E7-E9
+          </v-btn>
+          <v-btn small
+                 disabled
+                 value="3">
+            O1-O6
+          </v-btn>
+        </v-btn-toggle>
+        <v-btn v-if="getEvalEditForm.recordType"
+               small
                outlined
                color="primary"
                @click.stop="defaultsDrawer = !defaultsDrawer">
@@ -15,7 +34,24 @@
       </v-card-title>
       <v-form ref="eval"
               v-model="valid">
-        <v-card-text>
+        <v-card-text v-if="!getEvalEditForm.recordType"
+                     class="text-center">
+          <h3 class="pb-2">Please select a form type.</h3>
+          <v-btn-toggle class="mr-2"
+                        @change="updateForm('recordType', $event)">
+            <v-btn :value="ENLISTED">
+              E1-E6
+            </v-btn>
+            <v-btn :value="CHIEF">
+              E7-E9
+            </v-btn>
+            <v-btn disabled
+                   value="3">
+              O1-O6
+            </v-btn>
+          </v-btn-toggle>
+        </v-card-text>
+        <v-card-text v-if="getEvalEditForm.recordType">
           <TheCommandInfoComponentVue v-model="showCommandInfo"
                                       :edit="getEvalEditForm" />
           <TheSeniorInfoComponentVue v-model="showSeniorInfo"
@@ -106,47 +142,112 @@
                       counter
                       @input="updateForm('primaryCollateral', $event)" />
           <h4>Performance Traits</h4>
-          <v-layout>
+          <v-layout v-if="getEvalEditForm.recordType === ENLISTED">
             <v-col cols="6">
               <v-select :value="getEvalEditForm.professionalKnowledge ? getEvalEditForm.professionalKnowledge : ''"
-                        :items="traits.professionalKnowledge.standards"
-                        :label="traits.professionalKnowledge.title"
+                        :items="traitsEnlisted.professionalKnowledge.standards"
+                        :label="traitsEnlisted.professionalKnowledge.title"
                         item-text="label"
                         @change="updateForm('professionalKnowledge', $event)" />
               <v-select :value="getEvalEditForm.qualityOfWork ? getEvalEditForm.qualityOfWork : ''"
-                        :items="traits.qualityOfWork.standards"
-                        :label="traits.qualityOfWork.title"
+                        :items="traitsEnlisted.qualityOfWork.standards"
+                        :label="traitsEnlisted.qualityOfWork.title"
                         item-text="label"
                         @change="updateForm('qualityOfWork', $event)" />
               <v-select :value="getEvalEditForm.commandClimate ? getEvalEditForm.commandClimate : ''"
-                        :items="traits.commandClimate.standards"
-                        :label="traits.commandClimate.title"
+                        :items="traitsEnlisted.commandClimate.standards"
+                        :label="traitsEnlisted.commandClimate.title"
                         item-text="label"
                         @change="updateForm('commandClimate', $event)" />
               <v-select :value="getEvalEditForm.militaryBearing ? getEvalEditForm.militaryBearing : ''"
-                        :items="traits.militaryBearing.standards"
-                        :label="traits.militaryBearing.title"
+                        :items="traitsEnlisted.militaryBearing.standards"
+                        :label="traitsEnlisted.militaryBearing.title"
                         item-text="label"
                         @change="updateForm('militaryBearing', $event)" />
             </v-col>
             <v-col cols="6">
               <v-select :value="getEvalEditForm.personalInitiative ? getEvalEditForm.personalInitiative : ''"
-                        :items="traits.personalInitiative.standards"
-                        :label="traits.personalInitiative.title"
+                        :items="traitsEnlisted.personalInitiative.standards"
+                        :label="traitsEnlisted.personalInitiative.title"
                         item-text="label"
                         @change="updateForm('personalInitiative', $event)" />
               <v-select :value="getEvalEditForm.teamwork ? getEvalEditForm.teamwork : ''"
-                        :items="traits.teamwork.standards"
-                        :label="traits.teamwork.title"
+                        :items="traitsEnlisted.teamwork.standards"
+                        :label="traitsEnlisted.teamwork.title"
                         item-text="label"
                         @change="updateForm('teamwork', $event)" />
               <v-select :value="getEvalEditForm.leadership ? getEvalEditForm.leadership : ''"
-                        :items="traits.leadership.standards"
-                        :label="traits.leadership.title"
+                        :items="traitsEnlisted.leadership.standards"
+                        :label="traitsEnlisted.leadership.title"
                         item-text="label"
                         @change="updateForm('leadership', $event)" />
             </v-col>
           </v-layout>
+
+          <v-layout v-if="getEvalEditForm.recordType === CHIEF">
+            <v-col cols="6">
+              <v-select :value="getEvalEditForm.deckplateLeader ? getEvalEditForm.deckplateLeader : ''"
+                        :items="traitsChief.deckplateLeader.standards"
+                        :label="traitsChief.deckplateLeader.title"
+                        item-text="label"
+                        @change="updateForm('deckplateLeader', $event)" />
+              <v-select :value="getEvalEditForm.technicalExpertise ? getEvalEditForm.technicalExpertise : ''"
+                        :items="traitsChief.technicalExpertise.standards"
+                        :label="traitsChief.technicalExpertise.title"
+                        item-text="label"
+                        @change="updateForm('technicalExpertise', $event)" />
+              <v-select :value="getEvalEditForm.professionalism ? getEvalEditForm.professionalism : ''"
+                        :items="traitsChief.professionalism.standards"
+                        :label="traitsChief.professionalism.title"
+                        item-text="label"
+                        @change="updateForm('professionalism', $event)" />
+              <v-select :value="getEvalEditForm.loyalty ? getEvalEditForm.loyalty : ''"
+                        :items="traitsChief.loyalty.standards"
+                        :label="traitsChief.loyalty.title"
+                        item-text="label"
+                        @change="updateForm('loyalty', $event)" />
+            </v-col>
+            <v-col cols="6">
+              <v-select :value="getEvalEditForm.character ? getEvalEditForm.character : ''"
+                        :items="traitsChief.character.standards"
+                        :label="traitsChief.character.title"
+                        item-text="label"
+                        @change="updateForm('character', $event)" />
+              <v-select :value="getEvalEditForm.activeCommunication ? getEvalEditForm.activeCommunication : ''"
+                        :items="traitsChief.activeCommunication.standards"
+                        :label="traitsChief.activeCommunication.title"
+                        item-text="label"
+                        @change="updateForm('activeCommunication', $event)" />
+              <v-select :value="getEvalEditForm.heritage ? getEvalEditForm.heritage : ''"
+                        :items="traitsChief.heritage.standards"
+                        :label="traitsChief.heritage.title"
+                        item-text="label"
+                        @change="updateForm('heritage', $event)" />
+            </v-col>
+          </v-layout>
+
+          <template v-if="getEvalEditForm.recordType === CHIEF">
+            <h4 class="pb-2">
+              Recommend screening this individual for next career milestone(s)
+            </h4>
+            <v-subheader>i.e. for competitive schools or duty assignments such as LCPO, DEPT CPO, SEA, CMC</v-subheader>
+            <v-layout>
+              <v-col cols="6">
+                <v-text-field :value="getEvalEditForm.recommendationOne ? getEvalEditForm.recommendationOne : ''"
+                              filled
+                              label="Primary Recommendation"
+                              counter
+                              @input="updateForm('recommendationOne', $event)" />
+              </v-col>
+              <v-col cols="6">
+                <v-text-field :value="getEvalEditForm.recommendationTwo ? getEvalEditForm.recommendationTwo : ''"
+                            filled
+                            label="Secondary Recommendation"
+                            counter
+                            @input="updateForm('recommendationTwo', $event)" />
+              </v-col>
+            </v-layout>
+          </template>
           <h4>Comments on Performance.</h4>
           <v-layout>
             <v-subheader>
@@ -163,7 +264,8 @@
                       filled
                       counter
                       @input="updateForm('performanceComments', $event)" />
-          <v-layout column>
+          <v-layout column
+            v-if="getEvalEditForm.recordType === ENLISTED">
             <h4>Qualifications/Achievements</h4>
             <v-subheader>Education, awards, community involvement, etc., during this period.</v-subheader>
             <v-textarea :value="getEvalEditForm.qualificationComments ? getEvalEditForm.qualificationComments : ''"
@@ -178,7 +280,8 @@
                  @click="dialog = false">
             Cancel
           </v-btn>
-          <v-btn color="primary"
+          <v-btn v-if="getEvalEditForm.recordType"
+                 color="primary"
                  :disabled="!valid"
                  @click="submit">
             {{ getEvalEditForm.id ? "Edit Eval" : "Add Eval" }}
@@ -199,6 +302,8 @@ import TheSeniorInfoComponentVue from "@/components/command/TheSeniorInfoCompone
 import TheDefaultsDrawerComponentVue from "@/components/command/TheDefaultsDrawerComponent";
 import TheCommandConfirmationDialogComponent from "@/components/shared/TheCommandConfirmationDialogComponent";
 import TheDatePickerComponent from "./shared/SharedDatePickerComponent";
+import {evalType} from "@/utils/evalBuilder";
+import {APP_CONSTANTS} from "@/utils/constants";
 
 export default Vue.extend({
   name: "TheAddEditEvalDialogComponent",
@@ -229,6 +334,10 @@ export default Vue.extend({
     social: [
       v => !!v || "9 Numbers",
     ],
+    ENLISTED: evalType.ENLISTED,
+    CHIEF: evalType.CHIEF,
+    traitsEnlisted: APP_CONSTANTS.traitsEnlisted,
+    traitsChief: APP_CONSTANTS.traitsChief,
   }),
   computed: {
     dialog: {
@@ -238,9 +347,6 @@ export default Vue.extend({
       set(newValue) {
         this.$emit("input", newValue);
       },
-    },
-    traits() {
-      return this.$store.getters.traits;
     },
     promotionRecommendations() {
       return this.$store.getters.promotionRecommendations || [];
