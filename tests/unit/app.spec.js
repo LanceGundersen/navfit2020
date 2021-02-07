@@ -33,7 +33,7 @@ describe("App.vue", () => {
     });
   });
 
-  test("render", () => {
+  test.skip("render", () => {
     const wrapper = shallowMountFunction({});
     expect(wrapper.vm).toBeTruthy();
     expect(actions.loadDb).toHaveBeenCalled();

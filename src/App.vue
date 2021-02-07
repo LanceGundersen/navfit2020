@@ -3,6 +3,20 @@
     <TheAppBarComponent />
     <v-main>
       <v-container fluid>
+        <v-banner
+          sticky
+          color="warning"
+          dark
+          icon="mdi-alert">
+          NavFit 2020 is no longer being developed and will be removed from all application stores and archived on 28FEB2021.
+          <v-btn color="primary"
+                 @click="openExternalGitHubAnnouncement"
+                 rounded
+                 small
+                 dark>
+            Read About It Here
+          </v-btn>
+        </v-banner>
         <router-view />
         <SharedAlertComponent />
       </v-container>
@@ -33,7 +47,12 @@ export default Vue.extend({
   },
   created() {
     this.$store.dispatch("loadDb");
-  }
+  },
+  methods: {
+    openExternalGitHubAnnouncement() {
+      this.$store.dispatch("openGitHubAnnouncement");
+    },
+  },
 });
 </script>
 

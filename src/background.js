@@ -201,6 +201,11 @@ ipcMain.on("open:githubRepo", event => {
   shell.openExternal("https://github.com/LanceGundersen/navfit2020/releases");
 });
 
+ipcMain.on("open:gitHubAnnouncement", event => {
+  event.preventDefault();
+  shell.openExternal("https://github.com/LanceGundersen/navfit2020/blob/prod/README.md");
+});
+
 ipcMain.on("pdf:export", async (event, args) => {
   const options = {
     title: "Save new file as...",

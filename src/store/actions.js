@@ -174,5 +174,8 @@ export default {
   },
   openGithubRepo() {
     window.ipcRenderer.send("open:githubRepo");
+  },
+  openGitHubAnnouncement() {
+    window.ipcRenderer.send("open:gitHubAnnouncement");
   }
 };
