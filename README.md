@@ -10,6 +10,9 @@ The updated process can be found via Bupers Online in the same fasion as one acc
 
 ----
 
+## Screenshots
+[Screenshots Here](https://github.com/LanceGundersen/navfit2020/blob/prod/screenshots.md)
+
 ## NavFit 2020 
 [![LanceGundersen](https://circleci.com/gh/LanceGundersen/navfit2020/tree/prod.svg?style=svg)](https://circleci.com/gh/LanceGundersen/navfit2020) [![Build status](https://ci.appveyor.com/api/projects/status/k5n4xuovwrhuivev/branch/prod?svg=true)](https://ci.appveyor.com/project/LanceGundersen/navfit2020/branch/prod)
  [![codecov](https://codecov.io/gh/LanceGundersen/navfit2020/branch/prod/graph/badge.svg?token=VVJK9VORZ6)](https://codecov.io/gh/LanceGundersen/navfit2020)
